@@ -4,7 +4,6 @@
 
 This is the source repository for [penguin.web.ap.it](https://penguin.web.ap.it).
 
-![Penguin](https://img.shields.io/badge/version-1.0-neon?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 
 ## Features
