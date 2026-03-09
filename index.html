@@ -1,0 +1,3291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penguin — Generators and utilities for developers</title>
+    <style>
+        :root {
+            --neon: #00ff41;
+            --bg: #0d0d0d;
+            --sidebar: #111;
+            --main: #1a1a1a;
+            --dim: #555;
+            --border: #222;
+            --sidebar-w: 220px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--neon);
+            font-family: 'Fira Code', 'Courier New', monospace;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: var(--sidebar-w);
+            min-width: var(--sidebar-w);
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-brand .logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--neon);
+            letter-spacing: 3px;
+        }
+
+        .sidebar-brand .sub {
+            font-size: 9px;
+            color: #444;
+            letter-spacing: 1px;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 0;
+        }
+
+        .sidebar-nav button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #555;
+            font-family: inherit;
+            font-size: 12px;
+            padding: 11px 20px;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.15s;
+            letter-spacing: 0.5px;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav button:hover {
+            color: #ccc;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .sidebar-nav button.active {
+            color: var(--neon);
+            background: rgba(0, 255, 65, 0.05);
+            border-left-color: var(--neon);
+        }
+
+        .sidebar-nav button .icon {
+            font-size: 14px;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-footer {
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            font-size: 9px;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .topbar {
+            background: var(--sidebar);
+            padding: 14px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 50px;
+        }
+
+        .topbar .page-title {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .topbar .dots span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 6px;
+        }
+
+        .topbar .r {
+            background: #ff5f56;
+        }
+
+        .topbar .y {
+            background: #ffbd2e;
+        }
+
+        .topbar .g {
+            background: #27c93f;
+        }
+
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            background: var(--main);
+        }
+
+        .content {
+            max-width: 800px;
+            padding: 40px 50px 60px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* ===== FORM ELEMENTS ===== */
+        .label {
+            color: #555;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select,
+        textarea {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #282828;
+            color: white;
+            width: 100%;
+            font-family: inherit;
+            font-size: 1.2rem;
+            outline: none;
+            padding: 10px 0;
+            margin-bottom: 30px;
+            caret-color: var(--neon);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--neon);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+            border: 1px solid #282828;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        textarea:focus {
+            border-color: var(--neon);
+        }
+
+        /* ===== OUTPUT ELEMENTS ===== */
+        .val {
+            font-size: 2.2rem;
+            color: white;
+            letter-spacing: 4px;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+            cursor: pointer;
+            word-break: break-all;
+            line-height: 1.4;
+            transition: 0.15s;
+        }
+
+        .val:hover {
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.7);
+        }
+
+        .val.small {
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .cmd-box {
+            background: #0a0a0a;
+            padding: 16px;
+            font-size: 13px;
+            color: var(--neon);
+            margin-top: 16px;
+            border-radius: 5px;
+            border: 1px solid #1e1e1e;
+            cursor: pointer;
+            transition: 0.2s;
+            word-break: break-all;
+        }
+
+        .cmd-box:hover {
+            background: #050505;
+            border-color: #444;
+        }
+
+        .notify {
+            font-size: 10px;
+            color: #444;
+            margin-top: 12px;
+            text-align: right;
+            height: 14px;
+        }
+
+        .stat-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 10px;
+            color: var(--dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--neon);
+            color: var(--neon);
+            font-family: inherit;
+            font-size: 12px;
+            padding: 10px 24px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: 0.2s;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background: var(--neon);
+            color: #000;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .row>* {
+            flex: 1;
+            min-width: 80px;
+        }
+
+        /* ===== CRON ===== */
+        .cron-fields {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cron-field {
+            flex: 1;
+            text-align: center;
+        }
+
+        .cron-field input {
+            text-align: center;
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+            padding: 8px 0;
+        }
+
+        .cron-field .label {
+            font-size: 9px;
+        }
+
+        .cron-explain {
+            background: #0a0a0a;
+            padding: 18px;
+            border-radius: 5px;
+            border: 1px solid #1e1e1e;
+            color: white;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .cron-next {
+            font-size: 11px;
+            color: #888;
+            margin-top: 12px;
+        }
+
+        .cron-next div {
+            padding: 3px 0;
+            color: #666;
+        }
+
+        .cron-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .cron-presets button {
+            background: #0a0a0a;
+            border: 1px solid #282828;
+            color: #888;
+            font-family: inherit;
+            font-size: 10px;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: 0.2s;
+        }
+
+        .cron-presets button:hover {
+            border-color: var(--neon);
+            color: var(--neon);
+        }
+
+        /* ===== CHECKBOXES ===== */
+        .checkbox-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .checkbox-row label {
+            color: #888;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .checkbox-row input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            accent-color: var(--neon);
+        }
+
+        /* ===== MOBILE ===== */
+        .menu-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid #333;
+            color: var(--neon);
+            font-family: inherit;
+            font-size: 18px;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-w: 260px;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: calc(-1 * var(--sidebar-w));
+                top: 0;
+                z-index: 100;
+                transition: left 0.25s ease;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.6);
+                z-index: 99;
+            }
+
+            .sidebar-overlay.open {
+                display: block;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .content {
+                padding: 25px 20px 40px;
+            }
+
+            .val {
+                font-size: 1.4rem;
+                letter-spacing: 2px;
+            }
+
+            .cron-fields {
+                flex-wrap: wrap;
+            }
+
+            .cron-field {
+                min-width: 55px;
+            }
+        }
+
+        /* ===== FAKE ID ROWS ===== */
+        .fake-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            border-bottom: 1px solid #1a1a1a;
+            transition: 0.1s;
+        }
+
+        .fake-row:hover {
+            background: rgba(0, 255, 65, 0.03);
+        }
+
+        .fake-label {
+            color: #555;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+            width: 140px;
+        }
+
+        .fake-val {
+            color: white;
+            font-size: 13px;
+            text-align: right;
+            cursor: pointer;
+            word-break: break-all;
+        }
+
+        .fake-val:hover {
+            color: var(--neon);
+        }
+
+        @media (max-width: 600px) {
+            .fake-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .fake-val {
+                text-align: left;
+            }
+        }
+
+        /* ===== CHMOD GRID ===== */
+        .chmod-grid {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .chmod-col {
+            flex: 1;
+            background: #0a0a0a;
+            border: 1px solid #1e1e1e;
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .chmod-col-title {
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .chmod-cb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #aaa;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 6px 0;
+        }
+
+        .chmod-cb input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            accent-color: var(--neon);
+        }
+
+        .chmod-label {
+            flex: 1;
+        }
+
+        .chmod-bit {
+            color: #555;
+            font-size: 10px;
+        }
+
+        .chmod-subtotal {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: white;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #222;
+        }
+
+        @media (max-width: 600px) {
+            .chmod-grid {
+                flex-direction: column;
+            }
+        }
+
+        /* ===== LINUX CMD CARDS ===== */
+        .lx-card {
+            background: #0a0a0a;
+            border: 1px solid #1e1e1e;
+            border-radius: 5px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .lx-card:hover {
+            border-color: #444;
+            background: #0f0f0f;
+        }
+
+        .lx-card .lx-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .lx-card .lx-name {
+            color: var(--neon);
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .lx-card .lx-tag {
+            font-size: 9px;
+            color: #555;
+            background: #1a1a1a;
+            padding: 2px 8px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .lx-card .lx-desc {
+            color: #888;
+            font-size: 11px;
+            margin-bottom: 8px;
+        }
+
+        .lx-card .lx-example {
+            color: #ccc;
+            font-size: 12px;
+            background: #111;
+            padding: 8px 12px;
+            border-radius: 3px;
+            border-left: 2px solid var(--neon);
+        }
+
+        .lx-cat-active {
+            border-color: var(--neon) !important;
+            color: var(--neon) !important;
+        }
+
+        /* scrollbar */
+        .content-area::-webkit-scrollbar,
+        .sidebar-nav::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .content-area::-webkit-scrollbar-track,
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .content-area::-webkit-scrollbar-thumb,
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: #282828;
+            border-radius: 3px;
+        }
+
+        .content-area::-webkit-scrollbar-thumb:hover,
+        .sidebar-nav::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Mobile overlay -->
+    <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="logo">&#x1F427; PENGUIN</div>
+            <div class="sub">Developer Generators</div>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="active" onclick="showPage('password', this)"><span class="icon">&gt;</span> Password</button>
+            <button onclick="showPage('username', this)"><span class="icon">&gt;</span> Username</button>
+            <button onclick="showPage('bcrypt', this)"><span class="icon">&gt;</span> Bcrypt</button>
+            <button onclick="showPage('appkey', this)"><span class="icon">&gt;</span> APP_KEY</button>
+            <button onclick="showPage('hash', this)"><span class="icon">&gt;</span> Hash</button>
+            <button onclick="showPage('jwt', this)"><span class="icon">&gt;</span> JWT</button>
+            <button onclick="showPage('uuid', this)"><span class="icon">&gt;</span> UUID</button>
+            <button onclick="showPage('jsonld', this)"><span class="icon">&gt;</span> JSON-LD</button>
+            <button onclick="showPage('fakeid', this)"><span class="icon">&gt;</span> Fake ID</button>
+            <button onclick="showPage('base64', this)"><span class="icon">&gt;</span> Base64</button>
+            <button onclick="showPage('urlparse', this)"><span class="icon">&gt;</span> URL Parse</button>
+            <button onclick="showPage('slug', this)"><span class="icon">&gt;</span> Slug</button>
+            <button onclick="showPage('crontab', this)"><span class="icon">&gt;</span> Crontab</button>
+            <button onclick="showPage('timestamp', this)"><span class="icon">&gt;</span> Timestamp</button>
+            <button onclick="showPage('lorem', this)"><span class="icon">&gt;</span> Lorem</button>
+            <button onclick="showPage('curl', this)"><span class="icon">&gt;</span> cURL</button>
+            <button onclick="showPage('sql', this)"><span class="icon">&gt;</span> SQL</button>
+            <button onclick="showPage('linux', this)"><span class="icon">&gt;</span> Linux</button>
+            <button onclick="showPage('chmod', this)"><span class="icon">&gt;</span> Chmod</button>
+        </nav>
+        <div class="sidebar-footer">Penguin v1.0</div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:14px">
+                <button class="menu-toggle" onclick="toggleSidebar()">&#9776;</button>
+                <span class="page-title" id="page-title">root@penguin: ~/password</span>
+            </div>
+            <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        </div>
+
+        <div class="content-area">
+            <div class="content">
+
+                <!-- USERNAME GENERATOR -->
+                <div id="page-username" class="page">
+                    <div class="label">Input Domain_</div>
+                    <input type="text" id="usr-domain" placeholder="e.g. newsletter.example.com" oninput="genUsername()"
+                        autocomplete="off">
+                    <div id="usr-results" style="display:none">
+                        <div class="stat-bar">
+                            <span>MODE: DEEP EXTRACTION (8L + 4N)</span>
+                            <span>NUMBERS: RANDOM</span>
+                        </div>
+                        <div class="label">Generated Linux Username</div>
+                        <div class="val" id="usr-out" onclick="clip('usr-out')">------------</div>
+                        <div style="margin-top:30px">
+                            <div class="label">Bash Command</div>
+                            <div class="cmd-box" id="usr-cmd" onclick="clip('usr-cmd')"></div>
+                            <div class="notify" id="usr-notify">Click to copy</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASSWORD GENERATOR -->
+                <div id="page-password" class="page active">
+                    <div class="row" style="margin-bottom:5px">
+                        <div>
+                            <div class="label">Length</div>
+                            <input type="number" id="pwd-len" value="14" min="6" max="128" oninput="genPassword()">
+                        </div>
+                    </div>
+                    <div class="checkbox-row">
+                        <label><input type="checkbox" id="pwd-upper" checked onchange="genPassword()"> A-Z</label>
+                        <label><input type="checkbox" id="pwd-lower" checked onchange="genPassword()"> a-z</label>
+                        <label><input type="checkbox" id="pwd-digits" checked onchange="genPassword()"> 0-9</label>
+                        <label><input type="checkbox" id="pwd-symbols" checked onchange="genPassword()"> !@#$%&*</label>
+                    </div>
+                    <div class="stat-bar">
+                        <span id="pwd-strength">STRENGTH: ----</span>
+                        <span id="pwd-entropy">ENTROPY: -- BIT</span>
+                    </div>
+                    <div class="label">Generated Password</div>
+                    <div class="val" id="pwd-out" onclick="clip('pwd-out')" style="letter-spacing:3px">--------------
+                    </div>
+                    <div class="btn-row" style="margin-top:25px">
+                        <button class="btn" onclick="genPassword()">&#x21BB; Generate</button>
+                    </div>
+                    <div class="notify" id="pwd-notify">Click password to copy</div>
+                </div>
+
+                <!-- CRONTAB GENERATOR -->
+                <div id="page-crontab" class="page">
+                    <div class="cron-presets">
+                        <button onclick="setCron('* * * * *')">Every minute</button>
+                        <button onclick="setCron('*/5 * * * *')">Every 5 min</button>
+                        <button onclick="setCron('*/15 * * * *')">Every 15 min</button>
+                        <button onclick="setCron('0 * * * *')">Every hour</button>
+                        <button onclick="setCron('0 0 * * *')">Daily</button>
+                        <button onclick="setCron('0 0 * * 0')">Weekly</button>
+                        <button onclick="setCron('0 0 1 * *')">Monthly</button>
+                        <button onclick="setCron('0 0 1 1 *')">Yearly</button>
+                        <button onclick="setCron('0 9-17 * * 1-5')">Work hours</button>
+                    </div>
+                    <div class="cron-fields">
+                        <div class="cron-field">
+                            <input type="text" id="cron-min" value="*" oninput="parseCron()" maxlength="10">
+                            <div class="label">Minute</div>
+                        </div>
+                        <div class="cron-field">
+                            <input type="text" id="cron-hour" value="*" oninput="parseCron()" maxlength="10">
+                            <div class="label">Hour</div>
+                        </div>
+                        <div class="cron-field">
+                            <input type="text" id="cron-dom" value="*" oninput="parseCron()" maxlength="10">
+                            <div class="label">Day (M)</div>
+                        </div>
+                        <div class="cron-field">
+                            <input type="text" id="cron-month" value="*" oninput="parseCron()" maxlength="10">
+                            <div class="label">Month</div>
+                        </div>
+                        <div class="cron-field">
+                            <input type="text" id="cron-dow" value="*" oninput="parseCron()" maxlength="10">
+                            <div class="label">Day (W)</div>
+                        </div>
+                    </div>
+                    <div class="cron-explain" id="cron-explain">Every minute</div>
+                    <div class="label">Cron Expression</div>
+                    <div class="cmd-box" id="cron-out" onclick="clip('cron-out')"
+                        style="font-size:1.4rem;letter-spacing:4px">* * * * *</div>
+                    <div id="cron-next" class="cron-next"></div>
+                    <div class="notify" id="cron-notify">Click expression to copy</div>
+                </div>
+
+                <!-- TIMESTAMP CONVERTER -->
+                <div id="page-timestamp" class="page">
+                    <div class="stat-bar">
+                        <span>UNIX TIMESTAMP</span>
+                        <span>SECONDS / MILLISECONDS</span>
+                    </div>
+                    <div class="btn-row" style="margin-bottom:25px">
+                        <button class="btn" id="ts-mode-tohuman" onclick="setTsMode('tohuman')"
+                            style="background:var(--neon);color:#000">Timestamp → Human</button>
+                        <button class="btn" id="ts-mode-tots" onclick="setTsMode('tots')">Human → Timestamp</button>
+                    </div>
+
+                    <div id="ts-tohuman-section">
+                        <div class="label">Unix Timestamp (seconds or ms)_</div>
+                        <input type="text" id="ts-input" placeholder="e.g. 1710000000 or 1710000000000"
+                            oninput="convertTimestamp()" autocomplete="off">
+                        <div class="label">Human Readable</div>
+                        <div class="cmd-box" id="ts-human-out" onclick="clip('ts-human-out')">----</div>
+                        <div class="label" style="margin-top:14px">ISO 8601</div>
+                        <div class="cmd-box" id="ts-iso-out" onclick="clip('ts-iso-out')">----</div>
+                    </div>
+
+                    <div id="ts-tots-section" style="display:none">
+                        <div class="label">Date / Time (natural input)_</div>
+                        <input type="text" id="ts-date-input" placeholder="e.g. 2024-03-09 14:30 or now"
+                            oninput="convertToTimestamp()" autocomplete="off">
+                        <div class="label">Unix Timestamp (seconds)</div>
+                        <div class="cmd-box" id="ts-ts-out" onclick="clip('ts-ts-out')">----</div>
+                        <div class="label" style="margin-top:14px">Unix Timestamp (milliseconds)</div>
+                        <div class="cmd-box" id="ts-ms-out" onclick="clip('ts-ms-out')">----</div>
+                    </div>
+
+                    <div class="btn-row" style="margin-top:20px">
+                        <button class="btn"
+                            onclick="setTsMode('tohuman');document.getElementById('ts-input').value=Math.floor(Date.now()/1000);convertTimestamp()">Now
+                            (seconds)</button>
+                        <button class="btn"
+                            onclick="setTsMode('tohuman');document.getElementById('ts-input').value=Date.now();convertTimestamp()">Now
+                            (ms)</button>
+                    </div>
+                    <div class="notify" id="ts-notify">Click to copy</div>
+                </div>
+
+                <!-- UUID GENERATOR -->
+                <div id="page-uuid" class="page">
+                    <div class="stat-bar">
+                        <span>FORMAT: UUID v4 (RFC 4122)</span>
+                        <span>SOURCE: CRYPTO RANDOM</span>
+                    </div>
+                    <div class="label">Generated UUID</div>
+                    <div class="val" id="uuid-out" onclick="clip('uuid-out')"
+                        style="font-size:1.6rem;letter-spacing:2px">----</div>
+                    <div class="btn-row" style="margin-top:25px">
+                        <button class="btn" onclick="genUUID()">&#x21BB; Generate</button>
+                    </div>
+                    <div class="notify" id="uuid-notify">Click UUID to copy</div>
+                </div>
+
+                <!-- JSON-LD STRUCTURED DATA GENERATOR -->
+                <div id="page-jsonld" class="page">
+                    <div class="stat-bar">
+                        <span>SCHEMA.ORG</span>
+                        <span>SEO / RICHE RESULTS</span>
+                    </div>
+                    <div class="row" style="margin-bottom:15px">
+                        <div>
+                            <div class="label">@type</div>
+                            <select id="jsonld-type" onchange="toggleJsonLdFields();genJsonLd()">
+                                <option value="SoftwareApplication">SoftwareApplication</option>
+                                <option value="WebSite">WebSite</option>
+                                <option value="Person">Person</option>
+                                <option value="Organization">Organization</option>
+                                <option value="Article">Article</option>
+                                <option value="Product">Product</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="label">Name_</div>
+                    <input type="text" id="jsonld-name" placeholder="Cipi" oninput="genJsonLd()" autocomplete="off">
+                    <div class="label">URL_</div>
+                    <input type="text" id="jsonld-url" placeholder="https://cipi.sh/" oninput="genJsonLd()"
+                        autocomplete="off">
+                    <div class="label">Description_</div>
+                    <textarea id="jsonld-desc" rows="2"
+                        placeholder="The open-source deploy CLI exclusively for Laravel..."
+                        oninput="genJsonLd()"></textarea>
+
+                    <div id="jsonld-software-fields">
+                        <div class="row">
+                            <div>
+                                <div class="label">Application Category</div>
+                                <input type="text" id="jsonld-appcat" placeholder="DeveloperApplication"
+                                    oninput="genJsonLd()" autocomplete="off">
+                            </div>
+                            <div>
+                                <div class="label">Operating System</div>
+                                <input type="text" id="jsonld-os" placeholder="Ubuntu" oninput="genJsonLd()"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="label">Offers (price / currency)</div>
+                        <div class="row">
+                            <div>
+                                <input type="text" id="jsonld-price" placeholder="0" oninput="genJsonLd()"
+                                    autocomplete="off">
+                            </div>
+                            <div>
+                                <input type="text" id="jsonld-currency" placeholder="USD" oninput="genJsonLd()"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="label">Code Repository_</div>
+                        <input type="text" id="jsonld-repo" placeholder="https://github.com/andreapollastri/cipi"
+                            oninput="genJsonLd()" autocomplete="off">
+                        <div class="label">License_</div>
+                        <input type="text" id="jsonld-license" placeholder="https://opensource.org/licenses/MIT"
+                            oninput="genJsonLd()" autocomplete="off">
+                        <div class="label">sameAs (one per line)_</div>
+                        <textarea id="jsonld-sameas" rows="2" placeholder="https://github.com/andreapollastri/cipi"
+                            oninput="genJsonLd()"></textarea>
+                    </div>
+
+                    <div id="jsonld-author-fields">
+                        <div class="label">Author (Person)_</div>
+                        <div class="row">
+                            <div>
+                                <input type="text" id="jsonld-author-name" placeholder="Andrea Pollastri"
+                                    oninput="genJsonLd()" autocomplete="off">
+                            </div>
+                            <div>
+                                <input type="text" id="jsonld-author-url"
+                                    placeholder="https://github.com/andreapollastri" oninput="genJsonLd()"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="jsonld-website-fields" style="display:none">
+                        <div class="label">Potential Action (Search)_</div>
+                        <input type="text" id="jsonld-search-url"
+                            placeholder="https://example.com/search?q={search_term_string}" oninput="genJsonLd()"
+                            autocomplete="off">
+                    </div>
+
+                    <div class="checkbox-row" style="margin-top:20px">
+                        <label><input type="checkbox" id="jsonld-script-tag" checked onchange="genJsonLd()"> Wrap in
+                            &lt;script type="application/ld+json"&gt;</label>
+                    </div>
+                    <div class="btn-row" style="margin:20px 0">
+                        <button class="btn" onclick="genJsonLd()">&#x21BB; Generate</button>
+                        <button class="btn" onclick="loadJsonLdExample()">Load Cipi example</button>
+                    </div>
+                    <div class="label">Generated JSON-LD</div>
+                    <div class="cmd-box" id="jsonld-out" onclick="clip('jsonld-out')"
+                        style="white-space:pre-wrap;font-size:11px;max-height:400px;overflow-y:auto;line-height:1.5">
+                        ----</div>
+                    <div class="notify" id="jsonld-notify">Click to copy</div>
+                </div>
+
+                <!-- HASH GENERATOR -->
+                <div id="page-hash" class="page">
+                    <div class="label">Input Text_</div>
+                    <input type="text" id="hash-input" placeholder="Text to hash..." oninput="genHash()"
+                        autocomplete="off">
+                    <div class="row" style="margin-bottom:10px">
+                        <div>
+                            <div class="label">Algorithm</div>
+                            <select id="hash-algo" onchange="genHash()">
+                                <option value="SHA-1">SHA-1</option>
+                                <option value="SHA-256" selected>SHA-256</option>
+                                <option value="SHA-384">SHA-384</option>
+                                <option value="SHA-512">SHA-512</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="label">Hash Output</div>
+                    <div class="val small" id="hash-out" onclick="clip('hash-out')">----</div>
+                    <div class="notify" id="hash-notify">Click hash to copy</div>
+                </div>
+
+                <!-- JWT GENERATOR / READER -->
+                <div id="page-jwt" class="page">
+                    <div class="stat-bar">
+                        <span>JSON WEB TOKEN</span>
+                        <span>HS256 / DECODE</span>
+                    </div>
+                    <div class="btn-row" style="margin-bottom:25px">
+                        <button class="btn" id="jwt-mode-decode" onclick="setJwtMode('decode')"
+                            style="background:var(--neon);color:#000">Decode (Read)</button>
+                        <button class="btn" id="jwt-mode-encode" onclick="setJwtMode('encode')">Encode
+                            (Generate)</button>
+                    </div>
+
+                    <div id="jwt-decode-section">
+                        <div class="label">Paste JWT Token_</div>
+                        <textarea id="jwt-decode-input" rows="3"
+                            placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                            oninput="decodeJwt()"></textarea>
+                        <div id="jwt-decode-result" style="display:none">
+                            <div class="label">Header</div>
+                            <div class="cmd-box" id="jwt-header-out" onclick="clip('jwt-header-out')"
+                                style="font-size:12px;white-space:pre-wrap;word-break:break-all">----</div>
+                            <div class="label" style="margin-top:14px">Payload</div>
+                            <div class="cmd-box" id="jwt-payload-out" onclick="clip('jwt-payload-out')"
+                                style="font-size:12px;white-space:pre-wrap;word-break:break-all">----</div>
+                            <div class="label" style="margin-top:14px">Signature (base64)</div>
+                            <div class="cmd-box" id="jwt-sig-out" onclick="clip('jwt-sig-out')">----</div>
+                            <div id="jwt-exp-info" style="margin-top:12px;font-size:11px;color:#666"></div>
+                        </div>
+                    </div>
+
+                    <div id="jwt-encode-section" style="display:none">
+                        <div class="label">Payload (JSON)_</div>
+                        <textarea id="jwt-payload-input" rows="6"
+                            placeholder='{"sub":"1234567890","name":"John Doe","iat":1516239022,"exp":1516242622}'
+                            oninput="encodeJwt()"></textarea>
+                        <div class="label" style="margin-top:14px">Secret Key_</div>
+                        <input type="text" id="jwt-secret" placeholder="your-256-bit-secret" oninput="encodeJwt()"
+                            autocomplete="off">
+                        <div class="row" style="margin-top:14px">
+                            <div>
+                                <div class="label">Algorithm</div>
+                                <select id="jwt-algo" onchange="encodeJwt()">
+                                    <option value="HS256" selected>HS256</option>
+                                    <option value="HS384">HS384</option>
+                                    <option value="HS512">HS512</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="label" style="margin-top:20px">Generated JWT</div>
+                        <div class="cmd-box" id="jwt-out" onclick="clip('jwt-out')"
+                            style="font-size:11px;word-break:break-all;line-height:1.5">----</div>
+                        <div class="btn-row" style="margin-top:15px">
+                            <button class="btn" onclick="addJwtExpiry()">Add exp (1h)</button>
+                        </div>
+                    </div>
+
+                    <div class="notify" id="jwt-notify">Click to copy</div>
+                </div>
+
+                <!-- BASE64 ENCODER/DECODER -->
+                <div id="page-base64" class="page">
+                    <div class="label">Input_</div>
+                    <textarea id="b64-input" rows="3" placeholder="Enter text or Base64 string..."
+                        oninput="doBase64()"></textarea>
+                    <div class="btn-row" style="margin-bottom:25px">
+                        <button class="btn" onclick="b64Mode='encode';doBase64()" id="b64-enc-btn"
+                            style="background:var(--neon);color:#000">Encode</button>
+                        <button class="btn" onclick="b64Mode='decode';doBase64()" id="b64-dec-btn">Decode</button>
+                    </div>
+                    <div class="label">Output</div>
+                    <div class="val small" id="b64-out" onclick="clip('b64-out')">----</div>
+                    <div class="notify" id="b64-notify">Click output to copy</div>
+                </div>
+
+                <!-- LOREM IPSUM GENERATOR -->
+                <div id="page-lorem" class="page">
+                    <div class="row" style="margin-bottom:5px">
+                        <div>
+                            <div class="label">Paragraphs</div>
+                            <input type="number" id="lorem-count" value="3" min="1" max="20" oninput="genLorem()">
+                        </div>
+                    </div>
+                    <div class="label">Generated Text</div>
+                    <div class="cmd-box" id="lorem-out" onclick="clip('lorem-out')"
+                        style="font-size:12px;color:#ccc;line-height:1.8;max-height:400px;overflow-y:auto;cursor:pointer">
+                        ----</div>
+                    <div class="btn-row" style="margin-top:15px">
+                        <button class="btn" onclick="genLorem()">&#x21BB; Generate</button>
+                    </div>
+                    <div class="notify" id="lorem-notify">Click text to copy</div>
+                </div>
+
+                <!-- SLUG GENERATOR -->
+                <div id="page-slug" class="page">
+                    <div class="label">Input Text_</div>
+                    <input type="text" id="slug-input" placeholder='e.g. "My Blog Post Title!"' oninput="genSlug()"
+                        autocomplete="off">
+                    <div class="label">Separator</div>
+                    <select id="slug-sep" onchange="genSlug()">
+                        <option value="-">Hyphen (-)</option>
+                        <option value="_">Underscore (_)</option>
+                        <option value=".">Dot (.)</option>
+                    </select>
+                    <div class="label">Generated Slug</div>
+                    <div class="val" id="slug-out" onclick="clip('slug-out')"
+                        style="font-size:1.4rem;letter-spacing:2px">----</div>
+                    <div class="notify" id="slug-notify">Click slug to copy</div>
+                </div>
+
+                <!-- LARAVEL BCRYPT GENERATOR -->
+                <div id="page-bcrypt" class="page">
+                    <div class="stat-bar">
+                        <span>ALGORITHM: BCRYPT ($2y$)</span>
+                        <span>FRAMEWORK: LARAVEL</span>
+                    </div>
+                    <div class="label">Password to Hash_</div>
+                    <input type="text" id="bcrypt-input" placeholder="Enter password..." autocomplete="off">
+                    <div class="row" style="margin-bottom:5px">
+                        <div>
+                            <div class="label">Rounds (Cost Factor)</div>
+                            <select id="bcrypt-rounds" onchange="genBcrypt()">
+                                <option value="10">10</option>
+                                <option value="12" selected>12 (Laravel default)</option>
+                                <option value="14">14</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="label">Bcrypt Hash</div>
+                    <div class="val small" id="bcrypt-out" onclick="clip('bcrypt-out')">----</div>
+                    <div style="margin-top:20px">
+                        <div class="label">Laravel / PHP Equivalent</div>
+                        <div class="cmd-box" id="bcrypt-php" onclick="clip('bcrypt-php')">Hash::make('...')</div>
+                    </div>
+                    <div class="btn-row" style="margin-top:15px">
+                        <button class="btn" onclick="genBcrypt()">&#x21BB; Hash</button>
+                    </div>
+                    <div class="notify" id="bcrypt-notify">Click hash to copy</div>
+                </div>
+
+                <!-- LARAVEL APP_KEY GENERATOR -->
+                <div id="page-appkey" class="page">
+                    <div class="stat-bar">
+                        <span>CIPHER: AES-256-CBC</span>
+                        <span>KEY SIZE: 32 BYTES (256 BIT)</span>
+                        <span>FRAMEWORK: LARAVEL</span>
+                    </div>
+                    <div class="label">Generated APP_KEY</div>
+                    <div class="val" id="appkey-out" onclick="clip('appkey-out')"
+                        style="font-size:1rem;letter-spacing:1px">----</div>
+                    <div style="margin-top:25px">
+                        <div class="label">.env Line</div>
+                        <div class="cmd-box" id="appkey-env" onclick="clip('appkey-env')">APP_KEY=</div>
+                    </div>
+                    <div style="margin-top:15px">
+                        <div class="label">Artisan Equivalent</div>
+                        <div class="cmd-box" id="appkey-cmd" onclick="clip('appkey-cmd')">php artisan key:generate</div>
+                    </div>
+                    <div class="btn-row" style="margin-top:20px">
+                        <button class="btn" onclick="genAppKey()">&#x21BB; Generate</button>
+                    </div>
+                    <div class="notify" id="appkey-notify">Click to copy</div>
+                </div>
+
+                <!-- CURL GENERATOR -->
+                <div id="page-curl" class="page">
+                    <div class="stat-bar">
+                        <span>OUTPUT: CURL COMMAND</span>
+                        <span>REALTIME BUILDER</span>
+                    </div>
+                    <div class="row">
+                        <div style="flex:0 0 140px">
+                            <div class="label">Method</div>
+                            <select id="curl-method" onchange="genCurl()">
+                                <option>GET</option>
+                                <option>POST</option>
+                                <option>PUT</option>
+                                <option>PATCH</option>
+                                <option>DELETE</option>
+                                <option>HEAD</option>
+                                <option>OPTIONS</option>
+                            </select>
+                        </div>
+                        <div style="flex:1">
+                            <div class="label">URL_</div>
+                            <input type="text" id="curl-url" placeholder="https://api.example.com/v1/resource"
+                                oninput="genCurl()" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <div class="label">Auth Type</div>
+                            <select id="curl-auth" onchange="genCurl()">
+                                <option value="none">None</option>
+                                <option value="bearer">Bearer Token</option>
+                                <option value="basic">Basic Auth</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="label">Content-Type</div>
+                            <select id="curl-content" onchange="genCurl()">
+                                <option value="none">None</option>
+                                <option value="application/json" selected>application/json</option>
+                                <option value="application/x-www-form-urlencoded">x-www-form-urlencoded</option>
+                                <option value="multipart/form-data">multipart/form-data</option>
+                                <option value="text/xml">text/xml</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="curl-auth-fields" style="display:none">
+                        <div class="label" id="curl-auth-label">Token_</div>
+                        <input type="text" id="curl-auth-value" placeholder="your-token-here" oninput="genCurl()"
+                            autocomplete="off">
+                        <div id="curl-basic-extra" style="display:none">
+                            <div class="label">Password_</div>
+                            <input type="text" id="curl-auth-pass" placeholder="password" oninput="genCurl()"
+                                autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="label">Custom Headers (one per line, Key: Value)</div>
+                    <textarea id="curl-headers" rows="2" placeholder="X-Custom-Header: value&#10;Accept-Language: en"
+                        oninput="genCurl()"></textarea>
+                    <div id="curl-body-section">
+                        <div class="label">Request Body_</div>
+                        <textarea id="curl-body" rows="3" placeholder='{"key": "value"}' oninput="genCurl()"></textarea>
+                    </div>
+                    <div class="checkbox-row">
+                        <label><input type="checkbox" id="curl-verbose" onchange="genCurl()"> Verbose (-v)</label>
+                        <label><input type="checkbox" id="curl-insecure" onchange="genCurl()"> Insecure (-k)</label>
+                        <label><input type="checkbox" id="curl-follow" checked onchange="genCurl()"> Follow redirects
+                            (-L)</label>
+                        <label><input type="checkbox" id="curl-silent" onchange="genCurl()"> Silent (-s)</label>
+                    </div>
+                    <div class="label">Generated cURL Command</div>
+                    <div class="cmd-box" id="curl-out" onclick="clip('curl-out')"
+                        style="white-space:pre-wrap;line-height:1.8">curl https://api.example.com</div>
+                    <div class="notify" id="curl-notify">Click command to copy</div>
+                </div>
+
+                <!-- SQL QUERY GENERATOR -->
+                <div id="page-sql" class="page">
+                    <div class="stat-bar">
+                        <span>OUTPUT: SQL QUERY</span>
+                        <span>REALTIME BUILDER</span>
+                    </div>
+
+                    <div class="label">Examples — Click to load</div>
+                    <div class="cron-presets" id="sql-examples">
+                        <button onclick="loadSqlExample('select-basic')">Basic Select</button>
+                        <button onclick="loadSqlExample('select-where')">Select + Where</button>
+                        <button onclick="loadSqlExample('select-join')">Select + Join</button>
+                        <button onclick="loadSqlExample('select-agg')">Aggregation</button>
+                        <button onclick="loadSqlExample('select-subquery')">Pagination</button>
+                        <button onclick="loadSqlExample('select-like')">Search (LIKE)</button>
+                        <button onclick="loadSqlExample('insert')">Insert Row</button>
+                        <button onclick="loadSqlExample('update')">Update Row</button>
+                        <button onclick="loadSqlExample('delete')">Delete Row</button>
+                        <button onclick="loadSqlExample('create')">Create Table</button>
+                        <button onclick="loadSqlExample('alter-add')">Add Column</button>
+                        <button onclick="loadSqlExample('upsert')">Upsert (ON DUPLICATE)</button>
+                    </div>
+
+                    <div class="label">Query Type</div>
+                    <select id="sql-type" onchange="genSQL()">
+                        <option value="SELECT">SELECT</option>
+                        <option value="INSERT">INSERT INTO</option>
+                        <option value="UPDATE">UPDATE</option>
+                        <option value="DELETE">DELETE FROM</option>
+                        <option value="CREATE">CREATE TABLE</option>
+                        <option value="ALTER_ADD">ALTER TABLE (Add Column)</option>
+                        <option value="ALTER_DROP">ALTER TABLE (Drop Column)</option>
+                        <option value="DROP">DROP TABLE</option>
+                        <option value="TRUNCATE">TRUNCATE TABLE</option>
+                    </select>
+
+                    <div class="label">Table Name_</div>
+                    <input type="text" id="sql-table" placeholder="users" oninput="genSQL()" autocomplete="off">
+
+                    <!-- SELECT fields -->
+                    <div id="sql-select-section">
+                        <div class="label">Columns (comma separated, * for all)</div>
+                        <input type="text" id="sql-columns" placeholder="id, name, email, created_at" oninput="genSQL()"
+                            autocomplete="off">
+                    </div>
+
+                    <!-- JOIN section -->
+                    <div id="sql-join-section">
+                        <div class="row">
+                            <div style="flex:0 0 140px">
+                                <div class="label">Join Type</div>
+                                <select id="sql-join-type" onchange="genSQL()">
+                                    <option value="">None</option>
+                                    <option value="INNER JOIN">INNER JOIN</option>
+                                    <option value="LEFT JOIN">LEFT JOIN</option>
+                                    <option value="RIGHT JOIN">RIGHT JOIN</option>
+                                    <option value="FULL JOIN">FULL JOIN</option>
+                                </select>
+                            </div>
+                            <div style="flex:1">
+                                <div class="label">Join Table_</div>
+                                <input type="text" id="sql-join-table" placeholder="orders" oninput="genSQL()"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                        <div id="sql-join-on-row" style="display:none">
+                            <div class="label">ON Condition_</div>
+                            <input type="text" id="sql-join-on" placeholder="users.id = orders.user_id"
+                                oninput="genSQL()" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <!-- WHERE section -->
+                    <div id="sql-where-section">
+                        <div class="label">WHERE Conditions (one per line: column operator value)</div>
+                        <textarea id="sql-where" rows="2" placeholder="status = 'active'&#10;age > 18"
+                            oninput="genSQL()"></textarea>
+                        <div id="sql-where-logic" style="margin-bottom:20px">
+                            <div class="checkbox-row">
+                                <label><input type="radio" name="sql-logic" value="AND" checked onchange="genSQL()"
+                                        style="width:auto;margin:0;accent-color:var(--neon)"> AND</label>
+                                <label><input type="radio" name="sql-logic" value="OR" onchange="genSQL()"
+                                        style="width:auto;margin:0;accent-color:var(--neon)"> OR</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INSERT fields -->
+                    <div id="sql-insert-section" style="display:none">
+                        <div class="label">Columns_</div>
+                        <input type="text" id="sql-ins-cols" placeholder="name, email, role" oninput="genSQL()"
+                            autocomplete="off">
+                        <div class="label">Values_</div>
+                        <input type="text" id="sql-ins-vals" placeholder="'John', 'john@mail.com', 'admin'"
+                            oninput="genSQL()" autocomplete="off">
+                    </div>
+
+                    <!-- UPDATE fields -->
+                    <div id="sql-update-section" style="display:none">
+                        <div class="label">SET (one per line: column = value)</div>
+                        <textarea id="sql-set" rows="2" placeholder="name = 'John'&#10;email = 'john@mail.com'"
+                            oninput="genSQL()"></textarea>
+                    </div>
+
+                    <!-- CREATE TABLE fields -->
+                    <div id="sql-create-section" style="display:none">
+                        <div class="label">Columns (one per line: name TYPE constraints)</div>
+                        <textarea id="sql-create-cols" rows="5"
+                            placeholder="id INT PRIMARY KEY AUTO_INCREMENT&#10;name VARCHAR(255) NOT NULL&#10;email VARCHAR(255) UNIQUE&#10;created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+                            oninput="genSQL()"></textarea>
+                    </div>
+
+                    <!-- ALTER ADD fields -->
+                    <div id="sql-alter-add-section" style="display:none">
+                        <div class="label">Column Definition_</div>
+                        <input type="text" id="sql-alter-col" placeholder="phone VARCHAR(20) NULL" oninput="genSQL()"
+                            autocomplete="off">
+                    </div>
+
+                    <!-- ALTER DROP fields -->
+                    <div id="sql-alter-drop-section" style="display:none">
+                        <div class="label">Column to Drop_</div>
+                        <input type="text" id="sql-alter-drop-col" placeholder="phone" oninput="genSQL()"
+                            autocomplete="off">
+                    </div>
+
+                    <!-- ORDER / LIMIT for SELECT -->
+                    <div id="sql-order-section">
+                        <div class="row">
+                            <div>
+                                <div class="label">ORDER BY</div>
+                                <input type="text" id="sql-order" placeholder="created_at DESC" oninput="genSQL()"
+                                    autocomplete="off">
+                            </div>
+                            <div>
+                                <div class="label">GROUP BY</div>
+                                <input type="text" id="sql-group" placeholder="status" oninput="genSQL()"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <div class="label">LIMIT</div>
+                                <input type="number" id="sql-limit" placeholder="10" oninput="genSQL()"
+                                    autocomplete="off">
+                            </div>
+                            <div>
+                                <div class="label">OFFSET</div>
+                                <input type="number" id="sql-offset" placeholder="0" oninput="genSQL()"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="label">Generated SQL Query</div>
+                    <div class="cmd-box" id="sql-out" onclick="clip('sql-out')"
+                        style="white-space:pre-wrap;line-height:1.8;color:var(--neon)">SELECT * FROM table_name;</div>
+                    <div class="notify" id="sql-notify">Click query to copy</div>
+                </div>
+
+                <!-- LINUX COMMANDS REFERENCE -->
+                <div id="page-linux" class="page">
+                    <div class="label">Search Commands_</div>
+                    <input type="text" id="linux-search" placeholder="e.g. network, file, process, nmap..."
+                        oninput="filterLinux()" autocomplete="off">
+                    <div class="cron-presets" id="linux-cats">
+                        <button class="lx-cat-active" onclick="filterLinuxCat('all', this)">All</button>
+                        <button onclick="filterLinuxCat('files', this)">Files</button>
+                        <button onclick="filterLinuxCat('system', this)">System</button>
+                        <button onclick="filterLinuxCat('network', this)">Network</button>
+                        <button onclick="filterLinuxCat('process', this)">Process</button>
+                        <button onclick="filterLinuxCat('users', this)">Users</button>
+                        <button onclick="filterLinuxCat('disk', this)">Disk</button>
+                        <button onclick="filterLinuxCat('text', this)">Text</button>
+                        <button onclick="filterLinuxCat('archive', this)">Archive</button>
+                        <button onclick="filterLinuxCat('package', this)">Package</button>
+                        <button onclick="filterLinuxCat('security', this)">Security</button>
+                        <button onclick="filterLinuxCat('recon', this)">Recon</button>
+                        <button onclick="filterLinuxCat('exploit', this)">Exploit</button>
+                        <button onclick="filterLinuxCat('wireless', this)">Wireless</button>
+                        <button onclick="filterLinuxCat('forensics', this)">Forensics</button>
+                    </div>
+                    <div class="stat-bar"><span id="linux-count">---</span></div>
+                    <div id="linux-list"></div>
+                    <div class="notify" id="linux-notify" style="margin-top:15px">Click any command to copy</div>
+                </div>
+
+                <!-- URL PARSE (SERIALIZE / DESERIALIZE) -->
+                <div id="page-urlparse" class="page">
+                    <div class="stat-bar">
+                        <span>MODE: SERIALIZE / DESERIALIZE</span>
+                        <span>REALTIME</span>
+                    </div>
+
+                    <div class="btn-row" style="margin-bottom:25px">
+                        <button class="btn" id="url-mode-ser" onclick="setUrlMode('serialize')"
+                            style="background:var(--neon);color:#000">Serialize (Build URL)</button>
+                        <button class="btn" id="url-mode-des" onclick="setUrlMode('deserialize')">Deserialize (Parse
+                            URL)</button>
+                    </div>
+
+                    <!-- DESERIALIZE: paste a URL and break it down -->
+                    <div id="url-des-section">
+                        <div class="label">Paste URL_</div>
+                        <textarea id="url-des-input" rows="2"
+                            placeholder="https://example.com/search?q=hello+world&page=2&lang=en#results"
+                            oninput="parseUrl()"></textarea>
+                        <div id="url-des-result" style="display:none">
+                            <div class="label">Protocol</div>
+                            <div class="cmd-box" id="url-protocol" onclick="clip('url-protocol')">----</div>
+                            <div class="label" style="margin-top:14px">Host</div>
+                            <div class="cmd-box" id="url-host" onclick="clip('url-host')">----</div>
+                            <div id="url-port-row" style="display:none">
+                                <div class="label" style="margin-top:14px">Port</div>
+                                <div class="cmd-box" id="url-port" onclick="clip('url-port')">----</div>
+                            </div>
+                            <div class="label" style="margin-top:14px">Path</div>
+                            <div class="cmd-box" id="url-path" onclick="clip('url-path')">----</div>
+                            <div id="url-params-section" style="display:none">
+                                <div class="label" style="margin-top:14px">Query Parameters</div>
+                                <div id="url-params-list"></div>
+                            </div>
+                            <div id="url-hash-row" style="display:none">
+                                <div class="label" style="margin-top:14px">Fragment (Hash)</div>
+                                <div class="cmd-box" id="url-hash" onclick="clip('url-hash')">----</div>
+                            </div>
+                            <div class="label" style="margin-top:20px">Decoded URL</div>
+                            <div class="cmd-box" id="url-decoded" onclick="clip('url-decoded')">----</div>
+                            <div class="label" style="margin-top:14px">Encoded URL</div>
+                            <div class="cmd-box" id="url-encoded" onclick="clip('url-encoded')">----</div>
+                        </div>
+                    </div>
+
+                    <!-- SERIALIZE: build a URL from parts -->
+                    <div id="url-ser-section" style="display:none">
+                        <div class="row">
+                            <div style="flex:0 0 140px">
+                                <div class="label">Protocol</div>
+                                <select id="url-ser-proto" onchange="buildUrl()">
+                                    <option>https</option>
+                                    <option>http</option>
+                                    <option>ftp</option>
+                                    <option>ws</option>
+                                    <option>wss</option>
+                                </select>
+                            </div>
+                            <div style="flex:1">
+                                <div class="label">Host_</div>
+                                <input type="text" id="url-ser-host" placeholder="api.example.com" oninput="buildUrl()"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <div class="label">Port (optional)</div>
+                                <input type="text" id="url-ser-port" placeholder="8080" oninput="buildUrl()"
+                                    autocomplete="off">
+                            </div>
+                            <div>
+                                <div class="label">Path_</div>
+                                <input type="text" id="url-ser-path" placeholder="/api/v1/users" oninput="buildUrl()"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="label">Query Parameters (one per line: key=value)</div>
+                        <textarea id="url-ser-params" rows="3"
+                            placeholder="q=hello world&#10;page=1&#10;sort=name&#10;order=asc"
+                            oninput="buildUrl()"></textarea>
+                        <div class="label">Fragment / Hash (optional)</div>
+                        <input type="text" id="url-ser-hash" placeholder="section-2" oninput="buildUrl()"
+                            autocomplete="off">
+                        <div class="label">Generated URL</div>
+                        <div class="cmd-box" id="url-ser-out" onclick="clip('url-ser-out')"
+                            style="word-break:break-all">----</div>
+                        <div class="label" style="margin-top:14px">Encoded URL</div>
+                        <div class="cmd-box" id="url-ser-encoded" onclick="clip('url-ser-encoded')"
+                            style="word-break:break-all">----</div>
+                    </div>
+
+                    <div class="notify" id="urlparse-notify">Click any field to copy</div>
+                </div>
+
+                <!-- CHMOD COMPOSER -->
+                <div id="page-chmod" class="page">
+                    <div class="stat-bar">
+                        <span>LINUX FILE PERMISSIONS</span>
+                        <span>INTERACTIVE COMPOSER</span>
+                    </div>
+
+                    <div class="label">Common Presets</div>
+                    <div class="cron-presets" style="margin-bottom:20px">
+                        <button onclick="setChmod(644)">644 (File default)</button>
+                        <button onclick="setChmod(755)">755 (Executable)</button>
+                        <button onclick="setChmod(700)">700 (Private)</button>
+                        <button onclick="setChmod(600)">600 (Secrets)</button>
+                        <button onclick="setChmod(777)">777 (Full access)</button>
+                        <button onclick="setChmod(444)">444 (Read-only all)</button>
+                        <button onclick="setChmod(750)">750 (Group read)</button>
+                        <button onclick="setChmod(640)">640 (Group readable)</button>
+                        <button onclick="setChmod(400)">400 (SSH keys)</button>
+                    </div>
+
+                    <div class="chmod-grid">
+                        <div class="chmod-col">
+                            <div class="chmod-col-title" style="color:var(--neon)">Owner</div>
+                            <label class="chmod-cb"><input type="checkbox" id="ch-o-r" checked
+                                    onchange="calcChmod()"><span class="chmod-label">Read</span><span
+                                    class="chmod-bit">4</span></label>
+                            <label class="chmod-cb"><input type="checkbox" id="ch-o-w" checked
+                                    onchange="calcChmod()"><span class="chmod-label">Write</span><span
+                                    class="chmod-bit">2</span></label>
+                            <label class="chmod-cb"><input type="checkbox" id="ch-o-x" onchange="calcChmod()"><span
+                                    class="chmod-label">Execute</span><span class="chmod-bit">1</span></label>
+                            <div class="chmod-subtotal" id="ch-o-val">6</div>
+                        </div>
+                        <div class="chmod-col">
+                            <div class="chmod-col-title" style="color:#ffbd2e">Group</div>
+                            <label class="chmod-cb"><input type="checkbox" id="ch-g-r" checked
+                                    onchange="calcChmod()"><span class="chmod-label">Read</span><span
+                                    class="chmod-bit">4</span></label>
+                            <label class="chmod-cb"><input type="checkbox" id="ch-g-w" onchange="calcChmod()"><span
+                                    class="chmod-label">Write</span><span class="chmod-bit">2</span></label>
+                            <label class="chmod-cb"><input type="checkbox" id="ch-g-x" onchange="calcChmod()"><span
+                                    class="chmod-label">Execute</span><span class="chmod-bit">1</span></label>
+                            <div class="chmod-subtotal" id="ch-g-val">4</div>
+                        </div>
+                        <div class="chmod-col">
+                            <div class="chmod-col-title" style="color:#ff5f56">Others</div>
+                            <label class="chmod-cb"><input type="checkbox" id="ch-a-r" checked
+                                    onchange="calcChmod()"><span class="chmod-label">Read</span><span
+                                    class="chmod-bit">4</span></label>
+                            <label class="chmod-cb"><input type="checkbox" id="ch-a-w" onchange="calcChmod()"><span
+                                    class="chmod-label">Write</span><span class="chmod-bit">2</span></label>
+                            <label class="chmod-cb"><input type="checkbox" id="ch-a-x" onchange="calcChmod()"><span
+                                    class="chmod-label">Execute</span><span class="chmod-bit">1</span></label>
+                            <div class="chmod-subtotal" id="ch-a-val">4</div>
+                        </div>
+                    </div>
+
+                    <div class="label" style="margin-top:25px">Numeric Value</div>
+                    <div class="val" id="chmod-num" onclick="clip('chmod-num')"
+                        style="font-size:4rem;letter-spacing:16px;text-align:center">644</div>
+
+                    <div class="label" style="margin-top:25px">Symbolic Notation</div>
+                    <div class="cmd-box" id="chmod-sym" onclick="clip('chmod-sym')"
+                        style="font-size:1.2rem;text-align:center;letter-spacing:4px">rw-r--r--</div>
+
+                    <div style="margin-top:20px">
+                        <div class="label">File Name (optional)_</div>
+                        <input type="text" id="chmod-file" placeholder="deploy.sh" oninput="calcChmod()"
+                            autocomplete="off">
+                    </div>
+
+                    <div class="label">Commands</div>
+                    <div class="cmd-box" id="chmod-cmd-num" onclick="clip('chmod-cmd-num')">chmod 644 file</div>
+                    <div class="cmd-box" id="chmod-cmd-sym" onclick="clip('chmod-cmd-sym')" style="margin-top:8px">chmod
+                        u=rw,g=r,o=r file</div>
+                    <div class="cmd-box" id="chmod-cmd-rec" onclick="clip('chmod-cmd-rec')" style="margin-top:8px">find
+                        . -type f -exec chmod 644 {} \;</div>
+
+                    <div class="label" style="margin-top:20px">ls -la Preview</div>
+                    <div class="cmd-box" id="chmod-ls" onclick="clip('chmod-ls')"
+                        style="color:white;letter-spacing:2px">-rw-r--r--</div>
+
+                    <div class="notify" id="chmod-notify">Click any value to copy</div>
+                </div>
+
+                <!-- FAKE IDENTITY GENERATOR -->
+                <div id="page-fakeid" class="page">
+                    <div class="stat-bar">
+                        <span>MODE: RANDOM FAKE IDENTITY</span>
+                        <span>FOR TESTING ONLY</span>
+                    </div>
+                    <div class="row" style="margin-bottom:5px">
+                        <div>
+                            <div class="label">Gender</div>
+                            <select id="fake-gender" onchange="genFakeId()">
+                                <option value="random">Random</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="label">Country</div>
+                            <select id="fake-country" onchange="genFakeId()">
+                                <option value="US">United States</option>
+                                <option value="IT">Italy</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="DE">Germany</option>
+                                <option value="FR">France</option>
+                                <option value="ES">Spain</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="btn-row" style="margin-bottom:25px">
+                        <button class="btn" onclick="genFakeId()">&#x21BB; Generate New Identity</button>
+                    </div>
+                    <div id="fake-result">
+                        <div class="fake-row"><span class="fake-label">Full Name</span><span class="fake-val"
+                                id="fk-name" onclick="clip('fk-name')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Username</span><span class="fake-val"
+                                id="fk-user" onclick="clip('fk-user')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Email</span><span class="fake-val" id="fk-email"
+                                onclick="clip('fk-email')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Password</span><span class="fake-val"
+                                id="fk-pass" onclick="clip('fk-pass')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Date of Birth</span><span class="fake-val"
+                                id="fk-dob" onclick="clip('fk-dob')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Age</span><span class="fake-val" id="fk-age"
+                                onclick="clip('fk-age')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Phone</span><span class="fake-val" id="fk-phone"
+                                onclick="clip('fk-phone')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Address</span><span class="fake-val" id="fk-addr"
+                                onclick="clip('fk-addr')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">City</span><span class="fake-val" id="fk-city"
+                                onclick="clip('fk-city')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">State / Province</span><span class="fake-val"
+                                id="fk-state" onclick="clip('fk-state')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">ZIP / CAP</span><span class="fake-val"
+                                id="fk-zip" onclick="clip('fk-zip')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Country</span><span class="fake-val"
+                                id="fk-country" onclick="clip('fk-country')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Company</span><span class="fake-val"
+                                id="fk-company" onclick="clip('fk-company')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Job Title</span><span class="fake-val"
+                                id="fk-job" onclick="clip('fk-job')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">SSN / Tax ID</span><span class="fake-val"
+                                id="fk-ssn" onclick="clip('fk-ssn')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Credit Card</span><span class="fake-val"
+                                id="fk-cc" onclick="clip('fk-cc')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">IBAN</span><span class="fake-val" id="fk-iban"
+                                onclick="clip('fk-iban')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">Website</span><span class="fake-val" id="fk-web"
+                                onclick="clip('fk-web')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">IP Address</span><span class="fake-val"
+                                id="fk-ip" onclick="clip('fk-ip')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">MAC Address</span><span class="fake-val"
+                                id="fk-mac" onclick="clip('fk-mac')">----</span></div>
+                        <div class="fake-row"><span class="fake-label">User Agent</span><span class="fake-val"
+                                id="fk-ua" onclick="clip('fk-ua')">----</span></div>
+                    </div>
+                    <div style="margin-top:20px">
+                        <div class="label">Copy All as JSON</div>
+                        <div class="cmd-box" id="fk-json" onclick="clip('fk-json')"
+                            style="white-space:pre-wrap;font-size:11px;max-height:300px;overflow-y:auto">{ }</div>
+                    </div>
+                    <div class="notify" id="fakeid-notify">Click any field to copy</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+    <script>
+        /* ========== NAVIGATION ========== */
+        const pageTitles = {
+            password: 'root@penguin: ~/password',
+            username: 'root@penguin: ~/username',
+            bcrypt: 'root@penguin: ~/bcrypt',
+            appkey: 'root@penguin: ~/app-key',
+            hash: 'root@penguin: ~/hash',
+            jwt: 'root@penguin: ~/jwt',
+            uuid: 'root@penguin: ~/uuid',
+            jsonld: 'root@penguin: ~/json-ld',
+            fakeid: 'root@penguin: ~/fake-identity',
+            base64: 'root@penguin: ~/base64',
+            urlparse: 'root@penguin: ~/url-parse',
+            slug: 'root@penguin: ~/slug',
+            crontab: 'root@penguin: ~/crontab',
+            timestamp: 'root@penguin: ~/timestamp',
+            lorem: 'root@penguin: ~/lorem',
+            curl: 'root@penguin: ~/curl',
+            sql: 'root@penguin: ~/sql',
+            linux: 'root@penguin: ~/linux-commands',
+            chmod: 'root@penguin: ~/chmod',
+        };
+
+        function showPage(id, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sidebar-nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById('page-' + id).classList.add('active');
+            if (btn) btn.classList.add('active');
+            document.getElementById('page-title').innerText = pageTitles[id] || '';
+            closeSidebar();
+
+            if (id === 'uuid' && document.getElementById('uuid-out').innerText === '----') genUUID();
+            if (id === 'jsonld' && document.getElementById('jsonld-out').innerText === '----') genJsonLd();
+            if (id === 'lorem' && document.getElementById('lorem-out').innerText === '----') genLorem();
+            if (id === 'password' && document.getElementById('pwd-out').innerText === '--------------') genPassword();
+            if (id === 'appkey' && document.getElementById('appkey-out').innerText === '----') genAppKey();
+            if (id === 'linux' && !document.getElementById('linux-list').innerHTML) filterLinux();
+        }
+
+        /* ========== MOBILE SIDEBAR ========== */
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        }
+
+        /* ========== CLIPBOARD ========== */
+        function clip(elId) {
+            const el = document.getElementById(elId);
+            const text = el.innerText;
+            if (!text || text === '----' || text === '------------' || text === '--------------') return;
+            navigator.clipboard.writeText(text).then(() => {
+                const page = el.closest('.page');
+                const notif = page ? page.querySelector('.notify') : null;
+                if (notif) {
+                    notif.innerText = '\u2713 COPIED';
+                    notif.style.color = 'var(--neon)';
+                    setTimeout(() => { notif.innerText = 'Click to copy'; notif.style.color = '#444'; }, 1500);
+                }
+            });
+        }
+
+        /* ========== USERNAME GENERATOR ========== */
+        function genUsername() {
+            const input = document.getElementById('usr-domain').value.trim().toLowerCase();
+            const res = document.getElementById('usr-results');
+            if (!input) { res.style.display = 'none'; return; }
+            res.style.display = 'block';
+
+            const raw = input.replace('www.', '').replace(/\./g, '').replace(/[^a-z]/g, '');
+            let letters = [];
+            for (let c of raw) {
+                if (letters.length < 8 && !letters.includes(c)) letters.push(c);
+            }
+            const fb = 'bcdfghjklmnpqrstvwxyz';
+            let fi = 0;
+            while (letters.length < 8) {
+                if (!letters.includes(fb[fi])) letters.push(fb[fi]);
+                fi++;
+            }
+            const prefix = letters.join('');
+            const suffix = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            const username = prefix + suffix;
+
+            document.getElementById('usr-out').innerText = username;
+            document.getElementById('usr-cmd').innerText = `sudo useradd -m -s /bin/bash -c "User ${input}" ${username}`;
+        }
+
+        /* ========== PASSWORD GENERATOR ========== */
+        function genPassword() {
+            const len = Math.max(6, Math.min(128, parseInt(document.getElementById('pwd-len').value) || 14));
+            let charset = '';
+            if (document.getElementById('pwd-upper').checked) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (document.getElementById('pwd-lower').checked) charset += 'abcdefghijklmnopqrstuvwxyz';
+            if (document.getElementById('pwd-digits').checked) charset += '0123456789';
+            if (document.getElementById('pwd-symbols').checked) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+            if (!charset) charset = 'abcdefghijklmnopqrstuvwxyz';
+
+            const arr = new Uint32Array(len);
+            crypto.getRandomValues(arr);
+            let pwd = '';
+            for (let i = 0; i < len; i++) {
+                pwd += charset[arr[i] % charset.length];
+            }
+
+            document.getElementById('pwd-out').innerText = pwd;
+
+            const entropy = Math.floor(len * Math.log2(charset.length));
+            document.getElementById('pwd-entropy').innerText = `ENTROPY: ${entropy} BIT`;
+
+            let strength = 'WEAK';
+            let color = '#ff5f56';
+            if (entropy >= 60) { strength = 'FAIR'; color = '#ffbd2e'; }
+            if (entropy >= 80) { strength = 'STRONG'; color = '#27c93f'; }
+            if (entropy >= 100) { strength = 'VERY STRONG'; color = '#00ff41'; }
+            document.getElementById('pwd-strength').innerHTML = `STRENGTH: <span style="color:${color}">${strength}</span>`;
+        }
+
+        /* ========== CRONTAB GENERATOR ========== */
+        const MONTHS = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        function setCron(expr) {
+            const parts = expr.split(' ');
+            document.getElementById('cron-min').value = parts[0] || '*';
+            document.getElementById('cron-hour').value = parts[1] || '*';
+            document.getElementById('cron-dom').value = parts[2] || '*';
+            document.getElementById('cron-month').value = parts[3] || '*';
+            document.getElementById('cron-dow').value = parts[4] || '*';
+            parseCron();
+        }
+
+        function parseCron() {
+            const min = document.getElementById('cron-min').value.trim() || '*';
+            const hour = document.getElementById('cron-hour').value.trim() || '*';
+            const dom = document.getElementById('cron-dom').value.trim() || '*';
+            const month = document.getElementById('cron-month').value.trim() || '*';
+            const dow = document.getElementById('cron-dow').value.trim() || '*';
+
+            const expr = `${min} ${hour} ${dom} ${month} ${dow}`;
+            document.getElementById('cron-out').innerText = expr;
+
+            const desc = describeCron(min, hour, dom, month, dow);
+            document.getElementById('cron-explain').innerText = desc;
+
+            const nextRuns = getNextCronRuns(min, hour, dom, month, dow, 5);
+            const nextEl = document.getElementById('cron-next');
+            if (nextRuns.length) {
+                nextEl.innerHTML = '<div style="color:#666;margin-bottom:4px">NEXT EXECUTIONS:</div>' +
+                    nextRuns.map(d => `<div>\u25B8 ${d.toLocaleString()}</div>`).join('');
+            } else {
+                nextEl.innerHTML = '';
+            }
+        }
+
+        function describeField(val, unit, names) {
+            if (val === '*') return '';
+            if (val.startsWith('*/')) return `every ${val.slice(2)} ${unit}s`;
+            if (val.includes(',')) {
+                const parts = val.split(',').map(v => names ? (names[parseInt(v)] || v) : v);
+                return `at ${unit} ${parts.join(', ')}`;
+            }
+            if (val.includes('-')) {
+                const [a, b] = val.split('-');
+                const from = names ? (names[parseInt(a)] || a) : a;
+                const to = names ? (names[parseInt(b)] || b) : b;
+                return `${unit} ${from} through ${to}`;
+            }
+            return names ? (names[parseInt(val)] || val) : val;
+        }
+
+        function describeCron(min, hour, dom, month, dow) {
+            let parts = [];
+
+            if (min === '*' && hour === '*' && dom === '*' && month === '*' && dow === '*') return 'Every minute';
+            if (min.startsWith('*/') && hour === '*' && dom === '*' && month === '*' && dow === '*') return `Every ${min.slice(2)} minutes`;
+            if (hour.startsWith('*/') && dom === '*' && month === '*' && dow === '*') {
+                const h = `Every ${hour.slice(2)} hours`;
+                return min === '0' ? h : `${h} at minute ${min}`;
+            }
+
+            if (min !== '*' && hour !== '*' && !min.includes('/') && !hour.includes('/')) {
+                if (hour.includes('-')) {
+                    parts.push(`Every hour from ${hour.split('-')[0]}:00 to ${hour.split('-')[1]}:00 at minute ${min}`);
+                } else if (hour.includes(',')) {
+                    parts.push(`At ${hour.split(',').map(h => `${h.padStart(2, '0')}:${min.padStart(2, '0')}`).join(', ')}`);
+                } else {
+                    parts.push(`At ${hour.padStart(2, '0')}:${min.padStart(2, '0')}`);
+                }
+            } else {
+                if (min === '0' && hour === '*') {
+                    parts.push('Every hour');
+                } else if (min !== '*') {
+                    if (min.startsWith('*/')) parts.push(`Every ${min.slice(2)} minutes`);
+                    else parts.push(`At minute ${min}`);
+                    if (hour !== '*') {
+                        if (hour.includes('-')) parts.push(`past every hour from ${hour.split('-')[0]} through ${hour.split('-')[1]}`);
+                        else parts.push(`past hour ${hour}`);
+                    }
+                } else if (hour !== '*') {
+                    parts.push(describeField(hour, 'hour'));
+                }
+            }
+
+            if (dom !== '*') {
+                if (dom === '1' && month !== '*') parts.push('on day 1');
+                else parts.push(`on day-of-month ${dom}`);
+            }
+
+            if (month !== '*') {
+                const mDesc = describeField(month, 'month', MONTHS);
+                parts.push(`in ${mDesc || MONTHS[parseInt(month)] || month}`);
+            }
+
+            if (dow !== '*') {
+                if (dow.includes('-')) {
+                    const [a, b] = dow.split('-');
+                    parts.push(`on ${DAYS[parseInt(a)] || a} through ${DAYS[parseInt(b)] || b}`);
+                } else if (dow.includes(',')) {
+                    const ds = dow.split(',').map(d => DAYS[parseInt(d)] || d);
+                    parts.push(`on ${ds.join(', ')}`);
+                } else {
+                    parts.push(`on ${DAYS[parseInt(dow)] || dow}`);
+                }
+            }
+
+            return parts.join(' ') || 'Invalid expression';
+        }
+
+        function getNextCronRuns(min, hour, dom, month, dow, count) {
+            const runs = [];
+            const now = new Date();
+            let d = new Date(now.getTime() + 60000);
+            d.setSeconds(0, 0);
+
+            for (let i = 0; i < 525600 && runs.length < count; i++) {
+                if (matchCronField(d.getMinutes(), min) &&
+                    matchCronField(d.getHours(), hour) &&
+                    matchCronField(d.getDate(), dom) &&
+                    matchCronField(d.getMonth() + 1, month) &&
+                    matchCronField(d.getDay(), dow)) {
+                    runs.push(new Date(d));
+                }
+                d.setMinutes(d.getMinutes() + 1);
+            }
+            return runs;
+        }
+
+        function matchCronField(value, field) {
+            if (field === '*') return true;
+            const parts = field.split(',');
+            return parts.some(part => {
+                if (part.includes('/')) {
+                    const [range, step] = part.split('/');
+                    const s = parseInt(step);
+                    if (range === '*') return value % s === 0;
+                    const [start] = range.split('-');
+                    return value >= parseInt(start) && value % s === 0;
+                }
+                if (part.includes('-')) {
+                    const [a, b] = part.split('-').map(Number);
+                    return value >= a && value <= b;
+                }
+                return value === parseInt(part);
+            });
+        }
+
+        parseCron();
+
+        /* ========== UUID GENERATOR ========== */
+        function genUUID() {
+            if (crypto.randomUUID) {
+                document.getElementById('uuid-out').innerText = crypto.randomUUID();
+            } else {
+                const hex = [...crypto.getRandomValues(new Uint8Array(16))]
+                    .map((b, i) => {
+                        if (i === 6) b = (b & 0x0f) | 0x40;
+                        if (i === 8) b = (b & 0x3f) | 0x80;
+                        return b.toString(16).padStart(2, '0');
+                    }).join('');
+                document.getElementById('uuid-out').innerText =
+                    `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+            }
+        }
+
+        /* ========== JSON-LD STRUCTURED DATA GENERATOR ========== */
+        function toggleJsonLdFields() {
+            const type = document.getElementById('jsonld-type').value;
+            document.getElementById('jsonld-software-fields').style.display = type === 'SoftwareApplication' ? 'block' : 'none';
+            document.getElementById('jsonld-website-fields').style.display = type === 'WebSite' ? 'block' : 'none';
+            document.getElementById('jsonld-author-fields').style.display = ['SoftwareApplication', 'Article'].includes(type) ? 'block' : 'none';
+        }
+
+        function genJsonLd() {
+            const type = document.getElementById('jsonld-type').value;
+            const name = document.getElementById('jsonld-name').value.trim();
+            const url = document.getElementById('jsonld-url').value.trim();
+            const desc = document.getElementById('jsonld-desc').value.trim();
+            const wrapScript = document.getElementById('jsonld-script-tag').checked;
+
+            const obj = {
+                '@context': 'https://schema.org',
+                '@type': type,
+                ...(name && { name }),
+                ...(url && { url }),
+                ...(desc && { description: desc }),
+            };
+
+            if (type === 'SoftwareApplication') {
+                const appCat = document.getElementById('jsonld-appcat').value.trim();
+                const os = document.getElementById('jsonld-os').value.trim();
+                const price = document.getElementById('jsonld-price').value.trim();
+                const currency = document.getElementById('jsonld-currency').value.trim();
+                const authorName = document.getElementById('jsonld-author-name').value.trim();
+                const authorUrl = document.getElementById('jsonld-author-url').value.trim();
+                const repo = document.getElementById('jsonld-repo').value.trim();
+                const license = document.getElementById('jsonld-license').value.trim();
+                const sameAsRaw = document.getElementById('jsonld-sameas').value.trim();
+                const sameAs = sameAsRaw ? sameAsRaw.split('\n').map(s => s.trim()).filter(Boolean) : [];
+
+                if (appCat) obj.applicationCategory = appCat;
+                if (os) obj.operatingSystem = os;
+                if (price || currency) {
+                    obj.offers = {
+                        '@type': 'Offer',
+                        ...(price && { price: price }),
+                        ...(currency && { priceCurrency: currency }),
+                    };
+                }
+                if (authorName || authorUrl) {
+                    obj.author = {
+                        '@type': 'Person',
+                        ...(authorName && { name: authorName }),
+                        ...(authorUrl && { url: authorUrl }),
+                    };
+                }
+                if (repo) obj.codeRepository = repo;
+                if (license) obj.license = license;
+                if (sameAs.length) obj.sameAs = sameAs;
+            }
+
+            if (type === 'WebSite') {
+                const searchUrl = document.getElementById('jsonld-search-url').value.trim();
+                if (searchUrl) {
+                    obj.potentialAction = {
+                        '@type': 'SearchAction',
+                        target: { '@type': 'EntryPoint', urlTemplate: searchUrl },
+                        'query-input': 'required name=search_term_string',
+                    };
+                }
+            }
+
+            if (['SoftwareApplication', 'Article'].includes(type)) {
+                const authorName = document.getElementById('jsonld-author-name').value.trim();
+                const authorUrl = document.getElementById('jsonld-author-url').value.trim();
+                if (authorName || authorUrl) {
+                    obj.author = {
+                        '@type': 'Person',
+                        ...(authorName && { name: authorName }),
+                        ...(authorUrl && { url: authorUrl }),
+                    };
+                }
+            }
+
+            let out = JSON.stringify(obj, null, 2);
+            if (wrapScript) {
+                out = '<!-- JSON-LD Structured Data -->\n<script type="application/ld+json">\n' + out + '\n</scr' + 'ipt>';
+            }
+            document.getElementById('jsonld-out').innerText = out;
+        }
+
+        function loadJsonLdExample() {
+            document.getElementById('jsonld-type').value = 'SoftwareApplication';
+            document.getElementById('jsonld-name').value = 'Cipi';
+            document.getElementById('jsonld-url').value = 'https://cipi.sh/';
+            document.getElementById('jsonld-desc').value = 'The open-source deploy CLI exclusively for Laravel. One command installs a complete production stack on any Ubuntu VPS.';
+            document.getElementById('jsonld-appcat').value = 'DeveloperApplication';
+            document.getElementById('jsonld-os').value = 'Ubuntu';
+            document.getElementById('jsonld-price').value = '0';
+            document.getElementById('jsonld-currency').value = 'USD';
+            document.getElementById('jsonld-author-name').value = 'Andrea Pollastri';
+            document.getElementById('jsonld-author-url').value = 'https://github.com/andreapollastri';
+            document.getElementById('jsonld-repo').value = 'https://github.com/andreapollastri/cipi';
+            document.getElementById('jsonld-license').value = 'https://opensource.org/licenses/MIT';
+            document.getElementById('jsonld-sameas').value = 'https://github.com/andreapollastri/cipi';
+            toggleJsonLdFields();
+            genJsonLd();
+        }
+
+        toggleJsonLdFields();
+
+        /* ========== HASH GENERATOR ========== */
+        async function genHash() {
+            const input = document.getElementById('hash-input').value;
+            if (!input) { document.getElementById('hash-out').innerText = '----'; return; }
+            const algo = document.getElementById('hash-algo').value;
+            const data = new TextEncoder().encode(input);
+            const hashBuffer = await crypto.subtle.digest(algo, data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            document.getElementById('hash-out').innerText = hashHex;
+        }
+
+        /* ========== JWT GENERATOR / READER ========== */
+        let jwtMode = 'decode';
+
+        function base64UrlEncode(str) {
+            const base64 = btoa(unescape(encodeURIComponent(str)));
+            return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        }
+
+        function base64UrlEncodeBytes(bytes) {
+            let binary = '';
+            for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+            return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        }
+
+        function base64UrlDecode(str) {
+            let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+            while (base64.length % 4) base64 += '=';
+            return decodeURIComponent(escape(atob(base64)));
+        }
+
+        function setJwtMode(mode) {
+            jwtMode = mode;
+            document.getElementById('jwt-decode-section').style.display = mode === 'decode' ? 'block' : 'none';
+            document.getElementById('jwt-encode-section').style.display = mode === 'encode' ? 'block' : 'none';
+            document.getElementById('jwt-mode-decode').style.background = mode === 'decode' ? 'var(--neon)' : 'transparent';
+            document.getElementById('jwt-mode-decode').style.color = mode === 'decode' ? '#000' : 'var(--neon)';
+            document.getElementById('jwt-mode-encode').style.background = mode === 'encode' ? 'var(--neon)' : 'transparent';
+            document.getElementById('jwt-mode-encode').style.color = mode === 'encode' ? '#000' : 'var(--neon)';
+            if (mode === 'decode') decodeJwt();
+            else encodeJwt();
+        }
+
+        function decodeJwt() {
+            const raw = document.getElementById('jwt-decode-input').value.trim();
+            const res = document.getElementById('jwt-decode-result');
+            if (!raw) { res.style.display = 'none'; return; }
+            const parts = raw.split('.');
+            if (parts.length < 2) {
+                res.style.display = 'block';
+                document.getElementById('jwt-header-out').innerText = 'Invalid JWT format (expected header.payload[.signature])';
+                document.getElementById('jwt-payload-out').innerText = '----';
+                document.getElementById('jwt-sig-out').innerText = '----';
+                document.getElementById('jwt-exp-info').innerHTML = '';
+                return;
+            }
+            try {
+                const header = base64UrlDecode(parts[0]);
+                const payload = base64UrlDecode(parts[1]);
+                document.getElementById('jwt-header-out').innerText = JSON.stringify(JSON.parse(header), null, 2);
+                document.getElementById('jwt-payload-out').innerText = JSON.stringify(JSON.parse(payload), null, 2);
+                document.getElementById('jwt-sig-out').innerText = parts[2] || '(none)';
+                res.style.display = 'block';
+
+                let expHtml = '';
+                try {
+                    const pl = JSON.parse(payload);
+                    if (pl.exp) {
+                        const expDate = new Date(pl.exp * 1000);
+                        const now = new Date();
+                        const expired = now > expDate;
+                        expHtml = `exp: ${expDate.toLocaleString()} ${expired ? '<span style="color:#ff5f56">(expired)</span>' : '<span style="color:#27c93f">(valid)</span>'}`;
+                    }
+                    if (pl.iat) expHtml += ` &nbsp;|&nbsp; iat: ${new Date(pl.iat * 1000).toLocaleString()}`;
+                } catch { }
+                document.getElementById('jwt-exp-info').innerHTML = expHtml;
+            } catch (e) {
+                res.style.display = 'block';
+                document.getElementById('jwt-header-out').innerText = 'Error: ' + (e.message || 'Invalid base64/JSON');
+                document.getElementById('jwt-payload-out').innerText = '----';
+                document.getElementById('jwt-sig-out').innerText = '----';
+                document.getElementById('jwt-exp-info').innerHTML = '';
+            }
+        }
+
+        async function encodeJwt() {
+            const payloadRaw = document.getElementById('jwt-payload-input').value.trim();
+            const secret = document.getElementById('jwt-secret').value;
+            const algoSelect = document.getElementById('jwt-algo').value;
+            const algo = { HS256: 'SHA-256', HS384: 'SHA-384', HS512: 'SHA-512' }[algoSelect] || 'SHA-256';
+            if (!payloadRaw) {
+                document.getElementById('jwt-out').innerText = '----';
+                return;
+            }
+            try {
+                JSON.parse(payloadRaw);
+            } catch {
+                document.getElementById('jwt-out').innerText = 'Invalid JSON payload';
+                return;
+            }
+            const header = { alg: algo, typ: 'JWT' };
+            const headerB64 = base64UrlEncode(JSON.stringify(header));
+            const payloadB64 = base64UrlEncode(payloadRaw.replace(/\s+/g, ''));
+            const toSign = headerB64 + '.' + payloadB64;
+
+            if (!secret) {
+                document.getElementById('jwt-out').innerText = headerB64 + '.' + payloadB64 + '.';
+                return;
+            }
+
+            const enc = new TextEncoder();
+            const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: algo }, false, ['sign']);
+            const sigBuffer = await crypto.subtle.sign('HMAC', key, enc.encode(toSign));
+            const sigB64 = base64UrlEncodeBytes(new Uint8Array(sigBuffer));
+
+            document.getElementById('jwt-out').innerText = toSign + '.' + sigB64;
+        }
+
+        function addJwtExpiry() {
+            const ta = document.getElementById('jwt-payload-input');
+            let pl = {};
+            try {
+                pl = JSON.parse(ta.value || '{}');
+            } catch { }
+            const now = Math.floor(Date.now() / 1000);
+            pl.iat = pl.iat || now;
+            pl.exp = pl.exp || now + 3600;
+            ta.value = JSON.stringify(pl, null, 2);
+            encodeJwt();
+        }
+
+        /* ========== BASE64 ========== */
+        let b64Mode = 'encode';
+
+        function doBase64() {
+            document.getElementById('b64-enc-btn').style.background = b64Mode === 'encode' ? 'var(--neon)' : 'transparent';
+            document.getElementById('b64-enc-btn').style.color = b64Mode === 'encode' ? '#000' : 'var(--neon)';
+            document.getElementById('b64-dec-btn').style.background = b64Mode === 'decode' ? 'var(--neon)' : 'transparent';
+            document.getElementById('b64-dec-btn').style.color = b64Mode === 'decode' ? '#000' : 'var(--neon)';
+
+            const input = document.getElementById('b64-input').value;
+            if (!input) { document.getElementById('b64-out').innerText = '----'; return; }
+            try {
+                if (b64Mode === 'encode') {
+                    document.getElementById('b64-out').innerText = btoa(unescape(encodeURIComponent(input)));
+                } else {
+                    document.getElementById('b64-out').innerText = decodeURIComponent(escape(atob(input)));
+                }
+            } catch {
+                document.getElementById('b64-out').innerText = '\u26A0 Invalid input';
+            }
+        }
+
+        /* ========== LOREM IPSUM ========== */
+        const LOREM_SENTENCES = [
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
+            'Nisi ut aliquip ex ea commodo consequat.',
+            'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+            'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+            'Curabitur pretium tincidunt lacus, nec viverra arcu hendrerit at.',
+            'Praesent blandit dolor sed nisi eleifend, eu posuere orci vehicula.',
+            'Maecenas faucibus mollis interdum, sed posuere consectetur est at lobortis.',
+            'Nullam quis risus eget urna mollis ornare vel eu leo.',
+            'Vestibulum id ligula porta felis euismod semper.',
+            'Aenean lacinia bibendum nulla sed consectetur.',
+            'Donec ullamcorper nulla non metus auctor fringilla.',
+            'Integer posuere erat a ante venenatis dapibus posuere velit aliquet.',
+            'Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.',
+            'Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.',
+            'Morbi leo risus, porta ac consectetur ac, vestibulum at eros.',
+            'Etiam porta sem malesuada magna mollis euismod.',
+            'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
+            'Nulla vitae elit libero, a pharetra augue mollis interdum.',
+        ];
+
+        function genLorem() {
+            const count = Math.max(1, Math.min(20, parseInt(document.getElementById('lorem-count').value) || 3));
+            let paragraphs = [];
+            for (let p = 0; p < count; p++) {
+                const sentCount = 3 + Math.floor(Math.random() * 4);
+                let sentences = [];
+                for (let s = 0; s < sentCount; s++) {
+                    sentences.push(LOREM_SENTENCES[Math.floor(Math.random() * LOREM_SENTENCES.length)]);
+                }
+                if (p === 0 && sentences[0] !== LOREM_SENTENCES[0]) sentences[0] = LOREM_SENTENCES[0];
+                paragraphs.push(sentences.join(' '));
+            }
+            document.getElementById('lorem-out').innerText = paragraphs.join('\n\n');
+        }
+
+        /* ========== LARAVEL BCRYPT GENERATOR ========== */
+        function genBcrypt() {
+            const input = document.getElementById('bcrypt-input').value;
+            if (!input) {
+                document.getElementById('bcrypt-out').innerText = '----';
+                document.getElementById('bcrypt-php').innerText = "Hash::make('...')";
+                return;
+            }
+            const rounds = parseInt(document.getElementById('bcrypt-rounds').value);
+            const outEl = document.getElementById('bcrypt-out');
+            const phpEl = document.getElementById('bcrypt-php');
+            const notifyEl = document.getElementById('bcrypt-notify');
+
+            outEl.innerText = 'Hashing...';
+            notifyEl.innerText = '\u23F3 Computing bcrypt hash...';
+            notifyEl.style.color = '#ffbd2e';
+
+            setTimeout(() => {
+                try {
+                    const salt = dcodeIO.bcrypt.genSaltSync(rounds);
+                    const hash = dcodeIO.bcrypt.hashSync(input, salt).replace(/^\$2a\$/, '$2y$');
+                    outEl.innerText = hash;
+                    phpEl.innerText = `Hash::make('${input}', ['rounds' => ${rounds}])`;
+                    notifyEl.innerText = 'Click hash to copy';
+                    notifyEl.style.color = '#444';
+                } catch (e) {
+                    outEl.innerText = '\u26A0 Error generating hash';
+                    notifyEl.innerText = e.message;
+                    notifyEl.style.color = '#ff5f56';
+                }
+            }, 50);
+        }
+
+        /* ========== LARAVEL APP_KEY GENERATOR ========== */
+        function genAppKey() {
+            const bytes = new Uint8Array(32);
+            crypto.getRandomValues(bytes);
+
+            let binary = '';
+            for (let i = 0; i < bytes.length; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            const b64 = btoa(binary);
+            const appKey = 'base64:' + b64;
+
+            document.getElementById('appkey-out').innerText = appKey;
+            document.getElementById('appkey-env').innerText = `APP_KEY=${appKey}`;
+        }
+
+        /* ========== CURL GENERATOR ========== */
+        function genCurl() {
+            const method = document.getElementById('curl-method').value;
+            const url = document.getElementById('curl-url').value.trim();
+            const authType = document.getElementById('curl-auth').value;
+            const contentType = document.getElementById('curl-content').value;
+            const customHeaders = document.getElementById('curl-headers').value.trim();
+            const body = document.getElementById('curl-body').value.trim();
+            const verbose = document.getElementById('curl-verbose').checked;
+            const insecure = document.getElementById('curl-insecure').checked;
+            const follow = document.getElementById('curl-follow').checked;
+            const silent = document.getElementById('curl-silent').checked;
+            const authValue = document.getElementById('curl-auth-value').value.trim();
+            const authPass = document.getElementById('curl-auth-pass').value.trim();
+
+            const authFields = document.getElementById('curl-auth-fields');
+            const basicExtra = document.getElementById('curl-basic-extra');
+            const authLabel = document.getElementById('curl-auth-label');
+            if (authType === 'none') {
+                authFields.style.display = 'none';
+            } else {
+                authFields.style.display = 'block';
+                if (authType === 'bearer') {
+                    authLabel.innerText = 'Bearer Token_';
+                    document.getElementById('curl-auth-value').placeholder = 'your-token-here';
+                    basicExtra.style.display = 'none';
+                } else {
+                    authLabel.innerText = 'Username_';
+                    document.getElementById('curl-auth-value').placeholder = 'username';
+                    basicExtra.style.display = 'block';
+                }
+            }
+
+            const bodyMethods = ['POST', 'PUT', 'PATCH'];
+            document.getElementById('curl-body-section').style.display = bodyMethods.includes(method) ? 'block' : 'none';
+
+            const parts = ['curl'];
+
+            if (method !== 'GET') parts.push(`-X ${method}`);
+            if (verbose) parts.push('-v');
+            if (silent) parts.push('-s');
+            if (follow) parts.push('-L');
+            if (insecure) parts.push('-k');
+
+            if (contentType !== 'none') {
+                parts.push(`-H "Content-Type: ${contentType}"`);
+            }
+
+            if (authType === 'bearer' && authValue) {
+                parts.push(`-H "Authorization: Bearer ${authValue}"`);
+            } else if (authType === 'basic' && authValue) {
+                parts.push(`-u "${authValue}:${authPass}"`);
+            }
+
+            if (customHeaders) {
+                customHeaders.split('\n').forEach(line => {
+                    const h = line.trim();
+                    if (h && h.includes(':')) {
+                        parts.push(`-H "${h}"`);
+                    }
+                });
+            }
+
+            if (bodyMethods.includes(method) && body) {
+                const escaped = body.replace(/'/g, "'\\''");
+                parts.push(`-d '${escaped}'`);
+            }
+
+            parts.push(`"${url || 'https://api.example.com'}"`);
+
+            let output;
+            if (parts.length <= 3) {
+                output = parts.join(' ');
+            } else {
+                output = parts[0] + ' \\\n  ' + parts.slice(1).join(' \\\n  ');
+            }
+
+            document.getElementById('curl-out').innerText = output;
+        }
+
+        genCurl();
+
+        /* ========== SQL QUERY GENERATOR ========== */
+        function genSQL() {
+            const type = document.getElementById('sql-type').value;
+            const table = document.getElementById('sql-table').value.trim() || 'table_name';
+
+            // Show/hide sections based on query type
+            const sections = {
+                'sql-select-section': ['SELECT'],
+                'sql-join-section': ['SELECT'],
+                'sql-where-section': ['SELECT', 'UPDATE', 'DELETE'],
+                'sql-insert-section': ['INSERT'],
+                'sql-update-section': ['UPDATE'],
+                'sql-create-section': ['CREATE'],
+                'sql-alter-add-section': ['ALTER_ADD'],
+                'sql-alter-drop-section': ['ALTER_DROP'],
+                'sql-order-section': ['SELECT'],
+            };
+
+            Object.entries(sections).forEach(([id, types]) => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = types.includes(type) ? 'block' : 'none';
+            });
+
+            // Show join ON row only when join type is selected
+            const joinType = document.getElementById('sql-join-type').value;
+            const joinOnRow = document.getElementById('sql-join-on-row');
+            if (joinOnRow) joinOnRow.style.display = joinType ? 'block' : 'none';
+
+            let query = '';
+
+            switch (type) {
+                case 'SELECT': {
+                    const cols = document.getElementById('sql-columns').value.trim() || '*';
+                    query = `SELECT ${cols}\nFROM ${table}`;
+
+                    if (joinType) {
+                        const joinTable = document.getElementById('sql-join-table').value.trim();
+                        const joinOn = document.getElementById('sql-join-on').value.trim();
+                        if (joinTable) {
+                            query += `\n${joinType} ${joinTable}`;
+                            if (joinOn) query += `\n  ON ${joinOn}`;
+                        }
+                    }
+
+                    query = appendWhere(query);
+
+                    const group = document.getElementById('sql-group').value.trim();
+                    if (group) query += `\nGROUP BY ${group}`;
+
+                    const order = document.getElementById('sql-order').value.trim();
+                    if (order) query += `\nORDER BY ${order}`;
+
+                    const limit = document.getElementById('sql-limit').value.trim();
+                    if (limit) {
+                        query += `\nLIMIT ${limit}`;
+                        const offset = document.getElementById('sql-offset').value.trim();
+                        if (offset && offset !== '0') query += ` OFFSET ${offset}`;
+                    }
+                    break;
+                }
+                case 'INSERT': {
+                    const cols = document.getElementById('sql-ins-cols').value.trim();
+                    const vals = document.getElementById('sql-ins-vals').value.trim();
+                    query = `INSERT INTO ${table}`;
+                    if (cols) query += ` (${cols})`;
+                    query += `\nVALUES (${vals || '...'})`;
+                    break;
+                }
+                case 'UPDATE': {
+                    const setLines = document.getElementById('sql-set').value.trim();
+                    const setParts = setLines ? setLines.split('\n').filter(l => l.trim()).join(',\n  ') : '... = ...';
+                    query = `UPDATE ${table}\nSET ${setParts}`;
+                    query = appendWhere(query);
+                    break;
+                }
+                case 'DELETE': {
+                    query = `DELETE FROM ${table}`;
+                    query = appendWhere(query);
+                    break;
+                }
+                case 'CREATE': {
+                    const colDefs = document.getElementById('sql-create-cols').value.trim();
+                    const colLines = colDefs ? colDefs.split('\n').filter(l => l.trim()).join(',\n  ') : '  id INT PRIMARY KEY';
+                    query = `CREATE TABLE ${table} (\n  ${colLines}\n)`;
+                    break;
+                }
+                case 'ALTER_ADD': {
+                    const colDef = document.getElementById('sql-alter-col').value.trim() || 'column_name TYPE';
+                    query = `ALTER TABLE ${table}\nADD COLUMN ${colDef}`;
+                    break;
+                }
+                case 'ALTER_DROP': {
+                    const colName = document.getElementById('sql-alter-drop-col').value.trim() || 'column_name';
+                    query = `ALTER TABLE ${table}\nDROP COLUMN ${colName}`;
+                    break;
+                }
+                case 'DROP': {
+                    query = `DROP TABLE IF EXISTS ${table}`;
+                    break;
+                }
+                case 'TRUNCATE': {
+                    query = `TRUNCATE TABLE ${table}`;
+                    break;
+                }
+            }
+
+            document.getElementById('sql-out').innerText = query + ';';
+        }
+
+        function appendWhere(query) {
+            const whereText = document.getElementById('sql-where').value.trim();
+            if (!whereText) return query;
+            const logic = document.querySelector('input[name="sql-logic"]:checked').value;
+            const conditions = whereText.split('\n').filter(l => l.trim());
+            if (conditions.length) {
+                query += `\nWHERE ${conditions.join(`\n  ${logic} `)}`;
+            }
+            return query;
+        }
+
+        genSQL();
+
+        function loadSqlExample(ex) {
+            const f = {
+                type: 'SELECT', table: '', columns: '', joinType: '', joinTable: '', joinOn: '',
+                where: '', logic: 'AND', insCols: '', insVals: '', set: '', createCols: '',
+                alterCol: '', alterDropCol: '', order: '', group: '', limit: '', offset: ''
+            };
+
+            switch (ex) {
+                case 'select-basic':
+                    Object.assign(f, { table: 'users', columns: 'id, name, email, created_at', order: 'created_at DESC', limit: '10' });
+                    break;
+                case 'select-where':
+                    Object.assign(f, { table: 'orders', columns: 'id, user_id, total, status', where: "status = 'completed'\ntotal > 100", logic: 'AND', order: 'total DESC' });
+                    break;
+                case 'select-join':
+                    Object.assign(f, { table: 'users', columns: 'users.name, orders.total, orders.created_at', joinType: 'LEFT JOIN', joinTable: 'orders', joinOn: 'users.id = orders.user_id', where: "orders.total > 50", order: 'orders.created_at DESC' });
+                    break;
+                case 'select-agg':
+                    Object.assign(f, { table: 'orders', columns: 'status, COUNT(*) as count, SUM(total) as revenue', group: 'status', order: 'revenue DESC' });
+                    break;
+                case 'select-subquery':
+                    Object.assign(f, { table: 'products', columns: 'id, name, price, category', where: "category = 'electronics'\nprice > 0", logic: 'AND', order: 'price ASC', limit: '20', offset: '40' });
+                    break;
+                case 'select-like':
+                    Object.assign(f, { table: 'users', columns: 'id, name, email', where: "name LIKE '%john%'\nemail LIKE '%@gmail.com'", logic: 'OR', order: 'name ASC', limit: '25' });
+                    break;
+                case 'insert':
+                    Object.assign(f, { type: 'INSERT', table: 'users', insCols: 'name, email, role, created_at', insVals: "'John Doe', 'john@example.com', 'admin', NOW()" });
+                    break;
+                case 'update':
+                    Object.assign(f, { type: 'UPDATE', table: 'users', set: "name = 'Jane Doe'\nemail = 'jane@example.com'\nupdated_at = NOW()", where: "id = 42" });
+                    break;
+                case 'delete':
+                    Object.assign(f, { type: 'DELETE', table: 'sessions', where: "expires_at < NOW()\nuser_id IS NULL", logic: 'OR' });
+                    break;
+                case 'create':
+                    Object.assign(f, { type: 'CREATE', table: 'products', createCols: "id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT\nname VARCHAR(255) NOT NULL\ndescription TEXT NULL\nprice DECIMAL(10,2) NOT NULL DEFAULT 0\ncategory_id INT UNSIGNED\nis_active BOOLEAN DEFAULT TRUE\ncreated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\nupdated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" });
+                    break;
+                case 'alter-add':
+                    Object.assign(f, { type: 'ALTER_ADD', table: 'users', alterCol: 'phone VARCHAR(20) NULL AFTER email' });
+                    break;
+                case 'upsert':
+                    Object.assign(f, { type: 'INSERT', table: 'page_views', insCols: 'page_url, view_count, last_viewed', insVals: "'/home', 1, NOW()\nON DUPLICATE KEY UPDATE\n  view_count = view_count + 1,\n  last_viewed = NOW()" });
+                    break;
+            }
+
+            document.getElementById('sql-type').value = f.type;
+            document.getElementById('sql-table').value = f.table;
+            document.getElementById('sql-columns').value = f.columns;
+            document.getElementById('sql-join-type').value = f.joinType;
+            document.getElementById('sql-join-table').value = f.joinTable;
+            document.getElementById('sql-join-on').value = f.joinOn;
+            document.getElementById('sql-where').value = f.where;
+            const radios = document.querySelectorAll('input[name="sql-logic"]');
+            radios.forEach(r => r.checked = r.value === f.logic);
+            document.getElementById('sql-ins-cols').value = f.insCols;
+            document.getElementById('sql-ins-vals').value = f.insVals;
+            document.getElementById('sql-set').value = f.set;
+            document.getElementById('sql-create-cols').value = f.createCols;
+            document.getElementById('sql-alter-col').value = f.alterCol;
+            document.getElementById('sql-alter-drop-col').value = f.alterDropCol;
+            document.getElementById('sql-order').value = f.order;
+            document.getElementById('sql-group').value = f.group;
+            document.getElementById('sql-limit').value = f.limit;
+            document.getElementById('sql-offset').value = f.offset;
+
+            genSQL();
+        }
+
+        /* ========== LINUX COMMANDS ========== */
+        const LINUX_CMDS = [
+            // FILES
+            { name: 'ls', desc: 'List directory contents', example: 'ls -la /var/log/', cat: 'files' },
+            { name: 'cd', desc: 'Change working directory', example: 'cd /etc/nginx/', cat: 'files' },
+            { name: 'pwd', desc: 'Print current working directory', example: 'pwd', cat: 'files' },
+            { name: 'cp', desc: 'Copy files and directories', example: 'cp -r /src/dir /backup/dir', cat: 'files' },
+            { name: 'mv', desc: 'Move or rename files', example: 'mv old_name.txt new_name.txt', cat: 'files' },
+            { name: 'rm', desc: 'Remove files or directories', example: 'rm -rf /tmp/cache/*', cat: 'files' },
+            { name: 'mkdir', desc: 'Create directories', example: 'mkdir -p /app/logs/2024', cat: 'files' },
+            { name: 'touch', desc: 'Create empty file or update timestamp', example: 'touch newfile.txt', cat: 'files' },
+            { name: 'find', desc: 'Search for files in directory hierarchy', example: 'find / -name "*.conf" -type f -mtime -7', cat: 'files' },
+            { name: 'locate', desc: 'Find files by name (indexed)', example: 'locate nginx.conf', cat: 'files' },
+            { name: 'ln', desc: 'Create symbolic or hard links', example: 'ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/', cat: 'files' },
+            { name: 'stat', desc: 'Display file status and metadata', example: 'stat /var/log/syslog', cat: 'files' },
+            { name: 'tree', desc: 'Display directory tree structure', example: 'tree -L 2 /var/www/', cat: 'files' },
+            { name: 'file', desc: 'Determine file type', example: 'file suspicious_binary', cat: 'files' },
+            { name: 'chmod', desc: 'Change file permissions', example: 'chmod 755 deploy.sh', cat: 'files' },
+            { name: 'chown', desc: 'Change file owner and group', example: 'chown -R www-data:www-data /var/www/', cat: 'files' },
+            { name: 'rsync', desc: 'Fast, versatile remote/local file copy', example: 'rsync -avz --progress /data/ user@remote:/backup/', cat: 'files' },
+            { name: 'scp', desc: 'Secure copy over SSH', example: 'scp -r ./dist/ user@server:/var/www/html/', cat: 'files' },
+            { name: 'wget', desc: 'Download files from the web', example: 'wget -c https://example.com/large-file.iso', cat: 'files' },
+            // TEXT
+            { name: 'cat', desc: 'Concatenate and display file contents', example: 'cat /etc/hosts', cat: 'text' },
+            { name: 'less', desc: 'View file with pagination', example: 'less /var/log/syslog', cat: 'text' },
+            { name: 'head', desc: 'Output first lines of a file', example: 'head -n 20 access.log', cat: 'text' },
+            { name: 'tail', desc: 'Output last lines / follow log in realtime', example: 'tail -f /var/log/nginx/error.log', cat: 'text' },
+            { name: 'grep', desc: 'Search text with patterns', example: 'grep -rn "ERROR" /var/log/ --include="*.log"', cat: 'text' },
+            { name: 'awk', desc: 'Pattern scanning and text processing', example: "awk -F: '{print $1, $3}' /etc/passwd", cat: 'text' },
+            { name: 'sed', desc: 'Stream editor for text transformation', example: "sed -i 's/localhost/0.0.0.0/g' config.yml", cat: 'text' },
+            { name: 'sort', desc: 'Sort lines of text files', example: 'sort -t: -k3 -n /etc/passwd', cat: 'text' },
+            { name: 'uniq', desc: 'Report or filter repeated lines', example: 'sort access.log | uniq -c | sort -rn | head', cat: 'text' },
+            { name: 'wc', desc: 'Count lines, words, characters', example: 'wc -l /var/log/auth.log', cat: 'text' },
+            { name: 'cut', desc: 'Remove sections from lines', example: "cut -d':' -f1,3 /etc/passwd", cat: 'text' },
+            { name: 'diff', desc: 'Compare files line by line', example: 'diff -u old.conf new.conf', cat: 'text' },
+            { name: 'jq', desc: 'Command-line JSON processor', example: "curl -s api.example.com | jq '.data[].name'", cat: 'text' },
+            { name: 'tee', desc: 'Read stdin and write to stdout and files', example: 'echo "log entry" | tee -a /var/log/app.log', cat: 'text' },
+            { name: 'xargs', desc: 'Build and execute commands from stdin', example: "find . -name '*.tmp' | xargs rm -f", cat: 'text' },
+            // SYSTEM
+            { name: 'uname', desc: 'Print system information', example: 'uname -a', cat: 'system' },
+            { name: 'hostname', desc: 'Show or set system hostname', example: 'hostname -I', cat: 'system' },
+            { name: 'uptime', desc: 'Show how long the system has been running', example: 'uptime -p', cat: 'system' },
+            { name: 'dmesg', desc: 'Print kernel ring buffer messages', example: 'dmesg | tail -50', cat: 'system' },
+            { name: 'journalctl', desc: 'Query the systemd journal', example: 'journalctl -u nginx --since "1 hour ago"', cat: 'system' },
+            { name: 'systemctl', desc: 'Control systemd services', example: 'systemctl restart nginx && systemctl status nginx', cat: 'system' },
+            { name: 'service', desc: 'Run SysV init scripts', example: 'service apache2 reload', cat: 'system' },
+            { name: 'crontab', desc: 'Schedule periodic tasks', example: 'crontab -e', cat: 'system' },
+            { name: 'env', desc: 'Display environment variables', example: 'env | grep PATH', cat: 'system' },
+            { name: 'export', desc: 'Set environment variables', example: 'export NODE_ENV=production', cat: 'system' },
+            { name: 'alias', desc: 'Create command shortcuts', example: "alias ll='ls -la'", cat: 'system' },
+            { name: 'history', desc: 'Show command history', example: 'history | grep ssh', cat: 'system' },
+            { name: 'shutdown', desc: 'Shutdown or restart the system', example: 'shutdown -r +5 "Rebooting in 5 min"', cat: 'system' },
+            { name: 'reboot', desc: 'Reboot the system', example: 'sudo reboot', cat: 'system' },
+            { name: 'date', desc: 'Display or set system date/time', example: 'date "+%Y-%m-%d %H:%M:%S"', cat: 'system' },
+            { name: 'timedatectl', desc: 'Control system time and timezone', example: 'timedatectl set-timezone Europe/Rome', cat: 'system' },
+            // PROCESS
+            { name: 'ps', desc: 'Report process status', example: 'ps aux --sort=-%mem | head -20', cat: 'process' },
+            { name: 'top', desc: 'Real-time process viewer', example: 'top -bn1 | head -20', cat: 'process' },
+            { name: 'htop', desc: 'Interactive process viewer (enhanced top)', example: 'htop -u www-data', cat: 'process' },
+            { name: 'kill', desc: 'Send signal to a process', example: 'kill -9 $(pgrep -f "node server.js")', cat: 'process' },
+            { name: 'killall', desc: 'Kill processes by name', example: 'killall -SIGTERM nginx', cat: 'process' },
+            { name: 'pkill', desc: 'Send signal to processes by pattern', example: 'pkill -f "python3 app.py"', cat: 'process' },
+            { name: 'nohup', desc: 'Run command immune to hangups', example: 'nohup ./long-task.sh > output.log 2>&1 &', cat: 'process' },
+            { name: 'bg / fg', desc: 'Send job to background / foreground', example: 'bg %1 && jobs', cat: 'process' },
+            { name: 'screen', desc: 'Terminal multiplexer (persistent sessions)', example: 'screen -S deploy -dm bash -c "./deploy.sh"', cat: 'process' },
+            { name: 'tmux', desc: 'Terminal multiplexer (modern)', example: 'tmux new -s session && tmux attach -t session', cat: 'process' },
+            { name: 'lsof', desc: 'List open files and ports', example: 'lsof -i :80 -i :443', cat: 'process' },
+            { name: 'strace', desc: 'Trace system calls of a process', example: 'strace -p 1234 -e trace=network', cat: 'process' },
+            // NETWORK
+            { name: 'ping', desc: 'Test network connectivity (ICMP)', example: 'ping -c 4 8.8.8.8', cat: 'network' },
+            { name: 'traceroute', desc: 'Trace packet route to destination', example: 'traceroute -n google.com', cat: 'network' },
+            { name: 'ip', desc: 'Show/manipulate routing, devices, tunnels', example: 'ip addr show && ip route', cat: 'network' },
+            { name: 'ifconfig', desc: 'Configure network interfaces (legacy)', example: 'ifconfig eth0', cat: 'network' },
+            { name: 'netstat', desc: 'Network statistics and connections', example: 'netstat -tulpn', cat: 'network' },
+            { name: 'ss', desc: 'Socket statistics (modern netstat)', example: 'ss -tulpn | grep LISTEN', cat: 'network' },
+            { name: 'curl', desc: 'Transfer data with URLs', example: "curl -X POST -H 'Content-Type: application/json' -d '{\"key\":\"val\"}' https://api.example.com", cat: 'network' },
+            { name: 'dig', desc: 'DNS lookup utility', example: 'dig +short MX example.com', cat: 'network' },
+            { name: 'nslookup', desc: 'Query DNS nameservers', example: 'nslookup -type=A example.com 8.8.8.8', cat: 'network' },
+            { name: 'host', desc: 'DNS lookup utility (simple)', example: 'host -t AAAA example.com', cat: 'network' },
+            { name: 'whois', desc: 'Query domain registration info', example: 'whois example.com', cat: 'network' },
+            { name: 'ssh', desc: 'Secure Shell remote login', example: 'ssh -i ~/.ssh/key.pem -p 2222 user@server.com', cat: 'network' },
+            { name: 'sshfs', desc: 'Mount remote filesystem over SSH', example: 'sshfs user@remote:/var/www /mnt/remote', cat: 'network' },
+            { name: 'iptables', desc: 'IPv4 packet filtering and NAT', example: 'iptables -L -n -v --line-numbers', cat: 'network' },
+            { name: 'ufw', desc: 'Uncomplicated Firewall', example: 'ufw allow 443/tcp && ufw enable && ufw status', cat: 'network' },
+            { name: 'tcpdump', desc: 'Capture and analyze network packets', example: 'tcpdump -i eth0 -nn port 80 -w capture.pcap', cat: 'network' },
+            { name: 'nc (netcat)', desc: 'TCP/UDP connections, port scanning, transfers', example: 'nc -zv target.com 20-100', cat: 'network' },
+            { name: 'socat', desc: 'Multipurpose relay (advanced netcat)', example: 'socat TCP-LISTEN:8080,fork TCP:backend:3000', cat: 'network' },
+            // DISK
+            { name: 'df', desc: 'Report filesystem disk space usage', example: 'df -hT | grep -v tmpfs', cat: 'disk' },
+            { name: 'du', desc: 'Estimate file/directory space usage', example: 'du -sh /var/* | sort -rh | head -10', cat: 'disk' },
+            { name: 'fdisk', desc: 'Manipulate disk partition table', example: 'fdisk -l /dev/sda', cat: 'disk' },
+            { name: 'mount', desc: 'Mount a filesystem', example: 'mount /dev/sdb1 /mnt/data', cat: 'disk' },
+            { name: 'umount', desc: 'Unmount a filesystem', example: 'umount /mnt/data', cat: 'disk' },
+            { name: 'lsblk', desc: 'List block devices', example: 'lsblk -f', cat: 'disk' },
+            { name: 'blkid', desc: 'Locate/print block device attributes', example: 'blkid /dev/sda1', cat: 'disk' },
+            { name: 'dd', desc: 'Convert and copy a file (disk cloning)', example: 'dd if=/dev/sda of=/backup/disk.img bs=4M status=progress', cat: 'disk' },
+            { name: 'free', desc: 'Display memory usage', example: 'free -h', cat: 'disk' },
+            { name: 'vmstat', desc: 'Virtual memory statistics', example: 'vmstat 1 5', cat: 'disk' },
+            { name: 'iostat', desc: 'CPU and I/O statistics', example: 'iostat -xz 1 5', cat: 'disk' },
+            // USERS
+            { name: 'whoami', desc: 'Print current username', example: 'whoami', cat: 'users' },
+            { name: 'id', desc: 'Print user and group IDs', example: 'id www-data', cat: 'users' },
+            { name: 'who', desc: 'Show who is logged on', example: 'who -a', cat: 'users' },
+            { name: 'w', desc: 'Show who is logged in and what they do', example: 'w', cat: 'users' },
+            { name: 'last', desc: 'Show last logged in users', example: 'last -n 20', cat: 'users' },
+            { name: 'useradd', desc: 'Create a new user', example: 'useradd -m -s /bin/bash -G sudo newuser', cat: 'users' },
+            { name: 'usermod', desc: 'Modify a user account', example: 'usermod -aG docker,sudo username', cat: 'users' },
+            { name: 'userdel', desc: 'Delete a user account', example: 'userdel -r olduser', cat: 'users' },
+            { name: 'passwd', desc: 'Change user password', example: 'passwd username', cat: 'users' },
+            { name: 'su', desc: 'Switch user', example: 'su - postgres', cat: 'users' },
+            { name: 'sudo', desc: 'Execute command as superuser', example: 'sudo -u www-data php artisan migrate', cat: 'users' },
+            { name: 'visudo', desc: 'Safely edit sudoers file', example: 'EDITOR=nano visudo', cat: 'users' },
+            // ARCHIVE
+            { name: 'tar', desc: 'Archive and compress files', example: 'tar -czvf backup.tar.gz /var/www/ --exclude="*.log"', cat: 'archive' },
+            { name: 'gzip', desc: 'Compress files with gzip', example: 'gzip -k largefile.sql', cat: 'archive' },
+            { name: 'gunzip', desc: 'Decompress gzip files', example: 'gunzip backup.sql.gz', cat: 'archive' },
+            { name: 'zip', desc: 'Package and compress files', example: 'zip -r archive.zip /project/ -x "*/node_modules/*"', cat: 'archive' },
+            { name: 'unzip', desc: 'Extract compressed files', example: 'unzip archive.zip -d /opt/app/', cat: 'archive' },
+            // PACKAGE
+            { name: 'apt', desc: 'Package manager (Debian/Ubuntu)', example: 'apt update && apt upgrade -y', cat: 'package' },
+            { name: 'apt-get', desc: 'APT package handling utility', example: 'apt-get install -y nginx certbot', cat: 'package' },
+            { name: 'dpkg', desc: 'Debian package manager', example: 'dpkg -l | grep nginx', cat: 'package' },
+            { name: 'yum', desc: 'Package manager (RHEL/CentOS)', example: 'yum install -y httpd php', cat: 'package' },
+            { name: 'dnf', desc: 'Next-gen package manager (Fedora/RHEL)', example: 'dnf search nodejs', cat: 'package' },
+            { name: 'pacman', desc: 'Package manager (Arch Linux)', example: 'pacman -Syu && pacman -S vim', cat: 'package' },
+            { name: 'snap', desc: 'Snap package manager', example: 'snap install --classic code', cat: 'package' },
+            { name: 'pip', desc: 'Python package manager', example: 'pip install -r requirements.txt', cat: 'package' },
+            { name: 'npm', desc: 'Node.js package manager', example: 'npm install && npm run build', cat: 'package' },
+            { name: 'composer', desc: 'PHP dependency manager', example: 'composer install --no-dev --optimize-autoloader', cat: 'package' },
+            // SECURITY
+            { name: 'ssh-keygen', desc: 'Generate SSH key pairs', example: 'ssh-keygen -t ed25519 -C "user@host" -f ~/.ssh/mykey', cat: 'security' },
+            { name: 'openssl', desc: 'SSL/TLS toolkit and crypto', example: 'openssl req -x509 -newkey rsa:4096 -days 365 -nodes -out cert.pem -keyout key.pem', cat: 'security' },
+            { name: 'gpg', desc: 'GNU Privacy Guard encryption', example: 'gpg --encrypt --recipient user@mail.com secret.txt', cat: 'security' },
+            { name: 'fail2ban-client', desc: 'Ban IPs with failed auth attempts', example: 'fail2ban-client status sshd', cat: 'security' },
+            { name: 'chroot', desc: 'Run command with a different root directory', example: 'chroot /mnt/recovery /bin/bash', cat: 'security' },
+            { name: 'lynis', desc: 'Security auditing and hardening', example: 'lynis audit system --quick', cat: 'security' },
+            { name: 'aide', desc: 'File integrity monitoring', example: 'aide --init && aide --check', cat: 'security' },
+            { name: 'rkhunter', desc: 'Rootkit detection tool', example: 'rkhunter --check --skip-keypress', cat: 'security' },
+            { name: 'chkrootkit', desc: 'Check for rootkits locally', example: 'chkrootkit -q', cat: 'security' },
+            { name: 'john', desc: 'John the Ripper password cracker', example: 'john --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt', cat: 'security' },
+            { name: 'hashcat', desc: 'Advanced password recovery (GPU)', example: 'hashcat -m 0 -a 0 hashes.txt wordlist.txt', cat: 'security' },
+            // RECON
+            { name: 'nmap', desc: 'Network exploration and port scanner', example: 'nmap -sV -sC -O -A -p- target.com', cat: 'recon' },
+            { name: 'masscan', desc: 'Ultra-fast port scanner', example: 'masscan 10.0.0.0/8 -p80,443 --rate=10000', cat: 'recon' },
+            { name: 'nikto', desc: 'Web server vulnerability scanner', example: 'nikto -h https://target.com -ssl', cat: 'recon' },
+            { name: 'dirb', desc: 'Web content directory brute-forcer', example: 'dirb https://target.com /usr/share/wordlists/dirb/common.txt', cat: 'recon' },
+            { name: 'gobuster', desc: 'Directory/DNS/vhost brute-forcing', example: 'gobuster dir -u https://target.com -w /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt', cat: 'recon' },
+            { name: 'ffuf', desc: 'Fast web fuzzer', example: 'ffuf -u https://target.com/FUZZ -w wordlist.txt -mc 200,301', cat: 'recon' },
+            { name: 'wpscan', desc: 'WordPress vulnerability scanner', example: 'wpscan --url https://target.com --enumerate vp,u', cat: 'recon' },
+            { name: 'theHarvester', desc: 'Email, subdomain, IP OSINT gathering', example: 'theHarvester -d target.com -b google,bing,linkedin', cat: 'recon' },
+            { name: 'subfinder', desc: 'Subdomain discovery tool', example: 'subfinder -d target.com -all -o subs.txt', cat: 'recon' },
+            { name: 'amass', desc: 'Attack surface mapping and OSINT', example: 'amass enum -passive -d target.com -o domains.txt', cat: 'recon' },
+            { name: 'enum4linux', desc: 'Enumerate info from Windows/Samba systems', example: 'enum4linux -a 10.10.10.10', cat: 'recon' },
+            { name: 'smbclient', desc: 'SMB/CIFS client for accessing shares', example: "smbclient //10.10.10.10/share -U 'user%pass'", cat: 'recon' },
+            { name: 'snmpwalk', desc: 'SNMP data collector', example: 'snmpwalk -v2c -c public 10.10.10.10', cat: 'recon' },
+            // EXPLOIT
+            { name: 'msfconsole', desc: 'Metasploit Framework console', example: 'msfconsole -q -x "use exploit/multi/handler; set PAYLOAD windows/meterpreter/reverse_tcp; set LHOST 10.10.10.10; run"', cat: 'exploit' },
+            { name: 'searchsploit', desc: 'Search ExploitDB from terminal', example: 'searchsploit apache 2.4 privilege escalation', cat: 'exploit' },
+            { name: 'sqlmap', desc: 'Automatic SQL injection tool', example: "sqlmap -u 'https://target.com/page?id=1' --dbs --batch", cat: 'exploit' },
+            { name: 'hydra', desc: 'Brute-force login cracker', example: 'hydra -l admin -P wordlist.txt target.com ssh -t 4', cat: 'exploit' },
+            { name: 'burpsuite', desc: 'Web application security testing proxy', example: 'burpsuite &', cat: 'exploit' },
+            { name: 'responder', desc: 'LLMNR/NBT-NS/MDNS poisoner', example: 'responder -I eth0 -rdw', cat: 'exploit' },
+            { name: 'crackmapexec', desc: 'Network pentest tool (AD/SMB/WinRM)', example: "crackmapexec smb 10.10.10.0/24 -u 'admin' -p 'pass123'", cat: 'exploit' },
+            { name: 'impacket', desc: 'Python classes for network protocols', example: "impacket-psexec 'DOMAIN/user:password@10.10.10.10'", cat: 'exploit' },
+            { name: 'evil-winrm', desc: 'WinRM shell for pentesting', example: "evil-winrm -i 10.10.10.10 -u 'admin' -p 'pass'", cat: 'exploit' },
+            { name: 'chisel', desc: 'TCP/UDP tunnel over HTTP (pivoting)', example: './chisel server -p 8000 --reverse', cat: 'exploit' },
+            // WIRELESS
+            { name: 'aircrack-ng', desc: 'WiFi security auditing suite', example: 'aircrack-ng -w wordlist.txt capture.cap', cat: 'wireless' },
+            { name: 'airmon-ng', desc: 'Enable monitor mode on WiFi adapters', example: 'airmon-ng start wlan0', cat: 'wireless' },
+            { name: 'airodump-ng', desc: 'Capture WiFi packets and scan networks', example: 'airodump-ng -c 6 --bssid AA:BB:CC:DD:EE:FF -w capture wlan0mon', cat: 'wireless' },
+            { name: 'aireplay-ng', desc: 'Inject/replay WiFi packets (deauth)', example: 'aireplay-ng -0 10 -a AA:BB:CC:DD:EE:FF wlan0mon', cat: 'wireless' },
+            { name: 'reaver', desc: 'WPS brute-force attack', example: 'reaver -i wlan0mon -b AA:BB:CC:DD:EE:FF -vv', cat: 'wireless' },
+            { name: 'bettercap', desc: 'Network attack and MITM framework', example: 'bettercap -iface wlan0 -caplet http-ui', cat: 'wireless' },
+            { name: 'wifite', desc: 'Automated wireless auditing', example: 'wifite --kill', cat: 'wireless' },
+            // FORENSICS
+            { name: 'volatility', desc: 'Memory forensics framework', example: 'volatility -f memory.dump --profile=Win10x64 pslist', cat: 'forensics' },
+            { name: 'autopsy', desc: 'Digital forensics GUI platform', example: 'autopsy &', cat: 'forensics' },
+            { name: 'binwalk', desc: 'Firmware analysis and extraction', example: 'binwalk -e firmware.bin', cat: 'forensics' },
+            { name: 'foremost', desc: 'File carving and recovery', example: 'foremost -i disk.img -o recovered/', cat: 'forensics' },
+            { name: 'strings', desc: 'Print printable strings from binary', example: 'strings -n 8 suspicious_binary | grep -i pass', cat: 'forensics' },
+            { name: 'exiftool', desc: 'Read/write metadata in files', example: 'exiftool -all= photo.jpg', cat: 'forensics' },
+            { name: 'steghide', desc: 'Steganography hide/extract data in images', example: 'steghide extract -sf image.jpg', cat: 'forensics' },
+            { name: 'xxd', desc: 'Hex dump of a file', example: 'xxd suspicious_file | head -50', cat: 'forensics' },
+            { name: 'testdisk', desc: 'Data recovery and partition repair', example: 'testdisk /dev/sda', cat: 'forensics' },
+            { name: 'photorec', desc: 'File recovery from damaged media', example: 'photorec /dev/sdb', cat: 'forensics' },
+        ];
+
+        let currentLinuxCat = 'all';
+
+        function renderLinux(cmds) {
+            const list = document.getElementById('linux-list');
+            document.getElementById('linux-count').innerText = `SHOWING ${cmds.length} OF ${LINUX_CMDS.length} COMMANDS`;
+            if (!cmds.length) {
+                list.innerHTML = '<div style="color:#444;padding:20px;text-align:center">No commands found</div>';
+                return;
+            }
+            list.innerHTML = cmds.map(c => `<div class="lx-card" onclick="clipText('${c.example.replace(/'/g, "\\'")}', 'linux-notify')">
+                <div class="lx-head">
+                    <span class="lx-name">${c.name}</span>
+                    <span class="lx-tag">${c.cat}</span>
+                </div>
+                <div class="lx-desc">${c.desc}</div>
+                <div class="lx-example">$ ${c.example}</div>
+            </div>`).join('');
+        }
+
+        function filterLinux() {
+            const q = document.getElementById('linux-search').value.toLowerCase();
+            let filtered = LINUX_CMDS;
+            if (currentLinuxCat !== 'all') filtered = filtered.filter(c => c.cat === currentLinuxCat);
+            if (q) filtered = filtered.filter(c => c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || c.cat.includes(q) || c.example.toLowerCase().includes(q));
+            renderLinux(filtered);
+        }
+
+        function filterLinuxCat(cat, btn) {
+            currentLinuxCat = cat;
+            document.querySelectorAll('#linux-cats button').forEach(b => b.classList.remove('lx-cat-active'));
+            if (btn) btn.classList.add('lx-cat-active');
+            document.getElementById('linux-search').value = '';
+            filterLinux();
+        }
+
+        function clipText(text, notifyId) {
+            navigator.clipboard.writeText(text).then(() => {
+                const n = document.getElementById(notifyId);
+                if (n) {
+                    n.innerText = '\u2713 COMMAND COPIED';
+                    n.style.color = 'var(--neon)';
+                    setTimeout(() => { n.innerText = 'Click any command to copy'; n.style.color = '#444'; }, 1500);
+                }
+            });
+        }
+
+        /* ========== FAKE ID GENERATOR ========== */
+        function genFakeId() {
+            const gender = document.getElementById('fake-gender').value;
+            const country = document.getElementById('fake-country').value;
+
+            const maleNames = {
+                US: ['James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Joseph', 'Thomas', 'Charles', 'Daniel', 'Matthew', 'Anthony', 'Mark', 'Steven'],
+                IT: ['Marco', 'Giuseppe', 'Luca', 'Alessandro', 'Andrea', 'Francesco', 'Matteo', 'Lorenzo', 'Davide', 'Simone', 'Stefano', 'Federico', 'Riccardo', 'Giovanni', 'Antonio'],
+                UK: ['Oliver', 'George', 'Harry', 'Jack', 'Jacob', 'Noah', 'Charlie', 'Thomas', 'Oscar', 'William', 'James', 'Henry', 'Leo', 'Alfie', 'Edward'],
+                DE: ['Lukas', 'Leon', 'Maximilian', 'Felix', 'Paul', 'Jonas', 'Tim', 'Elias', 'Noah', 'Ben', 'Finn', 'Julian', 'Niklas', 'Jan', 'Moritz'],
+                FR: ['Jean', 'Pierre', 'Louis', 'Lucas', 'Hugo', 'Gabriel', 'Arthur', 'Raphaël', 'Jules', 'Adam', 'Nathan', 'Léo', 'Théo', 'Mathis', 'Ethan'],
+                ES: ['Carlos', 'Miguel', 'Alejandro', 'Daniel', 'Pablo', 'David', 'Javier', 'Adrián', 'Diego', 'Sergio', 'Álvaro', 'Jorge', 'Mario', 'Raúl', 'Hugo']
+            };
+            const femaleNames = {
+                US: ['Mary', 'Patricia', 'Jennifer', 'Linda', 'Barbara', 'Elizabeth', 'Susan', 'Jessica', 'Sarah', 'Karen', 'Lisa', 'Nancy', 'Betty', 'Dorothy', 'Sandra'],
+                IT: ['Giulia', 'Francesca', 'Sara', 'Valentina', 'Chiara', 'Elena', 'Alessia', 'Martina', 'Giorgia', 'Federica', 'Silvia', 'Laura', 'Anna', 'Sofia', 'Elisa'],
+                UK: ['Olivia', 'Amelia', 'Isla', 'Emily', 'Ava', 'Jessica', 'Mia', 'Ella', 'Grace', 'Sophie', 'Lily', 'Chloe', 'Hannah', 'Charlotte', 'Ruby'],
+                DE: ['Marie', 'Sophie', 'Maria', 'Anna', 'Emma', 'Lena', 'Lea', 'Laura', 'Johanna', 'Lina', 'Mia', 'Julia', 'Clara', 'Sara', 'Jana'],
+                FR: ['Marie', 'Camille', 'Léa', 'Manon', 'Chloé', 'Emma', 'Inès', 'Sarah', 'Julie', 'Jade', 'Louise', 'Alice', 'Juliette', 'Clara', 'Mathilde'],
+                ES: ['María', 'Carmen', 'Ana', 'Laura', 'Isabel', 'Lucía', 'Elena', 'Marta', 'Sara', 'Paula', 'Andrea', 'Sofía', 'Pilar', 'Raquel', 'Alba']
+            };
+            const lastNames = {
+                US: ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Wilson', 'Anderson', 'Taylor', 'Thomas', 'Moore'],
+                IT: ['Rossi', 'Russo', 'Ferrari', 'Esposito', 'Bianchi', 'Romano', 'Colombo', 'Ricci', 'Marino', 'Greco', 'Bruno', 'Gallo', 'Conti', 'De Luca', 'Mancini'],
+                UK: ['Smith', 'Jones', 'Williams', 'Taylor', 'Brown', 'Davies', 'Evans', 'Wilson', 'Thomas', 'Roberts', 'Johnson', 'Lewis', 'Walker', 'Robinson', 'Wood'],
+                DE: ['Müller', 'Schmidt', 'Schneider', 'Fischer', 'Weber', 'Meyer', 'Wagner', 'Becker', 'Schulz', 'Hoffmann', 'Koch', 'Richter', 'Wolf', 'Schröder', 'Neumann'],
+                FR: ['Martin', 'Bernard', 'Dubois', 'Thomas', 'Robert', 'Richard', 'Petit', 'Durand', 'Leroy', 'Moreau', 'Simon', 'Laurent', 'Lefebvre', 'Michel', 'Garcia'],
+                ES: ['García', 'Rodríguez', 'Martínez', 'López', 'González', 'Hernández', 'Pérez', 'Sánchez', 'Ramírez', 'Torres', 'Flores', 'Rivera', 'Gómez', 'Díaz', 'Reyes']
+            };
+            const cities = {
+                US: [{ c: 'New York', s: 'NY', z: '10001' }, { c: 'Los Angeles', s: 'CA', z: '90001' }, { c: 'Chicago', s: 'IL', z: '60601' }, { c: 'Houston', s: 'TX', z: '77001' }, { c: 'Phoenix', s: 'AZ', z: '85001' }, { c: 'Philadelphia', s: 'PA', z: '19101' }, { c: 'San Antonio', s: 'TX', z: '78201' }, { c: 'San Diego', s: 'CA', z: '92101' }, { c: 'Dallas', s: 'TX', z: '75201' }, { c: 'Austin', s: 'TX', z: '73301' }],
+                IT: [{ c: 'Roma', s: 'Lazio', z: '00100' }, { c: 'Milano', s: 'Lombardia', z: '20100' }, { c: 'Napoli', s: 'Campania', z: '80100' }, { c: 'Torino', s: 'Piemonte', z: '10100' }, { c: 'Firenze', s: 'Toscana', z: '50100' }, { c: 'Bologna', s: 'Emilia-Romagna', z: '40100' }, { c: 'Genova', s: 'Liguria', z: '16100' }, { c: 'Palermo', s: 'Sicilia', z: '90100' }, { c: 'Bari', s: 'Puglia', z: '70100' }, { c: 'Verona', s: 'Veneto', z: '37100' }],
+                UK: [{ c: 'London', s: 'England', z: 'EC1A 1BB' }, { c: 'Manchester', s: 'England', z: 'M1 1AE' }, { c: 'Birmingham', s: 'England', z: 'B1 1AA' }, { c: 'Leeds', s: 'England', z: 'LS1 1BA' }, { c: 'Glasgow', s: 'Scotland', z: 'G1 1AA' }, { c: 'Liverpool', s: 'England', z: 'L1 0AA' }, { c: 'Bristol', s: 'England', z: 'BS1 1AA' }, { c: 'Edinburgh', s: 'Scotland', z: 'EH1 1AA' }, { c: 'Cardiff', s: 'Wales', z: 'CF10 1AA' }, { c: 'Belfast', s: 'N. Ireland', z: 'BT1 1AA' }],
+                DE: [{ c: 'Berlin', s: 'Berlin', z: '10115' }, { c: 'Hamburg', s: 'Hamburg', z: '20095' }, { c: 'München', s: 'Bayern', z: '80331' }, { c: 'Köln', s: 'NRW', z: '50667' }, { c: 'Frankfurt', s: 'Hessen', z: '60311' }, { c: 'Stuttgart', s: 'Baden-Württemberg', z: '70173' }, { c: 'Düsseldorf', s: 'NRW', z: '40210' }, { c: 'Leipzig', s: 'Sachsen', z: '04109' }, { c: 'Hannover', s: 'Niedersachsen', z: '30159' }, { c: 'Dresden', s: 'Sachsen', z: '01067' }],
+                FR: [{ c: 'Paris', s: 'Île-de-France', z: '75001' }, { c: 'Marseille', s: 'PACA', z: '13001' }, { c: 'Lyon', s: 'Auvergne-RA', z: '69001' }, { c: 'Toulouse', s: 'Occitanie', z: '31000' }, { c: 'Nice', s: 'PACA', z: '06000' }, { c: 'Nantes', s: 'Pays de la Loire', z: '44000' }, { c: 'Strasbourg', s: 'Grand Est', z: '67000' }, { c: 'Montpellier', s: 'Occitanie', z: '34000' }, { c: 'Bordeaux', s: 'Nouvelle-Aquitaine', z: '33000' }, { c: 'Lille', s: 'Hauts-de-France', z: '59000' }],
+                ES: [{ c: 'Madrid', s: 'Madrid', z: '28001' }, { c: 'Barcelona', s: 'Cataluña', z: '08001' }, { c: 'Valencia', s: 'Valencia', z: '46001' }, { c: 'Sevilla', s: 'Andalucía', z: '41001' }, { c: 'Zaragoza', s: 'Aragón', z: '50001' }, { c: 'Málaga', s: 'Andalucía', z: '29001' }, { c: 'Murcia', s: 'Murcia', z: '30001' }, { c: 'Palma', s: 'Baleares', z: '07001' }, { c: 'Bilbao', s: 'País Vasco', z: '48001' }, { c: 'Alicante', s: 'Valencia', z: '03001' }]
+            };
+            const streets = {
+                US: ['Main St', 'Oak Ave', 'Elm St', 'Maple Dr', 'Cedar Ln', 'Pine Rd', 'Washington Blvd', 'Park Ave', 'Lake St', 'Hill Rd'],
+                IT: ['Via Roma', 'Via Garibaldi', 'Via Dante', 'Corso Italia', 'Via Mazzini', 'Via Verdi', 'Via Marconi', 'Via Cavour', 'Viale Europa', 'Via Vittorio Emanuele'],
+                UK: ['High Street', 'Church Road', 'Station Road', 'Park Lane', 'Mill Lane', 'London Road', 'Victoria Street', 'Green Lane', 'Manor Road', 'Queens Road'],
+                DE: ['Hauptstraße', 'Bahnhofstraße', 'Schulstraße', 'Gartenstraße', 'Berliner Straße', 'Dorfstraße', 'Kirchstraße', 'Waldstraße', 'Ringstraße', 'Bergstraße'],
+                FR: ['Rue de la Paix', 'Avenue des Champs', 'Rue Victor Hugo', 'Boulevard Saint-Michel', 'Rue de Rivoli', 'Rue du Faubourg', 'Avenue Montaigne', 'Rue Lafayette', 'Rue de la République', 'Boulevard Voltaire'],
+                ES: ['Calle Mayor', 'Gran Vía', 'Calle Real', 'Avenida de la Constitución', 'Paseo de Gracia', 'Calle del Sol', 'Calle San Juan', 'Avenida de España', 'Calle Nueva', 'Calle del Carmen']
+            };
+            const companies = ['TechNova Inc.', 'CyberWave Solutions', 'DataForge Ltd.', 'CloudPeak Systems', 'NexGen Digital', 'AlphaCore Labs', 'ByteStream Corp.', 'QuantumEdge Tech', 'SilverNode LLC', 'IronStack Ventures', 'BlueHorizon Group', 'SwiftLogic Partners'];
+            const jobs = ['Software Engineer', 'Product Manager', 'Data Analyst', 'UX Designer', 'DevOps Engineer', 'Marketing Manager', 'Project Manager', 'Full Stack Developer', 'System Administrator', 'Business Analyst', 'QA Engineer', 'Security Analyst', 'Cloud Architect', 'CTO', 'Frontend Developer'];
+            const uas = [
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36',
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 Chrome/119.0.0.0 Safari/537.36',
+                'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/119.0',
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/120.0',
+                'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148',
+                'Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148',
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 Safari/17.0',
+                'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/120.0.0.0 Mobile Safari/537.36'
+            ];
+            const domains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'protonmail.com', 'icloud.com', 'mail.com', 'zoho.com'];
+            const countryNames = { US: 'United States', IT: 'Italy', UK: 'United Kingdom', DE: 'Germany', FR: 'France', ES: 'Spain' };
+            const phoneFmt = {
+                US: () => `+1 (${rn(200, 999)}) ${rn(200, 999)}-${rn(1000, 9999)}`,
+                IT: () => `+39 3${rn(20, 99)} ${rn(100, 999)} ${rn(1000, 9999)}`,
+                UK: () => `+44 7${rn(100, 999)} ${rn(100, 999)} ${rn(100, 999)}`,
+                DE: () => `+49 1${rn(50, 79)} ${rn(1000000, 9999999)}`,
+                FR: () => `+33 6 ${rn(10, 99)} ${rn(10, 99)} ${rn(10, 99)} ${rn(10, 99)}`,
+                ES: () => `+34 6${rn(10, 99)} ${rn(10, 99)} ${rn(10, 99)} ${rn(10, 99)}`
+            };
+            const ibanFmt = {
+                US: () => null,
+                IT: () => `IT${rn(10, 99)} ${rc(1)}${rn(10000, 99999)} ${rn(10000, 99999)} ${rn(100000000000, 999999999999).toString().padStart(12, '0')}`,
+                UK: () => `GB${rn(10, 99)} ${rc(4).toUpperCase()} ${rn(10000000, 99999999).toString().padStart(8, '0')} ${rn(10000000, 99999999).toString().padStart(8, '0')}`,
+                DE: () => `DE${rn(10, 99)} ${rn(10000000, 99999999)} ${rn(10000000, 99999999)} ${rn(10, 99)}`,
+                FR: () => `FR${rn(10, 99)} ${rn(10000, 99999)} ${rn(10000, 99999)} ${rn(10000000000, 99999999999).toString().slice(0, 11)} ${rn(10, 99)}`,
+                ES: () => `ES${rn(10, 99)} ${rn(1000, 9999)} ${rn(1000, 9999)} ${rn(10, 99)} ${rn(1000000000, 9999999999)}`
+            };
+
+            function rn(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+            function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+            function rc(len) { let s = ''; for (let i = 0; i < len; i++) s += String.fromCharCode(65 + rn(0, 25)); return s; }
+
+            // Gender
+            let g = gender;
+            if (g === 'random') g = Math.random() < 0.5 ? 'male' : 'female';
+            const firstName = pick(g === 'male' ? maleNames[country] : femaleNames[country]);
+            const lastName = pick(lastNames[country]);
+            const fullName = firstName + ' ' + lastName;
+
+            // Username & email
+            const sep = pick(['', '.', '_', '']);
+            const num = rn(1, 99);
+            const username = (firstName + sep + lastName + num).toLowerCase().replace(/[^a-z0-9._]/g, '');
+            const email = (firstName.toLowerCase().replace(/[^a-z]/g, '') + '.' + lastName.toLowerCase().replace(/[^a-z]/g, '') + rn(1, 99) + '@' + pick(domains));
+
+            // Password
+            const passChars = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%&*';
+            let pass = ''; for (let i = 0; i < 14; i++) pass += passChars[rn(0, passChars.length - 1)];
+
+            // DOB & age
+            const year = rn(1960, 2003);
+            const month = rn(1, 12);
+            const day = rn(1, 28);
+            const dob = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const today = new Date();
+            let age = today.getFullYear() - year;
+            if (today.getMonth() + 1 < month || (today.getMonth() + 1 === month && today.getDate() < day)) age--;
+
+            // Phone
+            const phone = phoneFmt[country]();
+
+            // Location
+            const loc = pick(cities[country]);
+            const streetNum = rn(1, 250);
+            const street = streetNum + ' ' + pick(streets[country]);
+
+            // Company & job
+            const company = pick(companies);
+            const job = pick(jobs);
+
+            // SSN (US-style for all, just fake numbers)
+            const ssn = `${rn(100, 999)}-${rn(10, 99)}-${rn(1000, 9999)}`;
+
+            // Credit card (Visa-like, Luhn-valid)
+            function genCC() {
+                let digits = [4];
+                for (let i = 1; i < 15; i++) digits.push(rn(0, 9));
+                // Luhn checksum
+                let sum = 0;
+                for (let i = 0; i < 15; i++) {
+                    let d = digits[14 - i];
+                    if (i % 2 === 0) { d *= 2; if (d > 9) d -= 9; }
+                    sum += d;
+                }
+                digits.push((10 - (sum % 10)) % 10);
+                const s = digits.join('');
+                return s.slice(0, 4) + ' ' + s.slice(4, 8) + ' ' + s.slice(8, 12) + ' ' + s.slice(12, 16);
+            }
+            const cc = genCC();
+
+            // IBAN
+            const iban = ibanFmt[country]() || 'N/A';
+
+            // Website
+            const website = 'https://www.' + firstName.toLowerCase().replace(/[^a-z]/g, '') + lastName.toLowerCase().replace(/[^a-z]/g, '') + '.com';
+
+            // IP & MAC
+            const ip = `${rn(1, 223)}.${rn(0, 255)}.${rn(0, 255)}.${rn(1, 254)}`;
+            const mac = Array.from({ length: 6 }, () => rn(0, 255).toString(16).padStart(2, '0')).join(':').toUpperCase();
+
+            // User Agent
+            const ua = pick(uas);
+
+            // Fill UI
+            const vals = {
+                'fk-name': fullName,
+                'fk-user': username,
+                'fk-email': email,
+                'fk-pass': pass,
+                'fk-dob': dob,
+                'fk-age': age,
+                'fk-phone': phone,
+                'fk-addr': street,
+                'fk-city': loc.c,
+                'fk-state': loc.s,
+                'fk-zip': loc.z,
+                'fk-country': countryNames[country],
+                'fk-company': company,
+                'fk-job': job,
+                'fk-ssn': ssn,
+                'fk-cc': cc,
+                'fk-iban': iban,
+                'fk-web': website,
+                'fk-ip': ip,
+                'fk-mac': mac,
+                'fk-ua': ua
+            };
+            for (const [id, val] of Object.entries(vals)) {
+                const el = document.getElementById(id);
+                if (el) el.innerText = val;
+            }
+
+            // JSON
+            const json = JSON.stringify({
+                name: fullName, gender: g, username, email, password: pass,
+                date_of_birth: dob, age, phone, address: street,
+                city: loc.c, state: loc.s, zip: loc.z, country: countryNames[country],
+                company, job_title: job, ssn, credit_card: cc, iban,
+                website, ip_address: ip, mac_address: mac, user_agent: ua
+            }, null, 2);
+            document.getElementById('fk-json').innerText = json;
+
+            // Click-to-copy on values
+            document.querySelectorAll('#page-fakeid .fake-val').forEach(el => {
+                el.onclick = () => {
+                    navigator.clipboard.writeText(el.innerText);
+                    const orig = el.innerText;
+                    el.innerText = 'Copied!';
+                    el.style.color = 'var(--neon)';
+                    setTimeout(() => { el.innerText = orig; el.style.color = 'white'; }, 1200);
+                };
+            });
+        }
+
+        /* ========== CHMOD COMPOSER ========== */
+        function calcChmod() {
+            const o = (document.getElementById('ch-o-r').checked ? 4 : 0) + (document.getElementById('ch-o-w').checked ? 2 : 0) + (document.getElementById('ch-o-x').checked ? 1 : 0);
+            const g = (document.getElementById('ch-g-r').checked ? 4 : 0) + (document.getElementById('ch-g-w').checked ? 2 : 0) + (document.getElementById('ch-g-x').checked ? 1 : 0);
+            const a = (document.getElementById('ch-a-r').checked ? 4 : 0) + (document.getElementById('ch-a-w').checked ? 2 : 0) + (document.getElementById('ch-a-x').checked ? 1 : 0);
+
+            document.getElementById('ch-o-val').innerText = o;
+            document.getElementById('ch-g-val').innerText = g;
+            document.getElementById('ch-a-val').innerText = a;
+
+            const num = `${o}${g}${a}`;
+            document.getElementById('chmod-num').innerText = num;
+
+            const sym = toSym(o) + toSym(g) + toSym(a);
+            document.getElementById('chmod-sym').innerText = sym;
+
+            const fname = document.getElementById('chmod-file').value.trim() || 'file';
+            document.getElementById('chmod-cmd-num').innerText = `chmod ${num} ${fname}`;
+            document.getElementById('chmod-cmd-sym').innerText = `chmod u=${toSymLetters(o)},g=${toSymLetters(g)},o=${toSymLetters(a)} ${fname}`;
+            document.getElementById('chmod-cmd-rec').innerText = `find . -type f -exec chmod ${num} {} \\;`;
+            document.getElementById('chmod-ls').innerText = `-${sym}`;
+        }
+
+        function toSym(n) {
+            return (n & 4 ? 'r' : '-') + (n & 2 ? 'w' : '-') + (n & 1 ? 'x' : '-');
+        }
+
+        function toSymLetters(n) {
+            let s = '';
+            if (n & 4) s += 'r';
+            if (n & 2) s += 'w';
+            if (n & 1) s += 'x';
+            return s || '-';
+        }
+
+        function setChmod(val) {
+            const s = val.toString().padStart(3, '0');
+            const digits = [parseInt(s[0]), parseInt(s[1]), parseInt(s[2])];
+            const prefixes = ['o', 'g', 'a'];
+            const ids = [
+                ['ch-o-r', 'ch-o-w', 'ch-o-x'],
+                ['ch-g-r', 'ch-g-w', 'ch-g-x'],
+                ['ch-a-r', 'ch-a-w', 'ch-a-x'],
+            ];
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(ids[i][0]).checked = !!(digits[i] & 4);
+                document.getElementById(ids[i][1]).checked = !!(digits[i] & 2);
+                document.getElementById(ids[i][2]).checked = !!(digits[i] & 1);
+            }
+            calcChmod();
+        }
+
+        calcChmod();
+
+        /* ========== TIMESTAMP CONVERTER ========== */
+        let tsMode = 'tohuman';
+
+        function setTsMode(mode) {
+            tsMode = mode;
+            document.getElementById('ts-tohuman-section').style.display = mode === 'tohuman' ? 'block' : 'none';
+            document.getElementById('ts-tots-section').style.display = mode === 'tots' ? 'block' : 'none';
+            document.getElementById('ts-mode-tohuman').style.background = mode === 'tohuman' ? 'var(--neon)' : 'transparent';
+            document.getElementById('ts-mode-tohuman').style.color = mode === 'tohuman' ? '#000' : 'var(--neon)';
+            document.getElementById('ts-mode-tots').style.background = mode === 'tots' ? 'var(--neon)' : 'transparent';
+            document.getElementById('ts-mode-tots').style.color = mode === 'tots' ? '#000' : 'var(--neon)';
+            if (mode === 'tohuman') convertTimestamp();
+            else convertToTimestamp();
+        }
+
+        function convertTimestamp() {
+            const raw = document.getElementById('ts-input').value.trim();
+            if (!raw) {
+                document.getElementById('ts-human-out').innerText = '----';
+                document.getElementById('ts-iso-out').innerText = '----';
+                return;
+            }
+            let ms = parseInt(raw, 10);
+            if (isNaN(ms)) {
+                document.getElementById('ts-human-out').innerText = 'Invalid number';
+                document.getElementById('ts-iso-out').innerText = '----';
+                return;
+            }
+            if (ms < 1e12) ms *= 1000;
+            const d = new Date(ms);
+            if (isNaN(d.getTime())) {
+                document.getElementById('ts-human-out').innerText = 'Invalid date';
+                document.getElementById('ts-iso-out').innerText = '----';
+                return;
+            }
+            document.getElementById('ts-human-out').innerText = d.toLocaleString();
+            document.getElementById('ts-iso-out').innerText = d.toISOString();
+        }
+
+        function convertToTimestamp() {
+            const raw = document.getElementById('ts-date-input').value.trim();
+            if (!raw) {
+                document.getElementById('ts-ts-out').innerText = '----';
+                document.getElementById('ts-ms-out').innerText = '----';
+                return;
+            }
+            let d;
+            if (raw.toLowerCase() === 'now') {
+                d = new Date();
+            } else {
+                d = new Date(raw);
+            }
+            if (isNaN(d.getTime())) {
+                document.getElementById('ts-ts-out').innerText = 'Invalid date';
+                document.getElementById('ts-ms-out').innerText = '----';
+                return;
+            }
+            const sec = Math.floor(d.getTime() / 1000);
+            const ms = d.getTime();
+            document.getElementById('ts-ts-out').innerText = sec.toString();
+            document.getElementById('ts-ms-out').innerText = ms.toString();
+        }
+
+        /* ========== URL PARSE ========== */
+        let urlMode = 'serialize';
+
+        function setUrlMode(mode) {
+            urlMode = mode;
+            document.getElementById('url-ser-section').style.display = mode === 'serialize' ? 'block' : 'none';
+            document.getElementById('url-des-section').style.display = mode === 'deserialize' ? 'block' : 'none';
+            document.getElementById('url-mode-ser').style.background = mode === 'serialize' ? 'var(--neon)' : 'transparent';
+            document.getElementById('url-mode-ser').style.color = mode === 'serialize' ? '#000' : 'var(--neon)';
+            document.getElementById('url-mode-des').style.background = mode === 'deserialize' ? 'var(--neon)' : 'transparent';
+            document.getElementById('url-mode-des').style.color = mode === 'deserialize' ? '#000' : 'var(--neon)';
+        }
+
+        function parseUrl() {
+            const raw = document.getElementById('url-des-input').value.trim();
+            const res = document.getElementById('url-des-result');
+            if (!raw) { res.style.display = 'none'; return; }
+            res.style.display = 'block';
+
+            try {
+                const u = new URL(raw);
+                document.getElementById('url-protocol').innerText = u.protocol.replace(':', '');
+                document.getElementById('url-host').innerText = u.hostname;
+                document.getElementById('url-path').innerText = u.pathname || '/';
+
+                const portRow = document.getElementById('url-port-row');
+                if (u.port) {
+                    portRow.style.display = 'block';
+                    document.getElementById('url-port').innerText = u.port;
+                } else {
+                    portRow.style.display = 'none';
+                }
+
+                const hashRow = document.getElementById('url-hash-row');
+                if (u.hash) {
+                    hashRow.style.display = 'block';
+                    document.getElementById('url-hash').innerText = u.hash.slice(1);
+                } else {
+                    hashRow.style.display = 'none';
+                }
+
+                const paramsSection = document.getElementById('url-params-section');
+                const paramsList = document.getElementById('url-params-list');
+                const params = [...u.searchParams.entries()];
+                if (params.length) {
+                    paramsSection.style.display = 'block';
+                    paramsList.innerHTML = params.map(([k, v]) =>
+                        `<div class="cmd-box" style="margin-top:6px;display:flex;justify-content:space-between;cursor:pointer" onclick="clipText('${k}=${v.replace(/'/g, "\\'")}', 'urlparse-notify')"><span style="color:#888">${k}</span><span style="color:white">${v}</span></div>`
+                    ).join('');
+                } else {
+                    paramsSection.style.display = 'none';
+                }
+
+                document.getElementById('url-decoded').innerText = decodeURIComponent(raw);
+                document.getElementById('url-encoded').innerText = u.href;
+            } catch {
+                document.getElementById('url-protocol').innerText = '\u26A0 Invalid URL';
+                document.getElementById('url-host').innerText = '----';
+                document.getElementById('url-path').innerText = '----';
+                document.getElementById('url-params-section').style.display = 'none';
+                document.getElementById('url-port-row').style.display = 'none';
+                document.getElementById('url-hash-row').style.display = 'none';
+                document.getElementById('url-decoded').innerText = '----';
+                document.getElementById('url-encoded').innerText = '----';
+            }
+        }
+
+        function buildUrl() {
+            const proto = document.getElementById('url-ser-proto').value;
+            const host = document.getElementById('url-ser-host').value.trim();
+            const port = document.getElementById('url-ser-port').value.trim();
+            const path = document.getElementById('url-ser-path').value.trim();
+            const paramsRaw = document.getElementById('url-ser-params').value.trim();
+            const hash = document.getElementById('url-ser-hash').value.trim();
+
+            if (!host) {
+                document.getElementById('url-ser-out').innerText = '----';
+                document.getElementById('url-ser-encoded').innerText = '----';
+                return;
+            }
+
+            let base = `${proto}://${host}`;
+            if (port) base += `:${port}`;
+            if (path) base += path.startsWith('/') ? path : `/${path}`;
+
+            const params = new URLSearchParams();
+            if (paramsRaw) {
+                paramsRaw.split('\n').forEach(line => {
+                    const eq = line.indexOf('=');
+                    if (eq > 0) {
+                        params.append(line.slice(0, eq).trim(), line.slice(eq + 1).trim());
+                    }
+                });
+            }
+
+            const qs = params.toString();
+            if (qs) base += `?${qs}`;
+            if (hash) base += `#${hash}`;
+
+            // Readable version (decoded)
+            let readable = `${proto}://${host}`;
+            if (port) readable += `:${port}`;
+            if (path) readable += path.startsWith('/') ? path : `/${path}`;
+            if (paramsRaw) {
+                const pairs = paramsRaw.split('\n').filter(l => l.includes('=')).map(l => {
+                    const eq = l.indexOf('=');
+                    return `${l.slice(0, eq).trim()}=${l.slice(eq + 1).trim()}`;
+                });
+                if (pairs.length) readable += `?${pairs.join('&')}`;
+            }
+            if (hash) readable += `#${hash}`;
+
+            document.getElementById('url-ser-out').innerText = readable;
+            document.getElementById('url-ser-encoded').innerText = base;
+        }
+
+        /* ========== SLUG GENERATOR ========== */
+        function genSlug() {
+            const input = document.getElementById('slug-input').value;
+            if (!input) { document.getElementById('slug-out').innerText = '----'; return; }
+            const sep = document.getElementById('slug-sep').value;
+            const slug = input
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9\s-]/g, '')
+                .trim()
+                .replace(/[\s-]+/g, sep);
+            document.getElementById('slug-out').innerText = slug || '----';
+        }
+    </script>
+</body>
+
+</html>

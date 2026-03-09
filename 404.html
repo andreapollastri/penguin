@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Penguin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon: #00ff41;
+            --bg: #0d0d0d;
+            --sidebar: #111;
+            --main: #1a1a1a;
+            --dim: #555;
+            --border: #222;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--neon);
+            font-family: 'Fira Code', 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: var(--sidebar);
+            padding: 14px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 50px;
+        }
+
+        .topbar .page-title {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .topbar .dots span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 6px;
+        }
+
+        .topbar .r { background: #ff5f56; }
+        .topbar .y { background: #ffbd2e; }
+        .topbar .g { background: #27c93f; }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .code {
+            font-size: 8rem;
+            font-weight: bold;
+            color: var(--neon);
+            letter-spacing: 8px;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+            margin-bottom: 16px;
+        }
+
+        .message {
+            font-size: 1.1rem;
+            color: #888;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            max-width: 400px;
+        }
+
+        .prompt {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+        }
+
+        .cmd-box {
+            background: #0a0a0a;
+            padding: 16px 28px;
+            font-size: 14px;
+            color: var(--neon);
+            border-radius: 5px;
+            border: 1px solid #1e1e1e;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 2px;
+        }
+
+        .cmd-box:hover {
+            background: rgba(0, 255, 65, 0.08);
+            border-color: var(--neon);
+            text-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+        }
+
+        .footer {
+            padding: 20px;
+            font-size: 9px;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar">
+        <span class="page-title">root@penguin: ~/404</span>
+        <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+    </div>
+
+    <div class="content">
+        <div class="logo">&#x1F427;</div>
+        <div class="code">404</div>
+        <p class="message">Page not found. The resource you're looking for doesn't exist or has been moved.</p>
+        <div class="prompt">$ cd /</div>
+        <a href="index.html" class="cmd-box">→ Go to Penguin</a>
+    </div>
+
+    <div class="footer">Penguin v1.0 — Developer Generators</div>
+</body>
+
+</html>
