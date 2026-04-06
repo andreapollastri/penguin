@@ -874,6 +874,164 @@
         .laravel-guide li {
             margin-bottom: 4px;
         }
+
+        /* ===== WEB TOOLS ===== */
+        .content.content-wide {
+            max-width: 1000px;
+        }
+
+        .webtools-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+
+        .webtools-tabs button {
+            background: #0a0a0a;
+            border: 1px solid #282828;
+            color: #888;
+            font-family: inherit;
+            font-size: 10px;
+            padding: 7px 11px;
+            cursor: pointer;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        .webtools-tabs button:hover {
+            border-color: var(--neon);
+            color: var(--neon);
+        }
+
+        .webtools-tabs button.wt-active {
+            border-color: var(--neon);
+            color: var(--neon);
+            background: rgba(0, 255, 65, 0.06);
+        }
+
+        .webtools-panel {
+            display: none;
+        }
+
+        .webtools-panel.wt-show {
+            display: block;
+        }
+
+        .webtools-panel .label {
+            margin-top: 12px;
+        }
+
+        .webtools-panel .label:first-child {
+            margin-top: 0;
+        }
+
+        .wt-pre {
+            background: #0a0a0a;
+            border: 1px solid #1e1e1e;
+            border-radius: 5px;
+            padding: 12px 14px;
+            font-size: 11px;
+            color: #ccc;
+            line-height: 1.55;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        .wt-icon-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .wt-icon-toolbar input {
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .wt-icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+            gap: 6px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding: 8px;
+            background: #0a0a0a;
+            border: 1px solid #1e1e1e;
+            border-radius: 6px;
+        }
+
+        .wt-icon-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 8px 4px;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.12s;
+            background: #111;
+        }
+
+        .wt-icon-cell:hover {
+            border-color: var(--neon);
+        }
+
+        .wt-icon-cell img {
+            width: 22px;
+            height: 22px;
+            filter: invert(0.85);
+        }
+
+        .wt-icon-name {
+            font-size: 8px;
+            color: #666;
+            text-align: center;
+            line-height: 1.2;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .wt-hint {
+            font-size: 10px;
+            color: #666;
+            line-height: 1.5;
+            margin: 8px 0 12px;
+        }
+
+        .wt-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+            margin-bottom: 8px;
+        }
+
+        .wt-row>div {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .wt-kv {
+            font-size: 11px;
+            color: #aaa;
+            margin: 4px 0;
+            word-break: break-all;
+        }
+
+        .wt-kv b {
+            color: #777;
+            font-weight: normal;
+            margin-right: 6px;
+        }
     </style>
 </head>
 
@@ -920,6 +1078,7 @@
             <button onclick="showPage('kali', this)"><span class="icon">&gt;</span> Kali</button>
             <button onclick="showPage('sanitize', this)"><span class="icon">&gt;</span> Script sanitizer</button>
             <button onclick="showPage('mdpreview', this)"><span class="icon">&gt;</span> MD preview</button>
+            <button onclick="showPage('webtools', this)"><span class="icon">&gt;</span> Web tools</button>
         </nav>
         <div class="sidebar-footer">Penguin · <a href="https://web.ap.it" target="_blank" rel="noopener"
                 style="color:#444;text-decoration:none">by @ndrea</a></div>
@@ -936,7 +1095,7 @@
         </div>
 
         <div class="content-area">
-            <div class="content">
+            <div class="content" id="main-content">
 
                 <!-- USERNAME GENERATOR -->
                 <div id="page-username" class="page">
@@ -2325,6 +2484,208 @@
                     <div class="notify" id="md-notify">Preview is sanitized; scripts are stripped</div>
                 </div>
 
+                <!-- WEB TOOLS -->
+                <div id="page-webtools" class="page">
+                    <div class="stat-bar">
+                        <span>SITEMAP · META · FAVICON · CSS · ICONS · NET</span>
+                        <span>LOCAL + DNS (HTTPS)</span>
+                    </div>
+                    <p class="wt-hint">Generators run in your browser. DNS lookups use Google DNS-over-HTTPS. TCP port scan and
+                        full HTTP status for arbitrary hosts are not possible from a static page; snippets and external tools
+                        are provided where needed.</p>
+                    <div class="webtools-tabs" id="webtools-tabs">
+                        <button type="button" class="wt-active" data-wt="sitemap" onclick="webtoolsTab('sitemap', this)">Sitemap</button>
+                        <button type="button" data-wt="meta" onclick="webtoolsTab('meta', this)">OG / Twitter</button>
+                        <button type="button" data-wt="favicon" onclick="webtoolsTab('favicon', this)">Favicon</button>
+                        <button type="button" data-wt="media" onclick="webtoolsTab('media', this)">CSS media</button>
+                        <button type="button" data-wt="icons" onclick="webtoolsTab('icons', this)">SVG icons</button>
+                        <button type="button" data-wt="speed" onclick="webtoolsTab('speed', this)">Speed test</button>
+                        <button type="button" data-wt="perf" onclick="webtoolsTab('perf', this)">Performance</button>
+                        <button type="button" data-wt="online" onclick="webtoolsTab('online', this)">Online check</button>
+                        <button type="button" data-wt="ports" onclick="webtoolsTab('ports', this)">Port check</button>
+                        <button type="button" data-wt="netinfo" onclick="webtoolsTab('netinfo', this)">Host / DNS</button>
+                    </div>
+
+                    <div id="wt-panel-sitemap" class="webtools-panel wt-show">
+                        <div class="label">Base URL (no trailing slash)</div>
+                        <input type="text" id="sm-base" placeholder="https://example.com" spellcheck="false">
+                        <div class="label">Paths (one per line, or full URLs)</div>
+                        <textarea id="sm-paths" class="fmt-io" rows="8" spellcheck="false"
+                            placeholder="/&#10;/about&#10;/blog/post-1"></textarea>
+                        <div class="wt-row">
+                            <div>
+                                <div class="label">changefreq</div>
+                                <select id="sm-changefreq">
+                                    <option value="always">always</option>
+                                    <option value="hourly">hourly</option>
+                                    <option value="daily" selected>daily</option>
+                                    <option value="weekly">weekly</option>
+                                    <option value="monthly">monthly</option>
+                                    <option value="yearly">yearly</option>
+                                    <option value="never">never</option>
+                                </select>
+                            </div>
+                            <div>
+                                <div class="label">priority (0.0–1.0)</div>
+                                <input type="text" id="sm-prio" value="0.8" spellcheck="false">
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button type="button" class="btn" onclick="wtGenSitemap()">Generate XML</button>
+                            <button type="button" class="btn" onclick="wtCopy('sm-out')">Copy XML</button>
+                        </div>
+                        <div class="label">sitemap.xml</div>
+                        <textarea id="sm-out" class="fmt-io out" rows="12" readonly spellcheck="false"></textarea>
+                    </div>
+
+                    <div id="wt-panel-meta" class="webtools-panel">
+                        <div class="wt-row">
+                            <div>
+                                <div class="label">Page title</div>
+                                <input type="text" id="og-title" placeholder="Page title">
+                            </div>
+                            <div>
+                                <div class="label">Site name</div>
+                                <input type="text" id="og-site" placeholder="My site">
+                            </div>
+                        </div>
+                        <div class="label">Description</div>
+                        <textarea id="og-desc" class="fmt-io" rows="3" placeholder="Short description for previews"></textarea>
+                        <div class="wt-row">
+                            <div>
+                                <div class="label">Canonical URL</div>
+                                <input type="text" id="og-url" placeholder="https://example.com/page">
+                            </div>
+                            <div>
+                                <div class="label">Image URL (1200×630 recommended)</div>
+                                <input type="text" id="og-img" placeholder="https://example.com/og.jpg">
+                            </div>
+                        </div>
+                        <div class="wt-row">
+                            <div>
+                                <div class="label">Twitter @username (no @)</div>
+                                <input type="text" id="og-tw-user" placeholder="handle">
+                            </div>
+                            <div>
+                                <div class="label">Twitter card</div>
+                                <select id="og-tw-card">
+                                    <option value="summary_large_image" selected>summary_large_image</option>
+                                    <option value="summary">summary</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="label">Locale (optional)</div>
+                        <input type="text" id="og-locale" placeholder="it_IT" spellcheck="false">
+                        <div class="btn-row">
+                            <button type="button" class="btn" onclick="wtGenMeta()">Generate tags</button>
+                            <button type="button" class="btn" onclick="wtCopy('og-out')">Copy HTML</button>
+                        </div>
+                        <div class="label">&lt;head&gt; snippet</div>
+                        <textarea id="og-out" class="fmt-io out" rows="16" readonly spellcheck="false"></textarea>
+                    </div>
+
+                    <div id="wt-panel-favicon" class="webtools-panel">
+                        <div class="label">Image file (PNG / JPG / SVG / WebP)</div>
+                        <input type="file" id="fav-file" accept="image/*" onchange="wtFaviconLoad()">
+                        <p class="wt-hint">Resizes to 32×32 PNG in the browser. For production, also ship 16×16 and 180×180
+                            (apple-touch-icon) from your design tool.</p>
+                        <canvas id="fav-canvas" width="32" height="32" style="display:none"></canvas>
+                        <div class="btn-row">
+                            <button type="button" class="btn" onclick="wtFaviconDownload()" id="fav-dl-btn" disabled>Download favicon-32.png</button>
+                        </div>
+                        <div class="label">HTML snippet</div>
+                        <textarea id="fav-html" class="fmt-io out" rows="5" readonly spellcheck="false"></textarea>
+                        <button type="button" class="btn" onclick="wtCopy('fav-html')">Copy HTML</button>
+                    </div>
+
+                    <div id="wt-panel-media" class="webtools-panel">
+                        <div class="label">Common breakpoints (copy into your CSS)</div>
+                        <textarea id="wt-media-pre" class="fmt-io out" rows="22" readonly spellcheck="false"></textarea>
+                        <div class="btn-row">
+                            <button type="button" class="btn" onclick="wtCopy('wt-media-pre')">Copy</button>
+                        </div>
+                    </div>
+
+                    <div id="wt-panel-icons" class="webtools-panel">
+                        <div class="wt-icon-toolbar">
+                            <input type="search" id="wt-icon-filter" placeholder="Filter icons…" oninput="wtIconFilter()"
+                                spellcheck="false">
+                            <button type="button" class="btn" onclick="wtLoadIcons(true)">Reload from Lucide (GitHub)</button>
+                        </div>
+                        <p class="wt-hint">Open-source <a href="https://lucide.dev/icons/" target="_blank" rel="noopener">Lucide</a>
+                            icons via unpkg. Click a cell to copy an &lt;img&gt; tag. First open loads filenames from GitHub API (~400+).</p>
+                        <div id="wt-icon-grid" class="wt-icon-grid"></div>
+                        <div class="notify" id="wt-icon-status">—</div>
+                    </div>
+
+                    <div id="wt-panel-speed" class="webtools-panel">
+                        <p class="wt-hint">Rough download speed: fetches a known asset from jsDelivr (several runs, median). Not a
+                            lab-grade speed test; use a dedicated tool on a wired connection for ISP benchmarking.</p>
+                        <div class="btn-row">
+                            <button type="button" class="btn" onclick="wtSpeedRun()">Run test</button>
+                        </div>
+                        <div id="wt-speed-out" class="wt-pre">—</div>
+                    </div>
+
+                    <div id="wt-panel-perf" class="webtools-panel">
+                        <div class="label">Page URL to analyse</div>
+                        <input type="text" id="perf-url" placeholder="https://example.com" spellcheck="false">
+                        <div class="btn-row">
+                            <button type="button" class="btn" onclick="wtPerfPsi()">Open PageSpeed Insights</button>
+                            <button type="button" class="btn" onclick="wtPerfWebvitals()">Open web.dev measure</button>
+                        </div>
+                        <p class="wt-hint">These open Google tools in a new tab (Lab + field data). No API key required on your
+                            side.</p>
+                    </div>
+
+                    <div id="wt-panel-online" class="webtools-panel">
+                        <div class="label">Browser reports online</div>
+                        <div id="wt-on-nav" class="wt-kv"><b>navigator.onLine</b> —</div>
+                        <div class="btn-row">
+                            <button type="button" class="btn" onclick="wtOnlineNav()">Refresh</button>
+                        </div>
+                        <div class="label">This origin (this site)</div>
+                        <div class="btn-row">
+                            <button type="button" class="btn" onclick="wtOnlineThis()">Ping this page URL</button>
+                        </div>
+                        <div id="wt-on-this" class="wt-pre">—</div>
+                        <div class="label">External host (DNS + favicon probe)</div>
+                        <input type="text" id="wt-on-host" placeholder="example.com" spellcheck="false">
+                        <div class="btn-row">
+                            <button type="button" class="btn" onclick="wtOnlineExt()">Check</button>
+                        </div>
+                        <div id="wt-on-ext" class="wt-pre">—</div>
+                        <p class="wt-hint">Full HTTP status for third-party URLs is blocked by browser CORS. DNS resolution and
+                            loading <code>/favicon.ico</code> indicate reachability for many sites, not a guarantee.</p>
+                    </div>
+
+                    <div id="wt-panel-ports" class="webtools-panel">
+                        <p class="wt-hint">Browsers cannot open arbitrary TCP sockets to remote hosts. Use these commands on your
+                            machine or a server, or an online port scanner.</p>
+                        <div class="label">Bash (replace HOST / PORT)</div>
+                        <textarea id="wt-port-snippet" class="fmt-io out" rows="10" readonly spellcheck="false"></textarea>
+                        <div class="btn-row">
+                            <button type="button" class="btn" onclick="wtPortFill()">Fill HOST from field below</button>
+                            <button type="button" class="btn" onclick="wtCopy('wt-port-snippet')">Copy</button>
+                        </div>
+                        <div class="label">Hostname / IP for fill helper</div>
+                        <input type="text" id="wt-port-host" placeholder="example.com" spellcheck="false">
+                        <p class="wt-hint">Optional: <a href="https://www.yougetsignal.com/tools/open-ports/" target="_blank"
+                                rel="noopener">YouGetSignal</a> (third-party) for remote checks from the web.</p>
+                    </div>
+
+                    <div id="wt-panel-netinfo" class="webtools-panel">
+                        <div class="label">Hostname or IPv4 (for PTR use IP)</div>
+                        <input type="text" id="wt-net-q" placeholder="example.com or 8.8.8.8" spellcheck="false">
+                        <div class="btn-row">
+                            <button type="button" class="btn" onclick="wtDnsLookup()">Lookup DNS</button>
+                        </div>
+                        <div id="wt-net-out" class="wt-pre">—</div>
+                    </div>
+
+                    <div class="notify" id="webtools-notify">—</div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -2373,6 +2734,7 @@
             kali: 'root@penguin: ~/kali-tools',
             sanitize: 'root@penguin: ~/script-sanitizer',
             mdpreview: 'root@penguin: ~/markdown-preview',
+            webtools: 'root@penguin: ~/web-tools',
         };
 
         function showPage(id, btn) {
@@ -2399,6 +2761,12 @@
             if (id === 'placeholder') genPlaceholder();
             if (id === 'randomimg') genRandomImg();
             if (id === 'mdpreview') runMdPreview();
+            if (id === 'webtools') {
+                document.getElementById('main-content').classList.add('content-wide');
+                wtWebtoolsEnter();
+            } else {
+                document.getElementById('main-content').classList.remove('content-wide');
+            }
         }
 
         /* ========== FORMAT / VALIDATE / MINIFY ========== */
@@ -5203,6 +5571,322 @@
 
             document.getElementById('url-ser-out').innerText = readable;
             document.getElementById('url-ser-encoded').innerText = base;
+        }
+
+        /* ========== WEB TOOLS ========== */
+        const WT_ICON_FALLBACK = 'activity,airplay,alarm-clock,alert-circle,archive,arrow-right,at-sign,award,bell,bookmark,box,calendar,check,chevron-down,clipboard,clock,cloud,code,coffee,copy,database,download,edit,eye,file,file-text,filter,folder,git-branch,globe,grid,hash,heart,help-circle,home,image,inbox,info,key,layers,link,list,lock,log-in,mail,map,menu,mic,moon,package,paperclip,phone,pie-chart,plus,pocket,search,send,server,settings,share,shield,sidebar,slash,smartphone,star,sun,tag,terminal,trash,truck,upload,user,users,wifi,zap';
+
+        let wtFavDataUrl = null;
+
+        function webtoolsNotify(msg) {
+            const n = document.getElementById('webtools-notify');
+            if (n) n.textContent = msg || '—';
+        }
+
+        function wtWebtoolsEnter() {
+            wtOnlineNav();
+            if (!document.getElementById('wt-media-pre').value) wtMediaPreset();
+            if (!document.getElementById('wt-port-snippet').value.trim()) wtPortFill();
+        }
+
+        function webtoolsTab(tab, btn) {
+            document.querySelectorAll('#page-webtools .webtools-panel').forEach(p => p.classList.remove('wt-show'));
+            document.querySelectorAll('#webtools-tabs button').forEach(b => b.classList.remove('wt-active'));
+            if (btn) btn.classList.add('wt-active');
+            const p = document.getElementById('wt-panel-' + tab);
+            if (p) p.classList.add('wt-show');
+            if (tab === 'icons') wtLoadIcons(false);
+        }
+
+        function wtCopy(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            navigator.clipboard.writeText(el.value).then(() => webtoolsNotify('Copied')).catch(() => webtoolsNotify('Copy failed'));
+        }
+
+        function wtEscXml(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+        }
+
+        function wtGenSitemap() {
+            let base = document.getElementById('sm-base').value.trim().replace(/\/+$/, '');
+            const paths = document.getElementById('sm-paths').value.split('\n').map(s => s.trim()).filter(Boolean);
+            const prio = document.getElementById('sm-prio').value.trim() || '0.5';
+            const changefreq = document.getElementById('sm-changefreq').value;
+            const lastmod = new Date().toISOString().split('T')[0];
+            if (!paths.length) {
+                document.getElementById('sm-out').value = '';
+                webtoolsNotify('Add at least one path');
+                return;
+            }
+            if (!base && !paths.some(p => /^https?:\/\//i.test(p))) {
+                webtoolsNotify('Set base URL or use full URLs per line');
+                return;
+            }
+            let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+            for (const p of paths) {
+                let loc;
+                if (/^https?:\/\//i.test(p)) loc = p;
+                else loc = base + (p.startsWith('/') ? p : '/' + p);
+                xml += '  <url>\n    <loc>' + wtEscXml(loc) + '</loc>\n    <lastmod>' + lastmod + '</lastmod>\n    <changefreq>' + changefreq + '</changefreq>\n    <priority>' + wtEscXml(prio) + '</priority>\n  </url>\n';
+            }
+            xml += '</urlset>';
+            document.getElementById('sm-out').value = xml;
+            webtoolsNotify('Sitemap generated');
+        }
+
+        function wtEscAttr(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+        }
+
+        function wtGenMeta() {
+            const title = document.getElementById('og-title').value.trim();
+            const site = document.getElementById('og-site').value.trim();
+            const desc = document.getElementById('og-desc').value.trim();
+            const url = document.getElementById('og-url').value.trim();
+            const img = document.getElementById('og-img').value.trim();
+            const twUser = document.getElementById('og-tw-user').value.trim();
+            const twCard = document.getElementById('og-tw-card').value;
+            const loc = document.getElementById('og-locale').value.trim();
+            const lines = [];
+            lines.push('<meta name="description" content="' + wtEscAttr(desc) + '" />');
+            if (title) lines.push('<meta property="og:title" content="' + wtEscAttr(title) + '" />');
+            if (site) lines.push('<meta property="og:site_name" content="' + wtEscAttr(site) + '" />');
+            if (desc) lines.push('<meta property="og:description" content="' + wtEscAttr(desc) + '" />');
+            if (url) lines.push('<meta property="og:url" content="' + wtEscAttr(url) + '" />');
+            if (img) lines.push('<meta property="og:image" content="' + wtEscAttr(img) + '" />');
+            lines.push('<meta property="og:type" content="website" />');
+            if (loc) lines.push('<meta property="og:locale" content="' + wtEscAttr(loc) + '" />');
+            if (title) lines.push('<meta name="twitter:title" content="' + wtEscAttr(title) + '" />');
+            if (desc) lines.push('<meta name="twitter:description" content="' + wtEscAttr(desc) + '" />');
+            lines.push('<meta name="twitter:card" content="' + wtEscAttr(twCard) + '" />');
+            if (img) lines.push('<meta name="twitter:image" content="' + wtEscAttr(img) + '" />');
+            if (twUser) lines.push('<meta name="twitter:site" content="@' + wtEscAttr(twUser.replace(/^@/, '')) + '" />');
+            document.getElementById('og-out').value = lines.join('\n');
+            webtoolsNotify('Meta tags generated');
+        }
+
+        function wtFaviconLoad() {
+            const f = document.getElementById('fav-file').files[0];
+            if (!f) return;
+            wtFavDataUrl = null;
+            const img = new Image();
+            const u = URL.createObjectURL(f);
+            img.onload = () => {
+                const c = document.getElementById('fav-canvas');
+                const ctx = c.getContext('2d');
+                ctx.clearRect(0, 0, 32, 32);
+                ctx.drawImage(img, 0, 0, 32, 32);
+                wtFavDataUrl = c.toDataURL('image/png');
+                document.getElementById('fav-dl-btn').disabled = false;
+                document.getElementById('fav-html').value = '<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />\n<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />';
+                URL.revokeObjectURL(u);
+                webtoolsNotify('Favicon preview ready');
+            };
+            img.onerror = () => {
+                URL.revokeObjectURL(u);
+                webtoolsNotify('Could not read image');
+            };
+            img.src = u;
+        }
+
+        function wtFaviconDownload() {
+            if (!wtFavDataUrl) return;
+            const a = document.createElement('a');
+            a.href = wtFavDataUrl;
+            a.download = 'favicon-32.png';
+            a.click();
+        }
+
+        function wtMediaPreset() {
+            document.getElementById('wt-media-pre').value = '/* Common breakpoints (mobile-first) */\n.container { width: 100%; padding-inline: 1rem; }\n\n@media (min-width: 480px) {\n  /* large phones */\n}\n\n@media (min-width: 640px) {\n  /* sm */\n}\n\n@media (min-width: 768px) {\n  /* md / tablet */\n}\n\n@media (min-width: 1024px) {\n  /* lg / laptop */\n}\n\n@media (min-width: 1280px) {\n  /* xl */\n}\n\n@media (min-width: 1536px) {\n  /* 2xl */\n}\n\n/* Touch / hover capability */\n@media (hover: hover) and (pointer: fine) {\n  .btn:hover { opacity: 0.9; }\n}\n\n/* Dark mode */\n@media (prefers-color-scheme: dark) {\n  :root { color-scheme: dark; }\n}\n\n/* Reduced motion */\n@media (prefers-reduced-motion: reduce) {\n  *, *::before, *::after {\n    animation-duration: 0.01ms !important;\n    transition-duration: 0.01ms !important;\n  }\n}\n\n/* Print */\n@media print {\n  .no-print { display: none !important; }\n}\n';
+        }
+
+        function wtIconCopy(name) {
+            const u = 'https://unpkg.com/lucide-static@0.469.0/icons/' + name + '.svg';
+            const tag = '<img src="' + u + '" alt="" width="24" height="24" />';
+            navigator.clipboard.writeText(tag).then(() => webtoolsNotify('Copied ' + name)).catch(() => webtoolsNotify('Copy failed'));
+        }
+
+        async function wtLoadIcons(force) {
+            const grid = document.getElementById('wt-icon-grid');
+            const st = document.getElementById('wt-icon-status');
+            if (grid.dataset.loaded === '1' && !force) return;
+            grid.innerHTML = '';
+            st.textContent = 'Loading icon list…';
+            const names = [];
+            try {
+                for (let page = 1; page <= 10; page++) {
+                    const r = await fetch('https://api.github.com/repos/lucide-icons/lucide/contents/icons?per_page=100&page=' + page);
+                    if (r.status === 403) throw new Error('rate limit');
+                    if (!r.ok) break;
+                    const arr = await r.json();
+                    if (!Array.isArray(arr) || !arr.length) break;
+                    for (const x of arr) {
+                        if (x.name && x.name.endsWith('.svg')) names.push(x.name.replace(/\.svg$/i, ''));
+                    }
+                    if (arr.length < 100) break;
+                }
+            } catch (e) {
+                st.textContent = 'GitHub API unavailable — using fallback set.';
+            }
+            if (!names.length) names.push(...WT_ICON_FALLBACK.split(','));
+            grid.dataset.loaded = '1';
+            st.textContent = names.length + ' icons — click to copy <img> tag (Lucide / unpkg)';
+            const frag = document.createDocumentFragment();
+            for (const name of names) {
+                const cell = document.createElement('div');
+                cell.className = 'wt-icon-cell';
+                cell.dataset.name = name;
+                cell.title = name;
+                cell.onclick = () => wtIconCopy(name);
+                const img = document.createElement('img');
+                img.src = 'https://unpkg.com/lucide-static@0.469.0/icons/' + name + '.svg';
+                img.alt = '';
+                img.loading = 'lazy';
+                const lbl = document.createElement('div');
+                lbl.className = 'wt-icon-name';
+                lbl.textContent = name;
+                cell.appendChild(img);
+                cell.appendChild(lbl);
+                frag.appendChild(cell);
+            }
+            grid.appendChild(frag);
+        }
+
+        function wtIconFilter() {
+            const q = document.getElementById('wt-icon-filter').value.trim().toLowerCase();
+            document.querySelectorAll('#wt-icon-grid .wt-icon-cell').forEach(el => {
+                el.style.display = !q || (el.dataset.name && el.dataset.name.toLowerCase().includes(q)) ? '' : 'none';
+            });
+        }
+
+        async function wtSpeedRun() {
+            const out = document.getElementById('wt-speed-out');
+            out.textContent = 'Running…';
+            const url = 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js';
+            const times = [];
+            let bytes = 0;
+            try {
+                for (let i = 0; i < 5; i++) {
+                    const t0 = performance.now();
+                    const r = await fetch(url + '?r=' + Math.random(), { cache: 'no-store' });
+                    const buf = await r.arrayBuffer();
+                    const t1 = performance.now();
+                    times.push(t1 - t0);
+                    bytes = buf.byteLength;
+                }
+            } catch (e) {
+                out.textContent = 'Error: ' + e.message;
+                return;
+            }
+            const sorted = [...times].sort((a, b) => a - b);
+            const median = sorted[Math.floor(sorted.length / 2)];
+            const mbps = (bytes * 8) / (median / 1000) / 1e6;
+            out.textContent = 'Payload: ~' + (bytes / 1024).toFixed(1) + ' KiB (jsDelivr lodash.min.js)\n' +
+                'Median latency+download: ' + median.toFixed(0) + ' ms (5 runs)\n' +
+                'Approx throughput: ~' + mbps.toFixed(2) + ' Mbps\n\n' +
+                'Note: includes TLS, browser, and CDN variance — not an ISP speedometer.';
+        }
+
+        function wtPerfPsi() {
+            const u = document.getElementById('perf-url').value.trim() || window.location.href;
+            window.open('https://pagespeed.web.dev/analysis?url=' + encodeURIComponent(u), '_blank', 'noopener,noreferrer');
+        }
+
+        function wtPerfWebvitals() {
+            const u = document.getElementById('perf-url').value.trim() || window.location.href;
+            window.open('https://web.dev/measure/?url=' + encodeURIComponent(u), '_blank', 'noopener,noreferrer');
+        }
+
+        function wtOnlineNav() {
+            const el = document.getElementById('wt-on-nav');
+            el.innerHTML = '<b>navigator.onLine</b> ' + (navigator.onLine ? 'true' : 'false');
+        }
+
+        async function wtOnlineThis() {
+            const el = document.getElementById('wt-on-this');
+            el.textContent = 'Requesting…';
+            try {
+                const t0 = performance.now();
+                let r = await fetch(location.href, { method: 'HEAD', cache: 'no-store' });
+                if (r.status === 405) r = await fetch(location.href, { cache: 'no-store' });
+                el.textContent = 'URL: ' + location.href + '\nHTTP ' + r.status + ' ' + r.statusText + '\n~' + (performance.now() - t0).toFixed(0) + ' ms';
+            } catch (e) {
+                el.textContent = String(e.message || e);
+            }
+        }
+
+        async function wtDnsQuery(name, type) {
+            const u = 'https://dns.google/resolve?name=' + encodeURIComponent(name) + '&type=' + type;
+            const r = await fetch(u);
+            return r.json();
+        }
+
+        async function wtOnlineExt() {
+            const el = document.getElementById('wt-on-ext');
+            let host = document.getElementById('wt-on-host').value.trim().replace(/^https?:\/\//i, '').split(/[/?#]/)[0];
+            if (!host) {
+                el.textContent = 'Enter a hostname';
+                return;
+            }
+            const lines = [];
+            try {
+                const j = await wtDnsQuery(host, 'A');
+                const ans = (j.Answer || []).map(a => a.data).filter(Boolean);
+                lines.push('DNS A: ' + (ans.length ? ans.join(', ') : '(none)'));
+            } catch (e) {
+                lines.push('DNS error: ' + e.message);
+            }
+            const t0 = performance.now();
+            const img = new Image();
+            await new Promise(res => {
+                let done = false;
+                const fin = () => { if (!done) { done = true; res(); } };
+                img.onload = fin;
+                img.onerror = fin;
+                img.src = 'https://' + host + '/favicon.ico?probe=' + Date.now();
+                setTimeout(fin, 8000);
+            });
+            const ok = img.complete && img.naturalWidth > 0;
+            lines.push('GET https://' + host + '/favicon.ico — ' + (ok ? 'loaded (' + img.naturalWidth + '×' + img.naturalHeight + ')' : 'failed / blocked / mixed content'));
+            lines.push('~' + (performance.now() - t0).toFixed(0) + ' ms');
+            el.textContent = lines.join('\n');
+        }
+
+        function wtPortFill() {
+            const h = document.getElementById('wt-port-host').value.trim() || 'HOST';
+            document.getElementById('wt-port-snippet').value = '# TCP check (run on your machine)\n# Replace PORT\n\nnc -vz ' + h + ' PORT\n\n# Bash /dev/tcp (Linux)\ntimeout 2 bash -c \'echo >/dev/tcp/' + h + '/PORT\' && echo open || echo closed\n\n# HTTP banner\ncurl -v --connect-timeout 3 http://' + h + ':PORT/\n\n# TLS\necho | openssl s_client -servername ' + h + ' -connect ' + h + ':443 2>/dev/null | openssl x509 -noout -dates\n';
+        }
+
+        async function wtDnsLookup() {
+            const raw = document.getElementById('wt-net-q').value.trim();
+            const out = document.getElementById('wt-net-out');
+            if (!raw) {
+                out.textContent = 'Enter hostname or IPv4';
+                return;
+            }
+            out.textContent = 'Querying…';
+            const ipv4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.test(raw);
+            const lines = [];
+            try {
+                if (ipv4) {
+                    const ptr = raw.split('.').reverse().join('.') + '.in-addr.arpa';
+                    const j = await wtDnsQuery(ptr, 'PTR');
+                    lines.push('PTR for ' + raw + ' (' + ptr + ')');
+                    lines.push(JSON.stringify(j, null, 2));
+                } else {
+                    for (const t of ['A', 'AAAA', 'MX', 'NS', 'TXT']) {
+                        const j = await wtDnsQuery(raw, t);
+                        lines.push('=== ' + t + ' ===');
+                        lines.push(JSON.stringify(j, null, 2));
+                        lines.push('');
+                    }
+                }
+            } catch (e) {
+                lines.push('Error: ' + e.message);
+            }
+            out.textContent = lines.join('\n');
         }
 
         /* ========== SLUG GENERATOR ========== */
