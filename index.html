@@ -2097,7 +2097,7 @@
                 });
                 wrap.style.display = 'flex';
                 dl.style.display = 'inline-block';
-                notify.innerText = 'Download PNG or edit text above';
+                notify.innerText = 'Download PNG (black on white) or edit text above';
                 notify.style.color = 'var(--neon)';
             } catch (e) {
                 wrap.style.display = 'none';
@@ -2108,22 +2108,52 @@
         }
 
         function downloadQR() {
-            const host = document.getElementById('qr-el');
-            if (!host) return;
-            const canvas = host.querySelector('canvas');
-            const img = host.querySelector('img');
-            let dataUrl = '';
-            if (canvas && canvas.width) {
-                dataUrl = canvas.toDataURL('image/png');
-            } else if (img && img.src && img.src.indexOf('data:') === 0) {
-                dataUrl = img.src;
+            if (typeof QRCode === 'undefined') return;
+            const text = document.getElementById('qr-text').value.trim();
+            if (!text) return;
+
+            let size = parseInt(document.getElementById('qr-size').value, 10) || 256;
+            size = Math.max(128, Math.min(512, size));
+            const eccKey = document.getElementById('qr-ecc').value;
+            const levelMap = {
+                L: QRCode.CorrectLevel.L,
+                M: QRCode.CorrectLevel.M,
+                Q: QRCode.CorrectLevel.Q,
+                H: QRCode.CorrectLevel.H
+            };
+            const correctLevel = levelMap[eccKey] || QRCode.CorrectLevel.M;
+
+            const temp = document.createElement('div');
+            temp.setAttribute('aria-hidden', 'true');
+            temp.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;';
+            document.body.appendChild(temp);
+
+            try {
+                new QRCode(temp, {
+                    text: text,
+                    width: size,
+                    height: size,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: correctLevel
+                });
+                const canvas = temp.querySelector('canvas');
+                const img = temp.querySelector('img');
+                let dataUrl = '';
+                if (canvas && canvas.width) {
+                    dataUrl = canvas.toDataURL('image/png');
+                } else if (img && img.src && img.src.indexOf('data:') === 0) {
+                    dataUrl = img.src;
+                }
+                if (!dataUrl) return;
+                const a = document.createElement('a');
+                a.download = 'penguin-qrcode.png';
+                a.href = dataUrl;
+                a.rel = 'noopener';
+                a.click();
+            } finally {
+                document.body.removeChild(temp);
             }
-            if (!dataUrl) return;
-            const a = document.createElement('a');
-            a.download = 'penguin-qrcode.png';
-            a.href = dataUrl;
-            a.rel = 'noopener';
-            a.click();
         }
 
         /* ========== JSON-LD STRUCTURED DATA GENERATOR ========== */
