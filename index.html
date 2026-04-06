@@ -805,6 +805,75 @@
             border-radius: 5px;
             border: 1px solid #282828;
         }
+
+        /* ===== LARAVEL MINI GUIDE ===== */
+        .laravel-guide-wrap {
+            margin-bottom: 22px;
+            border: 1px solid #1e1e1e;
+            border-radius: 6px;
+            background: #0a0a0a;
+            overflow: hidden;
+        }
+
+        .laravel-guide-wrap summary {
+            cursor: pointer;
+            padding: 12px 16px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--neon);
+            list-style: none;
+        }
+
+        .laravel-guide-wrap summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .laravel-guide {
+            padding: 0 16px 16px;
+            font-size: 12px;
+            color: #aaa;
+            line-height: 1.7;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .laravel-guide h3 {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #888;
+            margin: 16px 0 8px;
+        }
+
+        .laravel-guide p {
+            margin-bottom: 10px;
+        }
+
+        .laravel-guide a {
+            color: #6cf;
+            text-decoration: none;
+        }
+
+        .laravel-guide a:hover {
+            text-decoration: underline;
+        }
+
+        .laravel-guide code {
+            font-size: 11px;
+            color: #ccc;
+            background: #111;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .laravel-guide ul {
+            margin: 8px 0 8px 18px;
+        }
+
+        .laravel-guide li {
+            margin-bottom: 4px;
+        }
     </style>
 </head>
 
@@ -2100,19 +2169,65 @@
 
                 <!-- LARAVEL SNIPPETS -->
                 <div id="page-laravel" class="page">
+                    <details class="laravel-guide-wrap" open>
+                        <summary>Laravel 13.x — mini guida (allineata alla documentazione ufficiale)</summary>
+                        <div class="laravel-guide">
+                            <p>Questa sezione riassume i capitoli principali della documentazione
+                                <a href="https://laravel.com/docs/13.x/" target="_blank" rel="noopener">Laravel 13.x</a>
+                                e raccoglie comandi e snippet pronti da copiare.</p>
+                            <h3>Getting started</h3>
+                            <p>Installazione PHP/Composer, CLI <code>laravel</code>, creazione app con <code>laravel new</code>,
+                                avvio con <code>composer run dev</code> (server, queue, Vite). Configurazione via <code>.env</code>
+                                e file in <code>config/</code>. Default SQLite in <code>database/database.sqlite</code>; per MySQL
+                                aggiornare <code>DB_*</code> ed eseguire <code>php artisan migrate</code>.</p>
+                            <h3>Architecture</h3>
+                            <p>Request lifecycle, service container, providers, facades. Convenzioni di cartelle prevedibili
+                                per agenti e strumenti AI (vedi anche <a href="https://laravel.com/docs/13.x/agentic-development"
+                                    target="_blank" rel="noopener">Agentic development</a>).</p>
+                            <h3>The basics</h3>
+                            <p>Routing, middleware, CSRF, controllers, requests, responses, Blade, asset con Vite,
+                                URL generation, sessioni, validazione, logging, gestione errori.</p>
+                            <h3>Digging deeper</h3>
+                            <p>Artisan, broadcasting, cache, collections, HTTP client, file storage, mail, notifiche,
+                                code, queue, rate limiting, scheduling, task.</p>
+                            <h3>Security &amp; database</h3>
+                            <p>Autenticazione, autorizzazione, hashing, crittografia. Query builder, migrazioni, seeding,
+                                Redis, MongoDB. Eloquent: relazioni, casts, API resources, factories.</p>
+                            <h3>AI &amp; testing</h3>
+                            <p><a href="https://laravel.com/docs/13.x/boost" target="_blank" rel="noopener">Laravel Boost</a>
+                                per contesto AI (documentazione versionata, strumenti). Test HTTP, console, browser, database,
+                                mocking.</p>
+                            <h3>Packages</h3>
+                            <p>Ecosistema: Horizon, Sanctum, Sail, Telescope, Pint, Passport, Scout, Dusk, Cashier, ecc.
+                                Ogni pacchetto ha la sua sezione nella doc ufficiale.</p>
+                            <p style="margin-top:12px;font-size:11px;color:#555">PHP 8.2+ consigliato per Laravel 13. Usa i
+                                filtri sotto per trovare snippet per area.</p>
+                        </div>
+                    </details>
                     <div class="label">Search_</div>
-                    <input type="text" id="laravel-search" placeholder="e.g. migrate, route, queue, artisan..."
+                    <input type="text" id="laravel-search" placeholder="e.g. migrate, sanctum, boost, vite, sail..."
                         oninput="filterLaravel()" autocomplete="off">
                     <div class="cron-presets" id="laravel-cats">
                         <button class="lx-cat-active" onclick="filterLaravelCat('all', this)">All</button>
+                        <button onclick="filterLaravelCat('install', this)">Install</button>
                         <button onclick="filterLaravelCat('artisan', this)">Artisan</button>
                         <button onclick="filterLaravelCat('routes', this)">Routes</button>
-                        <button onclick="filterLaravelCat('eloquent', this)">Eloquent</button>
-                        <button onclick="filterLaravelCat('blade', this)">Blade</button>
                         <button onclick="filterLaravelCat('middleware', this)">Middleware</button>
-                        <button onclick="filterLaravelCat('config', this)">Config</button>
+                        <button onclick="filterLaravelCat('blade', this)">Blade</button>
+                        <button onclick="filterLaravelCat('controller', this)">Controller</button>
+                        <button onclick="filterLaravelCat('request', this)">Request</button>
+                        <button onclick="filterLaravelCat('eloquent', this)">Eloquent</button>
+                        <button onclick="filterLaravelCat('db', this)">DB / migrate</button>
                         <button onclick="filterLaravelCat('queues', this)">Queues</button>
+                        <button onclick="filterLaravelCat('cache', this)">Cache</button>
+                        <button onclick="filterLaravelCat('auth', this)">Auth</button>
+                        <button onclick="filterLaravelCat('vite', this)">Vite</button>
+                        <button onclick="filterLaravelCat('sail', this)">Sail</button>
                         <button onclick="filterLaravelCat('testing', this)">Testing</button>
+                        <button onclick="filterLaravelCat('scheduling', this)">Schedule</button>
+                        <button onclick="filterLaravelCat('packages', this)">Packages</button>
+                        <button onclick="filterLaravelCat('ai', this)">AI / Boost</button>
+                        <button onclick="filterLaravelCat('config', this)">Config</button>
                     </div>
                     <div class="stat-bar"><span id="laravel-count">---</span></div>
                     <div id="laravel-list"></div>
@@ -2316,7 +2431,7 @@
                 php: 'PHP: heuristic indent (no full parser). Minify strips block comments and collapses whitespace.',
                 env: '.env: KEY=value lines, sorted and normalized. Minify removes blank lines and extra spaces around =.',
                 ini: 'INI: section headers [name] and key=value lines, normalized.',
-                md: 'Markdown: normalize newlines only; structural formatting is not applied.',
+                md: 'Markdown: validate (balanced ``` fences + marked lexer); beautify normalizes newlines, headings, spacing; minify compacts prose outside fenced blocks. Uses marked.js.',
             };
             fmtSetStatus(hints[k] || '', 'hint');
         }
@@ -2485,6 +2600,64 @@
             return o.trim() + '\n';
         }
 
+        function fmtMdCheckFences(s) {
+            let inFence = false;
+            for (const line of s.split(/\r?\n/)) {
+                const t = line.trim();
+                if (t.startsWith('```')) inFence = !inFence;
+            }
+            if (inFence) throw new Error('Unclosed fenced code block (```)');
+        }
+
+        function fmtMdBeautify(s) {
+            let t = s.replace(/\r\n/g, '\n');
+            t = t.replace(/[ \t]+$/gm, '');
+            t = t.replace(/\n{3,}/g, '\n\n');
+            t = t.replace(/^(\s{0,3}#{1,6})([^\s#])/gm, '$1 $2');
+            t = t.replace(/^(\s{0,3})([-*+])([^\s])/gm, '$1$2 $3');
+            t = t.replace(/^(\s{0,3})(\d+\.)([^\s])/gm, '$1$2 $3');
+            return t.trim() + '\n';
+        }
+
+        function fmtMdMinify(s) {
+            const lines = s.replace(/\r\n/g, '\n').split('\n');
+            const out = [];
+            let inFence = false;
+            let prose = [];
+            let fence = [];
+            function flushProse() {
+                if (!prose.length) return;
+                const t = prose.join('\n').replace(/\n{3,}/g, '\n\n').replace(/[ \t]+\n/g, '\n').trim();
+                if (t) out.push(t);
+                prose = [];
+            }
+            function flushFence() {
+                if (!fence.length) return;
+                out.push(fence.join('\n'));
+                fence = [];
+            }
+            for (const line of lines) {
+                if (line.trim().startsWith('```')) {
+                    if (inFence) {
+                        fence.push(line);
+                        flushFence();
+                        inFence = false;
+                    } else {
+                        flushProse();
+                        inFence = true;
+                        fence.push(line);
+                    }
+                } else if (inFence) {
+                    fence.push(line);
+                } else {
+                    prose.push(line);
+                }
+            }
+            if (inFence) throw new Error('Unclosed fenced code block (```)');
+            flushProse();
+            return out.join('\n\n').trim() + '\n';
+        }
+
         async function fmtRun(mode) {
             const kind = document.getElementById('fmt-kind').value;
             const input = document.getElementById('fmt-in').value;
@@ -2627,9 +2800,23 @@
 
                 if (kind === 'md') {
                     if (!input.trim()) throw new Error('Empty input');
-                    const norm = input.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
-                    fmtSetStatus(mode === 'validate' ? 'Markdown: newline normalization only.' : 'Normalized newlines.', 'hint');
-                    outEl.value = norm; return;
+                    if (mode === 'validate') {
+                        fmtMdCheckFences(input);
+                        if (typeof marked !== 'undefined' && marked.lexer) marked.lexer(input);
+                        outEl.value = fmtMdBeautify(input);
+                        fmtSetStatus('Valid Markdown (fences + lexer OK). Output is beautified preview.', 'ok');
+                        return;
+                    }
+                    if (mode === 'beautify') {
+                        fmtMdCheckFences(input);
+                        outEl.value = fmtMdBeautify(input);
+                        fmtSetStatus('Beautified (newlines, ATX headings, trailing spaces).', 'ok');
+                        return;
+                    }
+                    fmtMdCheckFences(input);
+                    outEl.value = fmtMdMinify(input);
+                    fmtSetStatus('Minified (compact prose; fenced code preserved).', 'ok');
+                    return;
                 }
 
                 throw new Error('Unknown format');
@@ -2801,30 +2988,126 @@
         }
 
         const LARAVEL_SNIPPETS = [
-            { name: 'Fresh migrate + seed', desc: 'Reset DB and run seeders', example: 'php artisan migrate:fresh --seed', cat: 'artisan' },
-            { name: 'Optimize production', desc: 'Cache config, routes, views', example: 'php artisan optimize', cat: 'artisan' },
-            { name: 'Clear caches', desc: 'Clear all Laravel caches', example: 'php artisan optimize:clear', cat: 'artisan' },
-            { name: 'Queue work', desc: 'Process queue jobs', example: 'php artisan queue:work --tries=3', cat: 'queues' },
-            { name: 'Horizon', desc: 'Laravel Horizon dashboard', example: 'php artisan horizon', cat: 'queues' },
-            { name: 'Make model + migration', desc: 'Scaffold model', example: 'php artisan make:model Post -mfs', cat: 'artisan' },
-            { name: 'Route list', desc: 'List registered routes', example: 'php artisan route:list', cat: 'routes' },
-            { name: 'Named route URL', desc: 'Generate URL in PHP', example: "route('profile.show', ['user' => $user])", cat: 'routes' },
-            { name: 'Named route URL (Blade)', desc: 'In Blade templates', example: "{{ route('home') }}", cat: 'blade' },
-            { name: 'Asset URL', desc: 'Versioned asset', example: "{{ asset('js/app.js') }}", cat: 'blade' },
-            { name: 'CSRF field', desc: 'Form CSRF token', example: '@csrf', cat: 'blade' },
-            { name: 'Eloquent find', desc: 'Find by primary key', example: '$user = User::find($id);', cat: 'eloquent' },
-            { name: 'Eloquent firstOrFail', desc: '404 if missing', example: '$post = Post::where("slug", $slug)->firstOrFail();', cat: 'eloquent' },
-            { name: 'Mass assignment', desc: 'Create with fillable', example: 'User::create($request->validated());', cat: 'eloquent' },
-            { name: 'Eager load', desc: 'N+1 prevention', example: '$posts = Post::with("author")->get();', cat: 'eloquent' },
-            { name: 'Middleware alias', desc: 'routes/web.php', example: "Route::middleware(['auth'])->group(function () { ... });", cat: 'middleware' },
-            { name: 'Rate limit', desc: 'Throttle middleware', example: "Route::middleware('throttle:60,1')->group(...);", cat: 'middleware' },
-            { name: 'env()', desc: 'Read config from env', example: "env('APP_DEBUG', false)", cat: 'config' },
-            { name: 'config()', desc: 'Cached config', example: "config('app.name')", cat: 'config' },
-            { name: 'Feature test', desc: 'HTTP test', example: '$this->get("/")->assertOk();', cat: 'testing' },
-            { name: 'RefreshDatabase', desc: 'Trait for tests', example: 'use RefreshDatabase;', cat: 'testing' },
-            { name: 'Tinker', desc: 'REPL', example: 'php artisan tinker', cat: 'artisan' },
-            { name: 'Storage link', desc: 'Public disk symlink', example: 'php artisan storage:link', cat: 'artisan' },
-            { name: 'Schedule', desc: 'routes/console.php or Kernel', example: "Schedule::command('inspire')->hourly();", cat: 'artisan' },
+            { name: 'New app (Laravel installer)', desc: 'Docs: Creating an Application', example: 'laravel new my-app', cat: 'install' },
+            { name: 'Composer create-project', desc: 'Alternative install', example: 'composer create-project laravel/laravel my-app', cat: 'install' },
+            { name: 'Dev stack (Laravel 13)', desc: 'Server + queue + Vite', example: 'composer run dev', cat: 'install' },
+            { name: 'PHP + Composer via php.new', desc: 'macOS one-liner from docs', example: '/bin/bash -c "$(curl -fsSL https://php.new/install/mac/8.4)"', cat: 'install' },
+            { name: 'Global Laravel installer', desc: 'Composer global', example: 'composer global require laravel/installer', cat: 'install' },
+            { name: 'Install Boost (dev)', desc: 'AI / agents', example: 'composer require laravel/boost --dev', cat: 'install' },
+            { name: 'Boost install wizard', desc: 'Interactive', example: 'php artisan boost:install', cat: 'install' },
+            { name: 'migrate:fresh --seed', desc: 'Reset DB + seeders', example: 'php artisan migrate:fresh --seed', cat: 'artisan' },
+            { name: 'optimize', desc: 'Production caches', example: 'php artisan optimize', cat: 'artisan' },
+            { name: 'optimize:clear', desc: 'Clear caches', example: 'php artisan optimize:clear', cat: 'artisan' },
+            { name: 'make:model -mfs', desc: 'Model + migration + factory + seeder', example: 'php artisan make:model Post -mfs', cat: 'artisan' },
+            { name: 'make:controller', desc: 'Invokable', example: 'php artisan make:controller ShowPostController --invokable', cat: 'artisan' },
+            { name: 'make:middleware', desc: 'Custom middleware', example: 'php artisan make:middleware EnsureEmailIsVerified', cat: 'artisan' },
+            { name: 'make:request', desc: 'Form request', example: 'php artisan make:request StorePostRequest', cat: 'artisan' },
+            { name: 'make:policy', desc: 'Authorization', example: 'php artisan make:policy PostPolicy --model=Post', cat: 'artisan' },
+            { name: 'make:event', desc: 'Domain event', example: 'php artisan make:event OrderShipped', cat: 'artisan' },
+            { name: 'make:listener', desc: 'Event listener', example: 'php artisan make:listener SendShipmentNotification --event=OrderShipped', cat: 'artisan' },
+            { name: 'make:notification', desc: 'Notification class', example: 'php artisan make:notification InvoicePaid', cat: 'artisan' },
+            { name: 'make:job', desc: 'Queue job', example: 'php artisan make:job ProcessPodcast', cat: 'artisan' },
+            { name: 'make:command', desc: 'Console command', example: 'php artisan make:command SendEmails', cat: 'artisan' },
+            { name: 'storage:link', desc: 'Public storage symlink', example: 'php artisan storage:link', cat: 'artisan' },
+            { name: 'route:list', desc: 'List routes', example: 'php artisan route:list', cat: 'artisan' },
+            { name: 'route:cache', desc: 'Production', example: 'php artisan route:cache', cat: 'artisan' },
+            { name: 'config:cache', desc: 'Production', example: 'php artisan config:cache', cat: 'artisan' },
+            { name: 'view:cache', desc: 'Production', example: 'php artisan view:cache', cat: 'artisan' },
+            { name: 'queue:work', desc: 'Worker', example: 'php artisan queue:work --tries=3', cat: 'artisan' },
+            { name: 'queue:failed', desc: 'Failed jobs table', example: 'php artisan queue:failed', cat: 'artisan' },
+            { name: 'horizon', desc: 'Horizon UI', example: 'php artisan horizon', cat: 'artisan' },
+            { name: 'schedule:list', desc: 'List scheduled tasks', example: 'php artisan schedule:list', cat: 'artisan' },
+            { name: 'schedule:run', desc: 'Run scheduler once', example: 'php artisan schedule:run', cat: 'artisan' },
+            { name: 'tinker', desc: 'REPL', example: 'php artisan tinker', cat: 'artisan' },
+            { name: 'db:show', desc: 'Database info', example: 'php artisan db:show', cat: 'artisan' },
+            { name: 'db:seed', desc: 'Run seeders', example: 'php artisan db:seed', cat: 'artisan' },
+            { name: 'vendor:publish', desc: 'Publish vendor assets', example: 'php artisan vendor:publish', cat: 'artisan' },
+            { name: 'about', desc: 'App info', example: 'php artisan about', cat: 'artisan' },
+            { name: 'key:generate', desc: 'APP_KEY', example: 'php artisan key:generate', cat: 'artisan' },
+            { name: 'serve', desc: 'Dev server', example: 'php artisan serve', cat: 'artisan' },
+            { name: 'GET closure', desc: 'Basic route', example: 'Route::get(\'/hello\', fn () => \'Hello\');', cat: 'routes' },
+            { name: 'Named route', desc: 'Name for URL gen', example: 'Route::get(\'/profile\', ...)->name(\'profile\');', cat: 'routes' },
+            { name: 'Route group prefix', desc: 'API prefix', example: 'Route::prefix(\'v1\')->group(function () { ... });', cat: 'routes' },
+            { name: 'Resource routes', desc: 'REST', example: 'Route::resource(\'posts\', PostController::class);', cat: 'routes' },
+            { name: 'apiResource', desc: 'API without create/edit forms', example: 'Route::apiResource(\'posts\', PostController::class);', cat: 'routes' },
+            { name: 'Route model binding', desc: 'Implicit', example: 'Route::get(\'/posts/{post}\', fn (Post $post) => ...);', cat: 'routes' },
+            { name: 'Fallback route', desc: 'SPA', example: 'Route::fallback(fn () => view(\'app\'));', cat: 'routes' },
+            { name: 'Rate limiter', desc: 'bootstrap/app.php', example: 'RateLimiter::for(\'api\', fn ($r) => Limit::perMinute(60)->by($r->user()?->id ?: $r->ip()));', cat: 'routes' },
+            { name: 'Group auth', desc: 'web group', example: 'Route::middleware([\'auth\'])->group(function () { ... });', cat: 'middleware' },
+            { name: 'Throttle', desc: 'Per minute', example: 'Route::middleware(\'throttle:60,1\')->group(...);', cat: 'middleware' },
+            { name: 'Substitute bindings', desc: 'Explicit', example: 'Route::middleware([SubstituteBindings::class])', cat: 'middleware' },
+            { name: 'Verify CSRF except', desc: 'bootstrap/app or middleware', example: '// except: [\'stripe/*\']', cat: 'middleware' },
+            { name: 'Layout @extends', desc: 'Classic', example: '@extends(\'layouts.app\')', cat: 'blade' },
+            { name: 'Section', desc: 'Content', example: '@section(\'content\') ... @endsection', cat: 'blade' },
+            { name: 'CSRF', desc: 'Forms', example: '@csrf', cat: 'blade' },
+            { name: 'Method spoof', desc: 'PUT/PATCH/DELETE', example: '@method(\'PUT\')', cat: 'blade' },
+            { name: 'Vite', desc: 'Assets', example: '@vite([\'resources/css/app.css\', \'resources/js/app.js\'])', cat: 'blade' },
+            { name: 'Stack / push', desc: 'Scripts', example: '@push(\'scripts\') ... @endpush', cat: 'blade' },
+            { name: 'Components', desc: 'Anonymous', example: '<x-alert type=\'error\' />', cat: 'blade' },
+            { name: 'Blade::withoutDoubleEncoding', desc: 'AppServiceProvider', example: 'Blade::withoutDoubleEncoding();', cat: 'blade' },
+            { name: 'Invoke', desc: 'Single action', example: 'public function __invoke(Request $request) { ... }', cat: 'controller' },
+            { name: 'Resource index', desc: 'REST', example: 'public function index() { return Post::paginate(15); }', cat: 'controller' },
+            { name: 'Authorize resource', desc: 'Policy', example: '$this->authorize(\'view\', $post);', cat: 'controller' },
+            { name: 'FormRequest validate', desc: 'authorize + rules', example: 'public function rules(): array { return [\'title\' => \'required\']; }', cat: 'request' },
+            { name: '$request->validated()', desc: 'Mass assign safe', example: 'Post::create($request->validated());', cat: 'request' },
+            { name: '$request->only()', desc: 'Subset', example: '$request->only([\'title\', \'body\'])', cat: 'request' },
+            { name: '$request->user()', desc: 'Auth user', example: '$request->user()', cat: 'request' },
+            { name: 'Response JSON', desc: 'API', example: 'return response()->json([\'data\' => $post]);', cat: 'request' },
+            { name: 'Redirect back', desc: 'With input', example: 'return back()->withInput();', cat: 'request' },
+            { name: 'abort 404', desc: 'HTTP exception', example: 'abort(404);', cat: 'request' },
+            { name: 'find / findOrFail', desc: 'By id', example: '$user = User::findOrFail($id);', cat: 'eloquent' },
+            { name: 'where / first', desc: 'Query', example: '$p = Post::where(\'slug\', $slug)->first();', cat: 'eloquent' },
+            { name: 'create', desc: 'Mass assign', example: 'User::create($attrs);', cat: 'eloquent' },
+            { name: 'update', desc: 'Model', example: '$post->update($request->validated());', cat: 'eloquent' },
+            { name: 'delete', desc: 'Model', example: '$post->delete();', cat: 'eloquent' },
+            { name: 'with()', desc: 'Eager load', example: 'Post::with([\'author\', \'comments\'])->get();', cat: 'eloquent' },
+            { name: 'loadCount', desc: 'Relation counts', example: '$posts->loadCount(\'comments\');', cat: 'eloquent' },
+            { name: 'scope', desc: 'Local scope', example: 'public function scopePublished($q) { $q->where(\'status\', \'published\'); }', cat: 'eloquent' },
+            { name: 'accessor / cast', desc: 'Model', example: 'protected function casts(): array { return [\'published_at\' => \'datetime\']; }', cat: 'eloquent' },
+            { name: 'Factory', desc: 'Testing', example: 'User::factory()->count(5)->create();', cat: 'eloquent' },
+            { name: 'migrate', desc: 'Run migrations', example: 'php artisan migrate', cat: 'db' },
+            { name: 'migrate:fresh', desc: 'Drop all + migrate', example: 'php artisan migrate:fresh', cat: 'db' },
+            { name: 'migrate:rollback', desc: 'Step back', example: 'php artisan migrate:rollback', cat: 'db' },
+            { name: 'make:migration', desc: 'New file', example: 'php artisan make:migration create_posts_table', cat: 'db' },
+            { name: 'Schema create', desc: 'Migration body', example: 'Schema::create(\'posts\', function (Blueprint $table) { $table->id(); $table->timestamps(); });', cat: 'db' },
+            { name: 'DB::transaction', desc: 'Closure', example: 'DB::transaction(fn () => ...);', cat: 'db' },
+            { name: 'DB::table raw', desc: 'Query builder', example: 'DB::table(\'users\')->where(\'votes\', \'>\', 100)->get();', cat: 'db' },
+            { name: 'dispatch', desc: 'Job', example: 'ProcessPodcast::dispatch($podcast);', cat: 'queues' },
+            { name: 'ShouldQueue', desc: 'Interface', example: 'class SendEmail implements ShouldQueue { }', cat: 'queues' },
+            { name: 'delay', desc: 'Delayed job', example: 'ProcessPodcast::dispatch($p)->delay(now()->addMinutes(10));', cat: 'queues' },
+            { name: 'onQueue', desc: 'Named queue', example: 'ProcessPodcast::dispatch($p)->onQueue(\'processing\');', cat: 'queues' },
+            { name: 'Cache::remember', desc: 'Get or store', example: 'return Cache::remember(\'key\', 3600, fn () => expensive());', cat: 'cache' },
+            { name: 'Cache::forget', desc: 'Invalidate', example: 'Cache::forget(\'key\');', cat: 'cache' },
+            { name: 'config cache driver', desc: '.env', example: 'CACHE_STORE=redis', cat: 'cache' },
+            { name: 'Auth::user()', desc: 'Current user', example: '$user = Auth::user();', cat: 'auth' },
+            { name: 'auth()->id()', desc: 'Helper', example: '$id = auth()->id();', cat: 'auth' },
+            { name: 'Gate::allows', desc: 'Authorization', example: 'Gate::allows(\'update\', $post);', cat: 'auth' },
+            { name: '@can Blade', desc: 'Policy', example: '@can(\'update\', $post) ... @endcan', cat: 'auth' },
+            { name: 'Password::defaults', desc: 'Validation rules', example: 'Password::defaults(fn () => Rule::min(8)->mixedCase()->numbers());', cat: 'auth' },
+            { name: 'Sanctum: createToken', desc: 'API token', example: '$token = $user->createToken(\'device-name\')->plainTextToken;', cat: 'auth' },
+            { name: 'Sanctum: auth:sanctum', desc: 'Route middleware', example: 'Route::middleware(\'auth:sanctum\')->get(\'/user\', fn ($r) => $r->user());', cat: 'auth' },
+            { name: 'npm run dev', desc: 'Vite dev', example: 'npm run dev', cat: 'vite' },
+            { name: 'npm run build', desc: 'Production assets', example: 'npm run build', cat: 'vite' },
+            { name: '@vite Blade', desc: 'Entry', example: '@vite(\'resources/js/app.js\')', cat: 'vite' },
+            { name: 'Sail up', desc: 'Docker', example: './vendor/bin/sail up -d', cat: 'sail' },
+            { name: 'Sail artisan', desc: 'Via Sail', example: './vendor/bin/sail artisan migrate', cat: 'sail' },
+            { name: 'Sail npm', desc: 'Frontend', example: './vendor/bin/sail npm run dev', cat: 'sail' },
+            { name: 'getJson', desc: 'API test', example: '$this->getJson(\'/api/posts\')->assertOk();', cat: 'testing' },
+            { name: 'actingAs', desc: 'Auth in test', example: '$this->actingAs($user)->get(\'/dashboard\');', cat: 'testing' },
+            { name: 'RefreshDatabase', desc: 'Trait', example: 'use RefreshDatabase;', cat: 'testing' },
+            { name: 'assertDatabaseHas', desc: 'DB assertion', example: '$this->assertDatabaseHas(\'users\', [\'email\' => \'a@b.com\']);', cat: 'testing' },
+            { name: 'Schedule daily', desc: 'routes/console.php', example: 'Schedule::command(\'emails:send\')->daily();', cat: 'scheduling' },
+            { name: 'Schedule closure', desc: 'Closure', example: 'Schedule::call(fn () => ...)->hourly();', cat: 'scheduling' },
+            { name: 'Horizon install', desc: 'Config publish', example: 'php artisan horizon:install', cat: 'packages' },
+            { name: 'Telescope install', desc: 'Local dev', example: 'php artisan telescope:install', cat: 'packages' },
+            { name: 'Pint', desc: 'Code style', example: './vendor/bin/pint', cat: 'packages' },
+            { name: 'Sanctum config', desc: 'SPA/API tokens', example: '// config/sanctum.php', cat: 'packages' },
+            { name: 'composer boost', desc: 'Install Boost', example: 'composer require laravel/boost --dev', cat: 'ai' },
+            { name: 'boost:install', desc: 'Wizard', example: 'php artisan boost:install', cat: 'ai' },
+            { name: 'AI guidelines dir', desc: 'Custom rules', example: '// .ai/guidelines/*.md', cat: 'ai' },
+            { name: 'config()', desc: 'Read', example: 'config(\'database.default\')', cat: 'config' },
+            { name: 'Config::set runtime', desc: 'Runtime', example: 'config([\'app.name\' => \'Test\']);', cat: 'config' },
+            { name: 'env default', desc: 'Fallback', example: 'env(\'APP_DEBUG\', false)', cat: 'config' },
         ];
 
         const PHP_SNIPPETS = [
