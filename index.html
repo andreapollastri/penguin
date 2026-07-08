@@ -1153,19 +1153,6 @@
                 <button type="button" data-page="phpsnip" onclick="showPage('phpsnip', this)"><span class="icon">&gt;</span> PHP snippets</button>
                 <button type="button" data-page="kali" onclick="showPage('kali', this)"><span class="icon">&gt;</span> Kali</button>
             </div>
-            <div class="nav-section">
-                <div class="nav-section-label">Web &amp; network</div>
-                <button type="button" data-page="sitemap" onclick="showPage('sitemap', this)"><span class="icon">&gt;</span> Sitemap</button>
-                <button type="button" data-page="socialmeta" onclick="showPage('socialmeta', this)"><span class="icon">&gt;</span> OG / Twitter</button>
-                <button type="button" data-page="favicon" onclick="showPage('favicon', this)"><span class="icon">&gt;</span> Favicon</button>
-                <button type="button" data-page="cssmedia" onclick="showPage('cssmedia', this)"><span class="icon">&gt;</span> CSS media</button>
-                <button type="button" data-page="svgicons" onclick="showPage('svgicons', this)"><span class="icon">&gt;</span> SVG icons</button>
-                <button type="button" data-page="speedtest" onclick="showPage('speedtest', this)"><span class="icon">&gt;</span> Speed test</button>
-                <button type="button" data-page="perfcheck" onclick="showPage('perfcheck', this)"><span class="icon">&gt;</span> Performance</button>
-                <button type="button" data-page="onlinecheck" onclick="showPage('onlinecheck', this)"><span class="icon">&gt;</span> Online check</button>
-                <button type="button" data-page="portcheck" onclick="showPage('portcheck', this)"><span class="icon">&gt;</span> Port check</button>
-                <button type="button" data-page="hostdns" onclick="showPage('hostdns', this)"><span class="icon">&gt;</span> Host / DNS</button>
-            </div>
         </nav>
         <div class="sidebar-footer">Penguin · <a href="https://web.ap.it" target="_blank" rel="noopener"
                 style="color:#444;text-decoration:none">by @ndrea</a></div>
@@ -2460,38 +2447,38 @@
                 <!-- LARAVEL SNIPPETS -->
                 <div id="page-laravel" class="page">
                     <details class="laravel-guide-wrap" open>
-                        <summary>Laravel 13.x — mini guida (allineata alla documentazione ufficiale)</summary>
+                        <summary>Laravel 13.x — quick guide (aligned with the official documentation)</summary>
                         <div class="laravel-guide">
-                            <p>Questa sezione riassume i capitoli principali della documentazione
+                            <p>This section summarizes the main chapters of the
                                 <a href="https://laravel.com/docs/13.x/" target="_blank" rel="noopener">Laravel 13.x</a>
-                                e raccoglie comandi e snippet pronti da copiare.</p>
+                                documentation and collects ready-to-copy commands and snippets.</p>
                             <h3>Getting started</h3>
-                            <p>Installazione PHP/Composer, CLI <code>laravel</code>, creazione app con <code>laravel new</code>,
-                                avvio con <code>composer run dev</code> (server, queue, Vite). Configurazione via <code>.env</code>
-                                e file in <code>config/</code>. Default SQLite in <code>database/database.sqlite</code>; per MySQL
-                                aggiornare <code>DB_*</code> ed eseguire <code>php artisan migrate</code>.</p>
+                            <p>PHP/Composer installation, <code>laravel</code> CLI, app creation with <code>laravel new</code>,
+                                startup with <code>composer run dev</code> (server, queue, Vite). Configuration via <code>.env</code>
+                                and files in <code>config/</code>. Default SQLite in <code>database/database.sqlite</code>; for MySQL
+                                update <code>DB_*</code> and run <code>php artisan migrate</code>.</p>
                             <h3>Architecture</h3>
-                            <p>Request lifecycle, service container, providers, facades. Convenzioni di cartelle prevedibili
-                                per agenti e strumenti AI (vedi anche <a href="https://laravel.com/docs/13.x/agentic-development"
+                            <p>Request lifecycle, service container, providers, facades. Predictable folder conventions
+                                for AI agents and tools (see also <a href="https://laravel.com/docs/13.x/agentic-development"
                                     target="_blank" rel="noopener">Agentic development</a>).</p>
                             <h3>The basics</h3>
-                            <p>Routing, middleware, CSRF, controllers, requests, responses, Blade, asset con Vite,
-                                URL generation, sessioni, validazione, logging, gestione errori.</p>
+                            <p>Routing, middleware, CSRF, controllers, requests, responses, Blade, assets with Vite,
+                                URL generation, sessions, validation, logging, error handling.</p>
                             <h3>Digging deeper</h3>
-                            <p>Artisan, broadcasting, cache, collections, HTTP client, file storage, mail, notifiche,
-                                code, queue, rate limiting, scheduling, task.</p>
+                            <p>Artisan, broadcasting, cache, collections, HTTP client, file storage, mail, notifications,
+                                strings, queue, rate limiting, scheduling, tasks.</p>
                             <h3>Security &amp; database</h3>
-                            <p>Autenticazione, autorizzazione, hashing, crittografia. Query builder, migrazioni, seeding,
-                                Redis, MongoDB. Eloquent: relazioni, casts, API resources, factories.</p>
+                            <p>Authentication, authorization, hashing, encryption. Query builder, migrations, seeding,
+                                Redis, MongoDB. Eloquent: relationships, casts, API resources, factories.</p>
                             <h3>AI &amp; testing</h3>
                             <p><a href="https://laravel.com/docs/13.x/boost" target="_blank" rel="noopener">Laravel Boost</a>
-                                per contesto AI (documentazione versionata, strumenti). Test HTTP, console, browser, database,
+                                for AI context (versioned documentation, tools). HTTP, console, browser, database tests,
                                 mocking.</p>
                             <h3>Packages</h3>
-                            <p>Ecosistema: Horizon, Sanctum, Sail, Telescope, Pint, Passport, Scout, Dusk, Cashier, ecc.
-                                Ogni pacchetto ha la sua sezione nella doc ufficiale.</p>
-                            <p style="margin-top:12px;font-size:11px;color:#555">PHP 8.2+ consigliato per Laravel 13. Usa i
-                                filtri sotto per trovare snippet per area.</p>
+                            <p>Ecosystem: Horizon, Sanctum, Sail, Telescope, Pint, Passport, Scout, Dusk, Cashier, etc.
+                                Each package has its own section in the official docs.</p>
+                            <p style="margin-top:12px;font-size:11px;color:#555">PHP 8.2+ recommended for Laravel 13. Use the
+                                filters below to find snippets by topic.</p>
                         </div>
                     </details>
                     <div class="label">Search_</div>
@@ -2615,243 +2602,6 @@
                     <div class="notify" id="md-notify">Preview is sanitized; scripts are stripped</div>
                 </div>
 
-                <!-- SITEMAP -->
-                <div id="page-sitemap" class="page">
-                    <div class="stat-bar">
-                        <span>SITEMAP.XML</span>
-                        <span>LOCAL</span>
-                    </div>
-                    <div class="label">Base URL (no trailing slash)</div>
-                    <input type="text" id="sm-base" placeholder="https://example.com" spellcheck="false">
-                    <div class="label">Paths (one per line, or full URLs)</div>
-                    <textarea id="sm-paths" class="fmt-io" rows="8" spellcheck="false"
-                        placeholder="/&#10;/about&#10;/blog/post-1"></textarea>
-                    <div class="wt-row">
-                        <div>
-                            <div class="label">changefreq</div>
-                            <select id="sm-changefreq">
-                                <option value="always">always</option>
-                                <option value="hourly">hourly</option>
-                                <option value="daily" selected>daily</option>
-                                <option value="weekly">weekly</option>
-                                <option value="monthly">monthly</option>
-                                <option value="yearly">yearly</option>
-                                <option value="never">never</option>
-                            </select>
-                        </div>
-                        <div>
-                            <div class="label">priority (0.0–1.0)</div>
-                            <input type="text" id="sm-prio" value="0.8" spellcheck="false">
-                        </div>
-                    </div>
-                    <div class="btn-row">
-                        <button type="button" class="btn" onclick="wtGenSitemap()">Generate XML</button>
-                        <button type="button" class="btn" onclick="wtCopy('sm-out','wt-notify-sitemap')">Copy XML</button>
-                    </div>
-                    <div class="label">sitemap.xml</div>
-                    <textarea id="sm-out" class="fmt-io out" rows="12" readonly spellcheck="false"></textarea>
-                    <div class="notify" id="wt-notify-sitemap">—</div>
-                </div>
-
-                <!-- OG / TWITTER -->
-                <div id="page-socialmeta" class="page">
-                    <div class="stat-bar">
-                        <span>OPEN GRAPH · TWITTER</span>
-                        <span>LOCAL</span>
-                    </div>
-                    <div class="wt-row">
-                        <div>
-                            <div class="label">Page title</div>
-                            <input type="text" id="og-title" placeholder="Page title">
-                        </div>
-                        <div>
-                            <div class="label">Site name</div>
-                            <input type="text" id="og-site" placeholder="My site">
-                        </div>
-                    </div>
-                    <div class="label">Description</div>
-                    <textarea id="og-desc" class="fmt-io" rows="3" placeholder="Short description for previews"></textarea>
-                    <div class="wt-row">
-                        <div>
-                            <div class="label">Canonical URL</div>
-                            <input type="text" id="og-url" placeholder="https://example.com/page">
-                        </div>
-                        <div>
-                            <div class="label">Image URL (1200×630 recommended)</div>
-                            <input type="text" id="og-img" placeholder="https://example.com/og.jpg">
-                        </div>
-                    </div>
-                    <div class="wt-row">
-                        <div>
-                            <div class="label">Twitter @username (no @)</div>
-                            <input type="text" id="og-tw-user" placeholder="handle">
-                        </div>
-                        <div>
-                            <div class="label">Twitter card</div>
-                            <select id="og-tw-card">
-                                <option value="summary_large_image" selected>summary_large_image</option>
-                                <option value="summary">summary</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="label">Locale (optional)</div>
-                    <input type="text" id="og-locale" placeholder="it_IT" spellcheck="false">
-                    <div class="btn-row">
-                        <button type="button" class="btn" onclick="wtGenMeta()">Generate tags</button>
-                        <button type="button" class="btn" onclick="wtCopy('og-out','wt-notify-social')">Copy HTML</button>
-                    </div>
-                    <div class="label">&lt;head&gt; snippet</div>
-                    <textarea id="og-out" class="fmt-io out" rows="16" readonly spellcheck="false"></textarea>
-                    <div class="notify" id="wt-notify-social">—</div>
-                </div>
-
-                <!-- FAVICON -->
-                <div id="page-favicon" class="page">
-                    <div class="stat-bar">
-                        <span>FAVICON PNG</span>
-                        <span>LOCAL</span>
-                    </div>
-                    <div class="label">Image file (PNG / JPG / SVG / WebP)</div>
-                    <input type="file" id="fav-file" accept="image/*" onchange="wtFaviconLoad()">
-                    <p class="wt-hint">Resizes to 32×32 PNG in the browser. For production, also ship 16×16 and 180×180
-                        (apple-touch-icon) from your design tool.</p>
-                    <canvas id="fav-canvas" width="32" height="32" style="display:none"></canvas>
-                    <div class="btn-row">
-                        <button type="button" class="btn" onclick="wtFaviconDownload()" id="fav-dl-btn" disabled>Download favicon-32.png</button>
-                    </div>
-                    <div class="label">HTML snippet</div>
-                    <textarea id="fav-html" class="fmt-io out" rows="5" readonly spellcheck="false"></textarea>
-                    <button type="button" class="btn" onclick="wtCopy('fav-html','wt-notify-favicon')">Copy HTML</button>
-                    <div class="notify" id="wt-notify-favicon">—</div>
-                </div>
-
-                <!-- CSS MEDIA -->
-                <div id="page-cssmedia" class="page">
-                    <div class="stat-bar">
-                        <span>CSS MEDIA QUERIES</span>
-                        <span>SNIPPET</span>
-                    </div>
-                    <div class="label">Common breakpoints (copy into your CSS)</div>
-                    <textarea id="wt-media-pre" class="fmt-io out" rows="22" readonly spellcheck="false"></textarea>
-                    <div class="btn-row">
-                        <button type="button" class="btn" onclick="wtCopy('wt-media-pre','wt-notify-cssmedia')">Copy</button>
-                    </div>
-                    <div class="notify" id="wt-notify-cssmedia">—</div>
-                </div>
-
-                <!-- SVG ICONS -->
-                <div id="page-svgicons" class="page">
-                    <div class="stat-bar">
-                        <span>LUCIDE SVG (UNPKG)</span>
-                        <span>GITHUB API + CDN</span>
-                    </div>
-                    <div class="wt-icon-toolbar">
-                        <input type="search" id="wt-icon-filter" placeholder="Filter icons…" oninput="wtIconFilter()"
-                            spellcheck="false">
-                        <button type="button" class="btn" onclick="wtLoadIcons(true)">Reload from Lucide (GitHub)</button>
-                    </div>
-                    <p class="wt-hint">Open-source <a href="https://lucide.dev/icons/" target="_blank" rel="noopener">Lucide</a>
-                        icons via unpkg. Click a cell to copy an &lt;img&gt; tag. First open loads filenames from GitHub API.</p>
-                    <div id="wt-icon-grid" class="wt-icon-grid"></div>
-                    <div class="notify" id="wt-icon-status">—</div>
-                    <div class="notify" id="wt-notify-svgicons">—</div>
-                </div>
-
-                <!-- SPEED TEST -->
-                <div id="page-speedtest" class="page">
-                    <div class="stat-bar">
-                        <span>DOWNLOAD SPEED (ESTIMATE)</span>
-                        <span>JSDELIVR</span>
-                    </div>
-                    <p class="wt-hint">Rough download speed: fetches a known asset from jsDelivr (several runs, median). Not a
-                        lab-grade speed test; use a dedicated tool on a wired connection for ISP benchmarking.</p>
-                    <div class="btn-row">
-                        <button type="button" class="btn" onclick="wtSpeedRun()">Run test</button>
-                    </div>
-                    <div id="wt-speed-out" class="wt-pre">—</div>
-                    <div class="notify" id="wt-notify-speed">—</div>
-                </div>
-
-                <!-- PERFORMANCE -->
-                <div id="page-perfcheck" class="page">
-                    <div class="stat-bar">
-                        <span>PAGESPEED · WEB.VITALS</span>
-                        <span>GOOGLE (NEW TAB)</span>
-                    </div>
-                    <div class="label">Page URL to analyse</div>
-                    <input type="text" id="perf-url" placeholder="https://example.com" spellcheck="false">
-                    <div class="btn-row">
-                        <button type="button" class="btn" onclick="wtPerfPsi()">Open PageSpeed Insights</button>
-                        <button type="button" class="btn" onclick="wtPerfWebvitals()">Open web.dev measure</button>
-                    </div>
-                    <p class="wt-hint">These open Google tools in a new tab (Lab + field data). No API key required on your
-                        side.</p>
-                </div>
-
-                <!-- ONLINE CHECK -->
-                <div id="page-onlinecheck" class="page">
-                    <div class="stat-bar">
-                        <span>ONLINE / REACHABILITY</span>
-                        <span>DNS + PROBE</span>
-                    </div>
-                    <p class="wt-hint">Full HTTP status for third-party URLs is blocked by browser CORS. DNS resolution and
-                        loading <code>/favicon.ico</code> indicate reachability for many sites, not a guarantee.</p>
-                    <div class="label">Browser reports online</div>
-                    <div id="wt-on-nav" class="wt-kv"><b>navigator.onLine</b> —</div>
-                    <div class="btn-row">
-                        <button type="button" class="btn" onclick="wtOnlineNav()">Refresh</button>
-                    </div>
-                    <div class="label">This origin (this site)</div>
-                    <div class="btn-row">
-                        <button type="button" class="btn" onclick="wtOnlineThis()">Ping this page URL</button>
-                    </div>
-                    <div id="wt-on-this" class="wt-pre">—</div>
-                    <div class="label">External host (DNS + favicon probe)</div>
-                    <input type="text" id="wt-on-host" placeholder="example.com" spellcheck="false">
-                    <div class="btn-row">
-                        <button type="button" class="btn" onclick="wtOnlineExt()">Check</button>
-                    </div>
-                    <div id="wt-on-ext" class="wt-pre">—</div>
-                    <div class="notify" id="wt-notify-online">—</div>
-                </div>
-
-                <!-- PORT CHECK -->
-                <div id="page-portcheck" class="page">
-                    <div class="stat-bar">
-                        <span>TCP / CLI SNIPPETS</span>
-                        <span>LOCAL TERMINAL</span>
-                    </div>
-                    <p class="wt-hint">Browsers cannot open arbitrary TCP sockets to remote hosts. Use these commands on your
-                        machine or a server, or an online port scanner.</p>
-                    <div class="label">Bash (replace HOST / PORT)</div>
-                    <textarea id="wt-port-snippet" class="fmt-io out" rows="10" readonly spellcheck="false"></textarea>
-                    <div class="btn-row">
-                        <button type="button" class="btn" onclick="wtPortFill()">Fill HOST from field below</button>
-                        <button type="button" class="btn" onclick="wtCopy('wt-port-snippet','wt-notify-port')">Copy</button>
-                    </div>
-                    <div class="label">Hostname / IP for fill helper</div>
-                    <input type="text" id="wt-port-host" placeholder="example.com" spellcheck="false">
-                    <p class="wt-hint">Optional: <a href="https://www.yougetsignal.com/tools/open-ports/" target="_blank"
-                            rel="noopener">YouGetSignal</a> (third-party) for remote checks from the web.</p>
-                    <div class="notify" id="wt-notify-port">—</div>
-                </div>
-
-                <!-- HOST / DNS -->
-                <div id="page-hostdns" class="page">
-                    <div class="stat-bar">
-                        <span>DNS · PTR</span>
-                        <span>GOOGLE DoH</span>
-                    </div>
-                    <p class="wt-hint">DNS lookups use Google DNS-over-HTTPS from your browser.</p>
-                    <div class="label">Hostname or IPv4 (for PTR use IP)</div>
-                    <input type="text" id="wt-net-q" placeholder="example.com or 8.8.8.8" spellcheck="false">
-                    <div class="btn-row">
-                        <button type="button" class="btn" onclick="wtDnsLookup()">Lookup DNS</button>
-                    </div>
-                    <div id="wt-net-out" class="wt-pre">—</div>
-                    <div class="notify" id="wt-notify-hostdns">—</div>
-                </div>
-
             </div>
         </div>
     </div>
@@ -2902,16 +2652,6 @@
             kali: 'root@penguin: ~/kali-tools',
             sanitize: 'root@penguin: ~/script-sanitizer',
             mdpreview: 'root@penguin: ~/markdown-preview',
-            sitemap: 'root@penguin: ~/sitemap-xml',
-            socialmeta: 'root@penguin: ~/og-twitter-meta',
-            favicon: 'root@penguin: ~/favicon-png',
-            cssmedia: 'root@penguin: ~/css-media-queries',
-            svgicons: 'root@penguin: ~/svg-icons-lucide',
-            speedtest: 'root@penguin: ~/speed-test',
-            perfcheck: 'root@penguin: ~/performance-test',
-            onlinecheck: 'root@penguin: ~/online-check',
-            portcheck: 'root@penguin: ~/port-check',
-            hostdns: 'root@penguin: ~/host-dns-lookup',
         };
 
         function navButtonFor(id) {
@@ -3006,19 +2746,6 @@
             if (id === 'placeholder') genPlaceholder();
             if (id === 'randomimg') genRandomImg();
             if (id === 'mdpreview') runMdPreview();
-            const wtWide = new Set(['svgicons']);
-            const mc = document.getElementById('main-content');
-            if (mc) {
-                if (wtWide.has(id)) mc.classList.add('content-wide');
-                else mc.classList.remove('content-wide');
-            }
-            if (id === 'svgicons') {
-                const g = document.getElementById('wt-icon-grid');
-                if (g && g.dataset.loaded !== '1') wtLoadIcons(false);
-            }
-            if (id === 'cssmedia' && !document.getElementById('wt-media-pre').value) wtMediaPreset();
-            if (id === 'portcheck' && !document.getElementById('wt-port-snippet').value.trim()) wtPortFill();
-            if (id === 'onlinecheck') wtOnlineNav();
         }
 
         function initRouteFromHash() {
@@ -5930,353 +5657,6 @@
 
             document.getElementById('url-ser-out').innerText = readable;
             document.getElementById('url-ser-encoded').innerText = base;
-        }
-
-        /* ========== WEB TOOLS ========== */
-        const WT_ICON_FALLBACK = 'activity,airplay,alarm-clock,alert-circle,archive,arrow-right,at-sign,award,bell,bookmark,box,calendar,check,chevron-down,clipboard,clock,cloud,code,coffee,copy,database,download,edit,eye,file,file-text,filter,folder,git-branch,globe,grid,hash,heart,help-circle,home,image,inbox,info,key,layers,link,list,lock,log-in,mail,map,menu,mic,moon,package,paperclip,phone,pie-chart,plus,pocket,search,send,server,settings,share,shield,sidebar,slash,smartphone,star,sun,tag,terminal,trash,truck,upload,user,users,wifi,zap';
-
-        let wtFavDataUrl = null;
-
-        function wtSetNotify(notifyId, msg) {
-            const n = document.getElementById(notifyId);
-            if (n) n.textContent = msg || '—';
-        }
-
-        function wtCopyTextFallback(text) {
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            ta.setAttribute('readonly', '');
-            ta.style.position = 'fixed';
-            ta.style.left = '-9999px';
-            document.body.appendChild(ta);
-            ta.select();
-            try {
-                return document.execCommand('copy');
-            } finally {
-                document.body.removeChild(ta);
-            }
-        }
-
-        function wtCopy(taId, notifyId) {
-            const el = document.getElementById(taId);
-            if (!el) return;
-            const text = el.value;
-            const done = (ok, failMsg) => {
-                if (notifyId) wtSetNotify(notifyId, ok ? 'Copied' : (failMsg || 'Copy failed'));
-            };
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => done(true)).catch(() => {
-                    done(wtCopyTextFallback(text));
-                });
-            } else {
-                done(wtCopyTextFallback(text));
-            }
-        }
-
-        function wtEscXml(s) {
-            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-        }
-
-        function wtGenSitemap() {
-            let base = document.getElementById('sm-base').value.trim().replace(/\/+$/, '');
-            const paths = document.getElementById('sm-paths').value.split('\n').map(s => s.trim()).filter(Boolean);
-            const prio = document.getElementById('sm-prio').value.trim() || '0.5';
-            const changefreq = document.getElementById('sm-changefreq').value;
-            const lastmod = new Date().toISOString().split('T')[0];
-            if (!paths.length) {
-                document.getElementById('sm-out').value = '';
-                wtSetNotify('wt-notify-sitemap', 'Add at least one path');
-                return;
-            }
-            if (!base && !paths.some(p => /^https?:\/\//i.test(p))) {
-                wtSetNotify('wt-notify-sitemap', 'Set base URL or use full URLs per line');
-                return;
-            }
-            let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-            for (const p of paths) {
-                let loc;
-                if (/^https?:\/\//i.test(p)) loc = p;
-                else loc = base + (p.startsWith('/') ? p : '/' + p);
-                xml += '  <url>\n    <loc>' + wtEscXml(loc) + '</loc>\n    <lastmod>' + lastmod + '</lastmod>\n    <changefreq>' + changefreq + '</changefreq>\n    <priority>' + wtEscXml(prio) + '</priority>\n  </url>\n';
-            }
-            xml += '</urlset>';
-            document.getElementById('sm-out').value = xml;
-            wtSetNotify('wt-notify-sitemap', 'Sitemap generated');
-        }
-
-        function wtEscAttr(s) {
-            return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-        }
-
-        function wtGenMeta() {
-            const title = document.getElementById('og-title').value.trim();
-            const site = document.getElementById('og-site').value.trim();
-            const desc = document.getElementById('og-desc').value.trim();
-            const url = document.getElementById('og-url').value.trim();
-            const img = document.getElementById('og-img').value.trim();
-            const twUser = document.getElementById('og-tw-user').value.trim();
-            const twCard = document.getElementById('og-tw-card').value;
-            const loc = document.getElementById('og-locale').value.trim();
-            const lines = [];
-            lines.push('<meta name="description" content="' + wtEscAttr(desc) + '" />');
-            if (title) lines.push('<meta property="og:title" content="' + wtEscAttr(title) + '" />');
-            if (site) lines.push('<meta property="og:site_name" content="' + wtEscAttr(site) + '" />');
-            if (desc) lines.push('<meta property="og:description" content="' + wtEscAttr(desc) + '" />');
-            if (url) lines.push('<meta property="og:url" content="' + wtEscAttr(url) + '" />');
-            if (img) lines.push('<meta property="og:image" content="' + wtEscAttr(img) + '" />');
-            lines.push('<meta property="og:type" content="website" />');
-            if (loc) lines.push('<meta property="og:locale" content="' + wtEscAttr(loc) + '" />');
-            if (title) lines.push('<meta name="twitter:title" content="' + wtEscAttr(title) + '" />');
-            if (desc) lines.push('<meta name="twitter:description" content="' + wtEscAttr(desc) + '" />');
-            lines.push('<meta name="twitter:card" content="' + wtEscAttr(twCard) + '" />');
-            if (img) lines.push('<meta name="twitter:image" content="' + wtEscAttr(img) + '" />');
-            if (twUser) lines.push('<meta name="twitter:site" content="@' + wtEscAttr(twUser.replace(/^@/, '')) + '" />');
-            document.getElementById('og-out').value = lines.join('\n');
-            wtSetNotify('wt-notify-social', 'Meta tags generated');
-        }
-
-        function wtFaviconLoad() {
-            const f = document.getElementById('fav-file').files[0];
-            if (!f) return;
-            wtFavDataUrl = null;
-            const img = new Image();
-            const u = URL.createObjectURL(f);
-            img.onload = () => {
-                const c = document.getElementById('fav-canvas');
-                const ctx = c.getContext('2d');
-                ctx.clearRect(0, 0, 32, 32);
-                ctx.drawImage(img, 0, 0, 32, 32);
-                wtFavDataUrl = c.toDataURL('image/png');
-                document.getElementById('fav-dl-btn').disabled = false;
-                document.getElementById('fav-html').value = '<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />\n<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />';
-                URL.revokeObjectURL(u);
-                wtSetNotify('wt-notify-favicon', 'Favicon preview ready');
-            };
-            img.onerror = () => {
-                URL.revokeObjectURL(u);
-                wtSetNotify('wt-notify-favicon', 'Could not read image');
-            };
-            img.src = u;
-        }
-
-        function wtFaviconDownload() {
-            if (!wtFavDataUrl) return;
-            const a = document.createElement('a');
-            a.href = wtFavDataUrl;
-            a.download = 'favicon-32.png';
-            a.click();
-        }
-
-        function wtMediaPreset() {
-            document.getElementById('wt-media-pre').value = '/* Common breakpoints (mobile-first) */\n.container { width: 100%; padding-inline: 1rem; }\n\n@media (min-width: 480px) {\n  /* large phones */\n}\n\n@media (min-width: 640px) {\n  /* sm */\n}\n\n@media (min-width: 768px) {\n  /* md / tablet */\n}\n\n@media (min-width: 1024px) {\n  /* lg / laptop */\n}\n\n@media (min-width: 1280px) {\n  /* xl */\n}\n\n@media (min-width: 1536px) {\n  /* 2xl */\n}\n\n/* Touch / hover capability */\n@media (hover: hover) and (pointer: fine) {\n  .btn:hover { opacity: 0.9; }\n}\n\n/* Dark mode */\n@media (prefers-color-scheme: dark) {\n  :root { color-scheme: dark; }\n}\n\n/* Reduced motion */\n@media (prefers-reduced-motion: reduce) {\n  *, *::before, *::after {\n    animation-duration: 0.01ms !important;\n    transition-duration: 0.01ms !important;\n  }\n}\n\n/* Print */\n@media print {\n  .no-print { display: none !important; }\n}\n';
-        }
-
-        function wtIconCopy(name) {
-            const u = 'https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/' + encodeURIComponent(name) + '.svg';
-            const tag = '<img src="' + u + '" alt="" width="24" height="24" />';
-            const fin = (ok) => wtSetNotify('wt-notify-svgicons', ok ? ('Copied ' + name) : 'Copy failed');
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(tag).then(() => fin(true)).catch(() => fin(wtCopyTextFallback(tag)));
-            } else {
-                fin(wtCopyTextFallback(tag));
-            }
-        }
-
-        async function wtLoadIcons(force) {
-            const grid = document.getElementById('wt-icon-grid');
-            const st = document.getElementById('wt-icon-status');
-            if (!grid || !st) return;
-            if (grid.dataset.loaded === '1' && !force) return;
-            grid.innerHTML = '';
-            st.textContent = 'Loading icon list…';
-            const seen = new Set();
-            const names = [];
-            try {
-                for (let page = 1; page <= 12; page++) {
-                    const r = await fetch('https://api.github.com/repos/lucide-icons/lucide/contents/icons?per_page=1000&page=' + page);
-                    if (r.status === 403) {
-                        st.textContent = 'GitHub rate limit — using built-in list.';
-                        break;
-                    }
-                    if (!r.ok) break;
-                    const arr = await r.json();
-                    if (!Array.isArray(arr) || !arr.length) break;
-                    for (const x of arr) {
-                        if (!x.name) continue;
-                        const m = x.name.match(/^(.+)\.(svg|json)$/i);
-                        if (!m) continue;
-                        const base = m[1];
-                        if (seen.has(base)) continue;
-                        seen.add(base);
-                        names.push(base);
-                    }
-                    if (arr.length < 1000) break;
-                }
-            } catch (e) {
-                st.textContent = 'GitHub API error — using built-in list. (' + (e.message || e) + ')';
-            }
-            if (!names.length) names.push(...WT_ICON_FALLBACK.split(','));
-            grid.dataset.loaded = '1';
-            st.textContent = names.length + ' icons — click to copy <img> tag (Lucide / unpkg)';
-            const frag = document.createDocumentFragment();
-            const baseUrl = 'https://cdn.jsdelivr.net/npm/lucide-static@0.469.0/icons/';
-            for (const name of names) {
-                const cell = document.createElement('div');
-                cell.className = 'wt-icon-cell';
-                cell.dataset.name = name;
-                cell.title = name;
-                cell.onclick = () => wtIconCopy(name);
-                const img = document.createElement('img');
-                img.src = baseUrl + encodeURIComponent(name) + '.svg';
-                img.alt = '';
-                img.loading = 'lazy';
-                img.referrerPolicy = 'no-referrer';
-                const lbl = document.createElement('div');
-                lbl.className = 'wt-icon-name';
-                lbl.textContent = name;
-                cell.appendChild(img);
-                cell.appendChild(lbl);
-                frag.appendChild(cell);
-            }
-            grid.appendChild(frag);
-        }
-
-        function wtIconFilter() {
-            const q = document.getElementById('wt-icon-filter').value.trim().toLowerCase();
-            document.querySelectorAll('#wt-icon-grid .wt-icon-cell').forEach(el => {
-                el.style.display = !q || (el.dataset.name && el.dataset.name.toLowerCase().includes(q)) ? '' : 'none';
-            });
-        }
-
-        async function wtSpeedRun() {
-            const out = document.getElementById('wt-speed-out');
-            out.textContent = 'Running…';
-            const url = 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js';
-            const times = [];
-            let bytes = 0;
-            try {
-                for (let i = 0; i < 5; i++) {
-                    const t0 = performance.now();
-                    const r = await fetch(url + '?r=' + Math.random(), { cache: 'no-store' });
-                    const buf = await r.arrayBuffer();
-                    const t1 = performance.now();
-                    times.push(t1 - t0);
-                    bytes = buf.byteLength;
-                }
-            } catch (e) {
-                out.textContent = 'Error: ' + e.message;
-                wtSetNotify('wt-notify-speed', 'Error');
-                return;
-            }
-            wtSetNotify('wt-notify-speed', 'Done');
-            const sorted = [...times].sort((a, b) => a - b);
-            const median = sorted[Math.floor(sorted.length / 2)];
-            const mbps = (bytes * 8) / (median / 1000) / 1e6;
-            out.textContent = 'Payload: ~' + (bytes / 1024).toFixed(1) + ' KiB (jsDelivr lodash.min.js)\n' +
-                'Median latency+download: ' + median.toFixed(0) + ' ms (5 runs)\n' +
-                'Approx throughput: ~' + mbps.toFixed(2) + ' Mbps\n\n' +
-                'Note: includes TLS, browser, and CDN variance — not an ISP speedometer.';
-        }
-
-        function wtPerfPsi() {
-            const u = document.getElementById('perf-url').value.trim() || window.location.href;
-            window.open('https://pagespeed.web.dev/analysis?url=' + encodeURIComponent(u), '_blank', 'noopener,noreferrer');
-        }
-
-        function wtPerfWebvitals() {
-            const u = document.getElementById('perf-url').value.trim() || window.location.href;
-            window.open('https://web.dev/measure/?url=' + encodeURIComponent(u), '_blank', 'noopener,noreferrer');
-        }
-
-        function wtOnlineNav() {
-            const el = document.getElementById('wt-on-nav');
-            el.innerHTML = '<b>navigator.onLine</b> ' + (navigator.onLine ? 'true' : 'false');
-        }
-
-        async function wtOnlineThis() {
-            const el = document.getElementById('wt-on-this');
-            el.textContent = 'Requesting…';
-            try {
-                const t0 = performance.now();
-                let r = await fetch(location.href, { method: 'HEAD', cache: 'no-store' });
-                if (r.status === 405) r = await fetch(location.href, { cache: 'no-store' });
-                el.textContent = 'URL: ' + location.href + '\nHTTP ' + r.status + ' ' + r.statusText + '\n~' + (performance.now() - t0).toFixed(0) + ' ms';
-            } catch (e) {
-                el.textContent = String(e.message || e);
-            }
-        }
-
-        async function wtDnsQuery(name, type) {
-            const u = 'https://dns.google/resolve?name=' + encodeURIComponent(name) + '&type=' + type;
-            const r = await fetch(u);
-            return r.json();
-        }
-
-        async function wtOnlineExt() {
-            const el = document.getElementById('wt-on-ext');
-            let host = document.getElementById('wt-on-host').value.trim().replace(/^https?:\/\//i, '').split(/[/?#]/)[0];
-            if (!host) {
-                el.textContent = 'Enter a hostname';
-                return;
-            }
-            const lines = [];
-            try {
-                const j = await wtDnsQuery(host, 'A');
-                const ans = (j.Answer || []).map(a => a.data).filter(Boolean);
-                lines.push('DNS A: ' + (ans.length ? ans.join(', ') : '(none)'));
-            } catch (e) {
-                lines.push('DNS error: ' + e.message);
-            }
-            const t0 = performance.now();
-            const img = new Image();
-            await new Promise(res => {
-                let done = false;
-                const fin = () => { if (!done) { done = true; res(); } };
-                img.onload = fin;
-                img.onerror = fin;
-                img.src = 'https://' + host + '/favicon.ico?probe=' + Date.now();
-                setTimeout(fin, 8000);
-            });
-            const ok = img.complete && img.naturalWidth > 0;
-            lines.push('GET https://' + host + '/favicon.ico — ' + (ok ? 'loaded (' + img.naturalWidth + '×' + img.naturalHeight + ')' : 'failed / blocked / mixed content'));
-            lines.push('~' + (performance.now() - t0).toFixed(0) + ' ms');
-            el.textContent = lines.join('\n');
-        }
-
-        function wtPortFill() {
-            const h = document.getElementById('wt-port-host').value.trim() || 'HOST';
-            document.getElementById('wt-port-snippet').value = '# TCP check (run on your machine)\n# Replace PORT\n\nnc -vz ' + h + ' PORT\n\n# Bash /dev/tcp (Linux)\ntimeout 2 bash -c \'echo >/dev/tcp/' + h + '/PORT\' && echo open || echo closed\n\n# HTTP banner\ncurl -v --connect-timeout 3 http://' + h + ':PORT/\n\n# TLS\necho | openssl s_client -servername ' + h + ' -connect ' + h + ':443 2>/dev/null | openssl x509 -noout -dates\n';
-        }
-
-        async function wtDnsLookup() {
-            const raw = document.getElementById('wt-net-q').value.trim();
-            const out = document.getElementById('wt-net-out');
-            if (!raw) {
-                out.textContent = 'Enter hostname or IPv4';
-                return;
-            }
-            out.textContent = 'Querying…';
-            const ipv4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.test(raw);
-            const lines = [];
-            try {
-                if (ipv4) {
-                    const ptr = raw.split('.').reverse().join('.') + '.in-addr.arpa';
-                    const j = await wtDnsQuery(ptr, 'PTR');
-                    lines.push('PTR for ' + raw + ' (' + ptr + ')');
-                    lines.push(JSON.stringify(j, null, 2));
-                } else {
-                    for (const t of ['A', 'AAAA', 'MX', 'NS', 'TXT']) {
-                        const j = await wtDnsQuery(raw, t);
-                        lines.push('=== ' + t + ' ===');
-                        lines.push(JSON.stringify(j, null, 2));
-                        lines.push('');
-                    }
-                }
-            } catch (e) {
-                lines.push('Error: ' + e.message);
-            }
-            out.textContent = lines.join('\n');
-            wtSetNotify('wt-notify-hostdns', 'Lookup finished');
         }
 
         /* ========== SLUG GENERATOR ========== */
