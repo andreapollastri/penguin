@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0d0d0d">
     <meta name="description"
-        content="Penguin — Free online generators and utilities for developers: password, UUID, JWT, bcrypt, Base64, QR code, barcode, OpenAPI/Swagger, AI toolkit (Cursor Skills, Rules, MCP, prompts, CLAUDE.md, AGENTS.md, hooks), placeholder and random images, Laravel/PHP/Kali snippets, script sanitizer, Markdown preview, code format/minify, fake REST API, cron, timestamp, cURL, and more. No signup required.">
+        content="Penguin — Free online generators and utilities for developers: password, UUID, JWT, bcrypt, Base64, QR code, barcode, OpenAPI/Swagger, AI toolkit (Cursor Skills, Rules, MCP, prompts, CLAUDE.md, AGENTS.md, hooks, spec-driven), placeholder and random images, Laravel/PHP/Kali snippets, script sanitizer, Markdown preview, code format/minify, fake REST API, cron, timestamp, cURL, and more. No signup required.">
     <title>Penguin — Generators and utilities for developers</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%90%A7</text></svg>">
@@ -1209,6 +1209,7 @@
                 <button type="button" data-page="aiclaude" onclick="showPage('aiclaude', this)"><span class="icon">&gt;</span> CLAUDE.md</button>
                 <button type="button" data-page="aiagents" onclick="showPage('aiagents', this)"><span class="icon">&gt;</span> AGENTS.md</button>
                 <button type="button" data-page="aihooks" onclick="showPage('aihooks', this)"><span class="icon">&gt;</span> Cursor Hooks</button>
+                <button type="button" data-page="aispec" onclick="showPage('aispec', this)"><span class="icon">&gt;</span> Spec Driven</button>
             </div>
         </nav>
         <div class="sidebar-footer">Penguin · <a href="https://web.ap.it" target="_blank" rel="noopener"
@@ -2988,6 +2989,72 @@
                     <div class="notify" id="hk-notify">Merge into hooks object; version must be 1</div>
                 </div>
 
+                <!-- SPEC-DRIVEN GENERATOR -->
+                <div id="page-aispec" class="page">
+                    <div class="stat-bar">
+                        <span>SPEC-DRIVEN</span>
+                        <span>OPENSPEC · SPEC KIT · BDD</span>
+                    </div>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate specs before code —
+                        compatible with <a href="https://openspec.dev/" target="_blank" rel="noopener">OpenSpec</a>,
+                        <a href="https://github.com/github/spec-kit" target="_blank" rel="noopener">GitHub Spec Kit</a>,
+                        generic feature specs, and BDD/Gherkin.</p>
+                    <div class="ai-presets">
+                        <button type="button" onclick="aiSpecPreset('openspec-dark')">OpenSpec · dark mode</button>
+                        <button type="button" onclick="aiSpecPreset('openspec-auth')">OpenSpec · 2FA</button>
+                        <button type="button" onclick="aiSpecPreset('speckit-api')">Spec Kit · REST API</button>
+                        <button type="button" onclick="aiSpecPreset('bdd-checkout')">BDD · checkout</button>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <div class="label">Framework</div>
+                            <select id="sp-framework" onchange="aiSpecUpdateArtifacts(); genAiSpec()">
+                                <option value="openspec">OpenSpec (brownfield, delta specs)</option>
+                                <option value="speckit">GitHub Spec Kit (phased SDLC)</option>
+                                <option value="generic">Generic feature spec</option>
+                                <option value="bdd">BDD / Gherkin</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="label">Output artifact</div>
+                            <select id="sp-artifact" onchange="genAiSpec()"></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <div class="label">Feature / change name_</div>
+                            <input type="text" id="sp-name" placeholder="add-dark-mode" oninput="genAiSpec()" autocomplete="off">
+                        </div>
+                        <div id="sp-domain-field">
+                            <div class="label">Domain (OpenSpec)</div>
+                            <input type="text" id="sp-domain" placeholder="ui, auth, payments" oninput="genAiSpec()" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="label">Intent / problem statement_</div>
+                    <textarea id="sp-intent" class="ai-io" rows="3" oninput="genAiSpec()" spellcheck="false"
+                        placeholder="Users need a dark mode to reduce eye strain during nighttime usage."></textarea>
+                    <div class="label">Scope (one item per line)_</div>
+                    <textarea id="sp-scope" class="ai-io" rows="3" oninput="genAiSpec()" spellcheck="false"
+                        placeholder="Add theme toggle in settings&#10;Detect system color preference&#10;Persist preference in localStorage"></textarea>
+                    <div class="label">Requirements (one per line — becomes SHALL/MUST statements)_</div>
+                    <textarea id="sp-reqs" class="ai-io" rows="4" oninput="genAiSpec()" spellcheck="false"
+                        placeholder="Theme selection between light and dark&#10;Preference persists across sessions&#10;Respect system preference when unset"></textarea>
+                    <div class="label">Scenarios (requirement | scenario name, then GIVEN/WHEN/THEN lines; blank line between scenarios)_</div>
+                    <textarea id="sp-scenarios" class="ai-io" rows="6" oninput="genAiSpec()" spellcheck="false"
+                        placeholder="Theme selection | Manual toggle&#10;GIVEN a user on any page&#10;WHEN the user clicks the theme toggle&#10;THEN the theme switches immediately&#10;AND the preference persists across sessions"></textarea>
+                    <div class="label">Technical approach / design notes_</div>
+                    <textarea id="sp-approach" class="ai-io" rows="3" oninput="genAiSpec()" spellcheck="false"
+                        placeholder="CSS custom properties for theming. React context for state. localStorage for persistence."></textarea>
+                    <div class="ai-path-hint" id="sp-path-hint">Save under openspec/changes/add-dark-mode/</div>
+                    <div class="btn-row" style="margin-bottom:12px">
+                        <button type="button" class="btn" onclick="genAiSpec()" style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('sp-out', 'sp-notify')">Copy output</button>
+                    </div>
+                    <div class="label">Output_</div>
+                    <textarea id="sp-out" class="ai-io out" rows="20" readonly spellcheck="false"></textarea>
+                    <div class="notify" id="sp-notify">Agree on the spec before asking the agent to implement</div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -3045,6 +3112,7 @@
             aiclaude: 'root@penguin: ~/claude-md',
             aiagents: 'root@penguin: ~/agents-md',
             aihooks: 'root@penguin: ~/cursor-hooks',
+            aispec: 'root@penguin: ~/spec-driven',
         };
 
         function navButtonFor(id) {
@@ -3146,6 +3214,7 @@
             if (id === 'aiclaude') genAiClaude();
             if (id === 'aiagents') genAiAgents();
             if (id === 'aihooks') genAiHooks();
+            if (id === 'aispec') { aiSpecUpdateArtifacts(); genAiSpec(); }
         }
 
         function initRouteFromHash() {
@@ -6102,6 +6171,7 @@
                         'cl-notify': 'Save as CLAUDE.md in project root',
                         'ag-notify': 'Save as AGENTS.md in project root',
                         'hk-notify': 'Merge into hooks object; version must be 1',
+                        'sp-notify': 'Agree on the spec before asking the agent to implement',
                     };
                     setTimeout(() => {
                         notif.innerText = defaults[notifyId] || 'Click to copy';
@@ -6443,6 +6513,457 @@
             document.getElementById('hk-prompt').value = p.prompt;
             document.getElementById('hk-fail').value = p.fail;
             genAiHooks();
+        }
+
+        /* ========== SPEC-DRIVEN ========== */
+        const AI_SPEC_ARTIFACTS = {
+            openspec: [
+                { v: 'proposal', l: 'proposal.md' },
+                { v: 'delta', l: 'Delta spec (ADDED/MODIFIED)' },
+                { v: 'design', l: 'design.md' },
+                { v: 'tasks', l: 'tasks.md' },
+                { v: 'bundle', l: 'Full change bundle' },
+            ],
+            speckit: [
+                { v: 'constitution', l: 'Constitution' },
+                { v: 'spec', l: 'Feature spec' },
+                { v: 'plan', l: 'Implementation plan' },
+                { v: 'tasks', l: 'Task list' },
+                { v: 'bundle', l: 'Full Spec Kit bundle' },
+            ],
+            generic: [
+                { v: 'feature', l: 'Feature spec (PRD-lite)' },
+                { v: 'stories', l: 'User stories' },
+                { v: 'acceptance', l: 'Acceptance criteria' },
+            ],
+            bdd: [
+                { v: 'feature', l: 'Feature file (.feature)' },
+                { v: 'outline', l: 'Scenario outline' },
+            ],
+        };
+
+        function aiSpecUpdateArtifacts() {
+            const fw = document.getElementById('sp-framework').value;
+            const sel = document.getElementById('sp-artifact');
+            const prev = sel.value;
+            const opts = AI_SPEC_ARTIFACTS[fw] || AI_SPEC_ARTIFACTS.generic;
+            sel.innerHTML = opts.map(o => '<option value="' + o.v + '">' + o.l + '</option>').join('');
+            if (opts.some(o => o.v === prev)) sel.value = prev;
+            document.getElementById('sp-domain-field').style.display = fw === 'openspec' ? 'block' : 'none';
+        }
+
+        function aiSpecTitle(name) {
+            return name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        }
+
+        function aiSpecParseScenarios(text, reqs) {
+            const blocks = (text || '').split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
+            const parsed = [];
+            blocks.forEach(block => {
+                const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+                if (!lines.length) return;
+                let reqName = reqs[0] || 'Requirement';
+                let scenName = 'Happy path';
+                let steps = lines;
+                if (lines[0].includes('|')) {
+                    const parts = lines[0].split('|').map(s => s.trim());
+                    reqName = parts[0] || reqName;
+                    scenName = parts[1] || scenName;
+                    steps = lines.slice(1);
+                }
+                parsed.push({ reqName, scenName, steps });
+            });
+            if (!parsed.length && reqs.length) {
+                reqs.forEach((r, i) => {
+                    parsed.push({
+                        reqName: r,
+                        scenName: 'Scenario ' + (i + 1),
+                        steps: [
+                            'GIVEN the system is in a valid state',
+                            'WHEN the user triggers "' + r + '"',
+                            'THEN the expected outcome is observed',
+                        ],
+                    });
+                });
+            }
+            return parsed;
+        }
+
+        function aiSpecFormatSteps(steps, style) {
+            return steps.map(s => {
+                const line = s.replace(/^(GIVEN|WHEN|THEN|AND|BUT)\s*/i, '').trim();
+                if (style === 'gherkin') {
+                    const kw = (s.match(/^(GIVEN|WHEN|THEN|AND|BUT)/i) || ['Given'])[0];
+                    const gherkinKw = kw.charAt(0).toUpperCase() + kw.slice(1).toLowerCase();
+                    return '    ' + gherkinKw + ' ' + line;
+                }
+                const kw = (s.match(/^(GIVEN|WHEN|THEN|AND|BUT)/i) || ['GIVEN'])[0].toUpperCase();
+                return '- ' + kw + ' ' + line;
+            }).join('\n');
+        }
+
+        function aiSpecGroupedScenarios(scenarios) {
+            const groups = {};
+            scenarios.forEach(s => {
+                if (!groups[s.reqName]) groups[s.reqName] = [];
+                groups[s.reqName].push(s);
+            });
+            return groups;
+        }
+
+        function aiSpecReadInputs() {
+            const name = aiSlugify(document.getElementById('sp-name').value) || 'my-feature';
+            const title = aiSpecTitle(name);
+            const domain = (document.getElementById('sp-domain').value.trim() || 'core').toLowerCase().replace(/[^a-z0-9-]/g, '');
+            const intent = document.getElementById('sp-intent').value.trim();
+            const scope = aiLines(document.getElementById('sp-scope').value);
+            const reqs = aiLines(document.getElementById('sp-reqs').value);
+            const approach = document.getElementById('sp-approach').value.trim();
+            const scenarios = aiSpecParseScenarios(document.getElementById('sp-scenarios').value, reqs);
+            return { name, title, domain, intent, scope, reqs, approach, scenarios };
+        }
+
+        function aiSpecOpenProposal(d) {
+            let out = '# Proposal: ' + d.title + '\n\n';
+            out += '## Intent\n' + (d.intent || 'Describe why this change is needed.') + '\n\n';
+            out += '## Scope\n';
+            out += d.scope.length ? d.scope.map(s => '- ' + s).join('\n') : '- Define in-scope work items\n';
+            out += '\n\n## Out of scope\n- TBD — list explicit non-goals\n\n';
+            out += '## Approach\n' + (d.approach || 'Outline the technical direction at a high level.') + '\n\n';
+            out += '## Workflow\n';
+            out += '1. Review this proposal\n';
+            out += '2. Refine delta specs in `specs/' + d.domain + '/spec.md`\n';
+            out += '3. Run `/opsx:apply` (or implement from `tasks.md`)\n';
+            out += '4. Archive with `/opsx:archive` when complete\n';
+            return out;
+        }
+
+        function aiSpecOpenDelta(d) {
+            const groups = aiSpecGroupedScenarios(d.scenarios);
+            let out = '# Delta for ' + aiSpecTitle(d.domain) + '\n\n## ADDED Requirements\n\n';
+            const reqNames = Object.keys(groups).length ? Object.keys(groups) : d.reqs;
+            (reqNames.length ? reqNames : ['New capability']).forEach(req => {
+                out += '### Requirement: ' + req + '\n';
+                out += 'The system SHALL support: ' + req + '.\n\n';
+                const scens = groups[req] || [];
+                if (scens.length) {
+                    scens.forEach(s => {
+                        out += '#### Scenario: ' + s.scenName + '\n';
+                        out += aiSpecFormatSteps(s.steps, 'bullet') + '\n\n';
+                    });
+                } else {
+                    out += '#### Scenario: Default\n';
+                    out += '- GIVEN a valid system state\n';
+                    out += '- WHEN the feature is used\n';
+                    out += '- THEN the requirement is satisfied\n\n';
+                }
+            });
+            out += '## MODIFIED Requirements\n\n_(None — add MODIFIED sections when changing existing behavior)_\n\n';
+            out += '## REMOVED Requirements\n\n_(None — add REMOVED sections when deprecating behavior)_\n';
+            return out;
+        }
+
+        function aiSpecOpenDesign(d) {
+            let out = '# Design: ' + d.title + '\n\n';
+            out += '## Context\n' + (d.intent || 'Background for this change.') + '\n\n';
+            out += '## Goals\n';
+            out += d.scope.length ? d.scope.map(s => '- ' + s).join('\n') : '- Deliver the scoped capability\n';
+            out += '\n\n## Technical approach\n' + (d.approach || 'Document architecture decisions here.') + '\n\n';
+            out += '## Decisions\n';
+            out += '| Decision | Rationale |\n|----------|----------|\n';
+            out += '| TBD | Record key trade-offs as you refine the spec |\n\n';
+            out += '## Risks & mitigations\n';
+            out += '- **Risk:** Incomplete requirements → **Mitigation:** review delta specs before coding\n';
+            return out;
+        }
+
+        function aiSpecOpenTasks(d) {
+            let out = '# Tasks\n\n';
+            const sections = d.scope.length ? d.scope : ['Implementation'];
+            sections.forEach((sec, i) => {
+                out += '## ' + (i + 1) + '. ' + sec + '\n';
+                out += '- [ ] ' + (i + 1) + '.1 Define interfaces and data model\n';
+                out += '- [ ] ' + (i + 1) + '.2 Implement core logic\n';
+                out += '- [ ] ' + (i + 1) + '.3 Add tests and documentation\n\n';
+            });
+            out += '## Verification\n';
+            out += '- [ ] All scenarios in the delta spec pass\n';
+            out += '- [ ] `openspec validate ' + d.name + '` succeeds\n';
+            return out;
+        }
+
+        function aiSpecKitConstitution(d) {
+            let out = '# Project Constitution\n\n';
+            out += '## Principles\n';
+            out += '- Spec before code — no implementation without an approved spec\n';
+            out += '- Test-driven development where applicable\n';
+            out += '- Small, reviewable changes\n\n';
+            out += '## Standards\n' + (d.approach || '- Follow existing project conventions\n') + '\n';
+            out += '## Governance\n';
+            out += '- Constitution overrides conflicting local decisions\n';
+            out += '- Amendments require explicit team review\n';
+            return out;
+        }
+
+        function aiSpecKitSpec(d) {
+            let out = '# Feature Specification: ' + d.title + '\n\n';
+            out += '## Overview\n' + (d.intent || 'Describe the feature.') + '\n\n';
+            out += '## User stories\n';
+            d.reqs.forEach((r, i) => {
+                out += '- **US-' + (i + 1) + ':** As a user, I want ' + r.toLowerCase() + ' so that I achieve the intended outcome.\n';
+            });
+            if (!d.reqs.length) out += '- **US-1:** As a user, I want the feature so that my need is met.\n';
+            out += '\n## Functional requirements\n';
+            d.reqs.forEach((r, i) => { out += (i + 1) + '. The system MUST ' + r.toLowerCase() + '.\n'; });
+            out += '\n## Acceptance scenarios\n';
+            d.scenarios.forEach(s => {
+                out += '\n### ' + s.scenName + '\n';
+                out += aiSpecFormatSteps(s.steps, 'bullet') + '\n';
+            });
+            return out;
+        }
+
+        function aiSpecKitPlan(d) {
+            let out = '# Implementation Plan: ' + d.title + '\n\n';
+            out += '## Technical context\n' + (d.approach || 'Stack and constraints for this feature.') + '\n\n';
+            out += '## Phases\n';
+            out += '### Phase 0 — Research\n- Confirm assumptions, identify dependencies\n\n';
+            out += '### Phase 1 — Design\n- Data model, API contracts, UI wireframes if needed\n\n';
+            out += '### Phase 2 — Implementation\n';
+            d.scope.forEach(s => { out += '- ' + s + '\n'; });
+            out += '\n### Phase 3 — Validation\n- Run test suite, manual QA against acceptance scenarios\n';
+            return out;
+        }
+
+        function aiSpecKitTasks(d) {
+            let out = '# Tasks: ' + d.title + '\n\n';
+            out += '> Generated from spec. Run `/speckit.implement` or work through manually.\n\n';
+            d.scope.forEach((sec, i) => {
+                out += '- [ ] T' + (i + 1) + ' ' + sec + '\n';
+                out += '  - [ ] T' + (i + 1) + '.1 Implementation\n';
+                out += '  - [ ] T' + (i + 1) + '.2 Tests\n';
+            });
+            if (!d.scope.length) {
+                out += '- [ ] T1 Core implementation\n';
+                out += '- [ ] T2 Tests and docs\n';
+            }
+            return out;
+        }
+
+        function aiSpecGenericFeature(d) {
+            let out = '# ' + d.title + '\n\n';
+            out += '## Problem\n' + (d.intent || 'What problem does this solve?') + '\n\n';
+            out += '## Goals\n';
+            out += d.scope.length ? d.scope.map(s => '- ' + s).join('\n') : '- Define measurable goals\n';
+            out += '\n\n## Requirements\n';
+            d.reqs.forEach((r, i) => { out += (i + 1) + '. ' + r + '\n'; });
+            out += '\n## Success metrics\n- TBD\n';
+            return out;
+        }
+
+        function aiSpecGenericStories(d) {
+            let out = '# User Stories: ' + d.title + '\n\n';
+            d.reqs.forEach((r, i) => {
+                out += '## US-' + (i + 1) + ': ' + r + '\n\n';
+                out += '**As a** user  \n';
+                out += '**I want** ' + r.toLowerCase() + '  \n';
+                out += '**So that** the product delivers the intended value.\n\n';
+                out += '**Acceptance criteria:**\n';
+                const related = d.scenarios.filter(s => s.reqName === r);
+                if (related.length) {
+                    related.forEach(s => {
+                        out += '- ' + s.scenName + ': ';
+                        out += s.steps.filter(st => /^THEN/i.test(st)).map(st => st.replace(/^THEN\s*/i, '')).join('; ') || 'expected outcome\n';
+                        out += '\n';
+                    });
+                } else {
+                    out += '- Given valid input, when the action runs, then the requirement is met\n';
+                }
+                out += '\n';
+            });
+            if (!d.reqs.length) {
+                out += '## US-1: Core capability\n\n**As a** user  \n**I want** the feature  \n**So that** my need is satisfied.\n';
+            }
+            return out;
+        }
+
+        function aiSpecGenericAcceptance(d) {
+            let out = '# Acceptance Criteria: ' + d.title + '\n\n';
+            d.scenarios.forEach((s, i) => {
+                out += '## AC-' + (i + 1) + ': ' + s.scenName + ' (' + s.reqName + ')\n\n';
+                out += aiSpecFormatSteps(s.steps, 'bullet') + '\n\n';
+            });
+            if (!d.scenarios.length) {
+                out += '## AC-1: Happy path\n\n- GIVEN prerequisites are met\n- WHEN the user performs the action\n- THEN the system responds correctly\n';
+            }
+            return out;
+        }
+
+        function aiSpecBddFeature(d) {
+            let out = 'Feature: ' + d.title + '\n';
+            out += '  As a user\n';
+            out += '  I want ' + (d.intent ? d.intent.toLowerCase().replace(/\.$/, '') : 'this capability') + '\n';
+            out += '  So that the product meets my needs\n\n';
+            d.scenarios.forEach(s => {
+                out += '  Scenario: ' + s.scenName + '\n';
+                out += aiSpecFormatSteps(s.steps, 'gherkin') + '\n\n';
+            });
+            if (!d.scenarios.length) {
+                out += '  Scenario: Default flow\n';
+                out += '    Given a valid application state\n';
+                out += '    When the user uses the feature\n';
+                out += '    Then the expected result occurs\n';
+            }
+            return out;
+        }
+
+        function aiSpecBddOutline(d) {
+            let out = 'Feature: ' + d.title + ' (outline)\n\n';
+            out += '  Scenario Outline: ' + (d.reqs[0] || 'Parameterized flow') + '\n';
+            out += '    Given <precondition>\n';
+            out += '    When <action>\n';
+            out += '    Then <expected>\n\n';
+            out += '    Examples:\n';
+            out += '      | precondition | action | expected |\n';
+            d.reqs.slice(0, 3).forEach((r, i) => {
+                out += '      | valid state ' + (i + 1) + ' | ' + r + ' | success |\n';
+            });
+            if (!d.reqs.length) {
+                out += '      | valid state | trigger feature | success |\n';
+            }
+            return out;
+        }
+
+        function aiSpecBundleSeparator(path) {
+            return '\n\n# --- ' + path + ' ---\n\n';
+        }
+
+        function genAiSpec() {
+            const fw = document.getElementById('sp-framework').value;
+            const artifact = document.getElementById('sp-artifact').value;
+            const d = aiSpecReadInputs();
+            let out = '';
+            let pathHint = '';
+
+            if (fw === 'openspec') {
+                const base = 'openspec/changes/' + d.name + '/';
+                pathHint = 'Save under ' + base;
+                const gens = {
+                    proposal: () => aiSpecOpenProposal(d),
+                    delta: () => aiSpecOpenDelta(d),
+                    design: () => aiSpecOpenDesign(d),
+                    tasks: () => aiSpecOpenTasks(d),
+                };
+                if (artifact === 'bundle') {
+                    out = aiSpecBundleSeparator(base + 'proposal.md') + gens.proposal();
+                    out += aiSpecBundleSeparator(base + 'specs/' + d.domain + '/spec.md') + gens.delta();
+                    out += aiSpecBundleSeparator(base + 'design.md') + gens.design();
+                    out += aiSpecBundleSeparator(base + 'tasks.md') + gens.tasks();
+                    pathHint += ' — then run /opsx:propose or /opsx:apply in your AI assistant';
+                } else {
+                    out = (gens[artifact] || gens.proposal)();
+                    const paths = {
+                        proposal: base + 'proposal.md',
+                        delta: base + 'specs/' + d.domain + '/spec.md',
+                        design: base + 'design.md',
+                        tasks: base + 'tasks.md',
+                    };
+                    pathHint = 'Save as: ' + (paths[artifact] || base + 'proposal.md');
+                }
+            } else if (fw === 'speckit') {
+                const base = '.specify/features/' + d.name + '/';
+                pathHint = 'Spec Kit artifacts for ' + d.name;
+                const gens = {
+                    constitution: () => aiSpecKitConstitution(d),
+                    spec: () => aiSpecKitSpec(d),
+                    plan: () => aiSpecKitPlan(d),
+                    tasks: () => aiSpecKitTasks(d),
+                };
+                if (artifact === 'bundle') {
+                    out = aiSpecBundleSeparator('memory/constitution.md') + gens.constitution();
+                    out += aiSpecBundleSeparator(base + 'spec.md') + gens.spec();
+                    out += aiSpecBundleSeparator(base + 'plan.md') + gens.plan();
+                    out += aiSpecBundleSeparator(base + 'tasks.md') + gens.tasks();
+                    pathHint += ' — use /speckit.specify, /speckit.plan, /speckit.tasks in your assistant';
+                } else {
+                    out = (gens[artifact] || gens.spec)();
+                    const paths = {
+                        constitution: 'memory/constitution.md',
+                        spec: base + 'spec.md',
+                        plan: base + 'plan.md',
+                        tasks: base + 'tasks.md',
+                    };
+                    pathHint = 'Save as: ' + (paths[artifact] || base + 'spec.md');
+                }
+            } else if (fw === 'bdd') {
+                pathHint = 'Save as: features/' + d.name + '.feature';
+                out = artifact === 'outline' ? aiSpecBddOutline(d) : aiSpecBddFeature(d);
+            } else {
+                pathHint = 'Generic spec artifact for ' + d.title;
+                const gens = {
+                    feature: () => aiSpecGenericFeature(d),
+                    stories: () => aiSpecGenericStories(d),
+                    acceptance: () => aiSpecGenericAcceptance(d),
+                };
+                out = (gens[artifact] || gens.feature)();
+            }
+
+            document.getElementById('sp-path-hint').textContent = pathHint;
+            document.getElementById('sp-out').value = out.trimEnd() + '\n';
+        }
+
+        function aiSpecPreset(kind) {
+            const presets = {
+                'openspec-dark': {
+                    fw: 'openspec', artifact: 'bundle',
+                    name: 'add-dark-mode', domain: 'ui',
+                    intent: 'Users have requested a dark mode option to reduce eye strain during nighttime usage.',
+                    scope: 'Add theme toggle in settings\nSupport system preference detection\nPersist preference in localStorage',
+                    reqs: 'Theme selection between light and dark\nPreference persists across sessions\nRespect system preference when unset',
+                    scenarios: 'Theme selection | Manual toggle\nGIVEN a user on any page\nWHEN the user clicks the theme toggle\nTHEN the theme switches immediately\nAND the preference persists across sessions\n\nTheme selection | System preference\nGIVEN a user with no saved preference\nWHEN the application loads\nTHEN the system preferred color scheme is used',
+                    approach: 'CSS custom properties for theming with a React context for state management.',
+                },
+                'openspec-auth': {
+                    fw: 'openspec', artifact: 'bundle',
+                    name: 'add-two-factor-auth', domain: 'auth',
+                    intent: 'Strengthen account security by requiring a second factor during login for sensitive accounts.',
+                    scope: 'TOTP enrollment and verification\nBackup codes generation\nAdmin policy to enforce 2FA',
+                    reqs: 'Two-factor authentication during login\nOTP challenge after valid credentials\nRecovery via backup codes',
+                    scenarios: 'Two-factor authentication | OTP required\nGIVEN a user with 2FA enabled\nWHEN the user submits valid credentials\nTHEN an OTP challenge is presented\n\nRecovery | Backup code\nGIVEN a user with backup codes\nWHEN the user submits a valid backup code\nTHEN access is granted and the code is consumed',
+                    approach: 'Use TOTP (RFC 6238) with encrypted secret storage. Rate-limit verification attempts.',
+                },
+                'speckit-api': {
+                    fw: 'speckit', artifact: 'bundle',
+                    name: 'user-profile-api', domain: 'api',
+                    intent: 'Expose a REST API for reading and updating user profile data consumed by the mobile app.',
+                    scope: 'GET /api/v1/profile\nPATCH /api/v1/profile\nInput validation and auth middleware',
+                    reqs: 'Authenticated users can read their profile\nUsers can update display name and avatar URL\nInvalid payloads return 422 with field errors',
+                    scenarios: 'Read profile | Success\nGIVEN an authenticated user\nWHEN GET /api/v1/profile is called\nTHEN 200 returns the profile JSON\n\nUpdate profile | Validation error\nGIVEN invalid display name\nWHEN PATCH /api/v1/profile is called\nTHEN 422 returns validation errors',
+                    approach: 'Laravel API resources, Form Request validation, Sanctum auth.',
+                },
+                'bdd-checkout': {
+                    fw: 'bdd', artifact: 'feature',
+                    name: 'checkout-flow', domain: 'commerce',
+                    intent: 'complete a purchase with valid payment details',
+                    scope: 'Cart review\nPayment entry\nOrder confirmation',
+                    reqs: 'User sees order summary before pay\nPayment fails gracefully on card decline\nSuccessful checkout shows confirmation',
+                    scenarios: 'Successful checkout\nGIVEN a cart with items\nWHEN the user pays with a valid card\nTHEN an order confirmation is shown\n\nDeclined payment\nGIVEN a cart with items\nWHEN the card is declined\nTHEN an error message is shown and the cart is preserved',
+                    approach: 'Stripe Payment Intents, idempotent order creation.',
+                },
+            };
+            const p = presets[kind];
+            if (!p) return;
+            document.getElementById('sp-framework').value = p.fw;
+            aiSpecUpdateArtifacts();
+            document.getElementById('sp-artifact').value = p.artifact;
+            document.getElementById('sp-name').value = p.name;
+            document.getElementById('sp-domain').value = p.domain || '';
+            document.getElementById('sp-intent').value = p.intent;
+            document.getElementById('sp-scope').value = p.scope;
+            document.getElementById('sp-reqs').value = p.reqs;
+            document.getElementById('sp-scenarios').value = p.scenarios;
+            document.getElementById('sp-approach').value = p.approach;
+            genAiSpec();
         }
     </script>
     <script async src="https://stats.web.ap.it/i/cc5736cc-538c-48e5-a19a-eb6bbd056d47.js"></script>
