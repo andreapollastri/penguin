@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0d0d0d">
     <meta name="description"
-        content="Penguin — Free online generators and utilities for developers: password, UUID, JWT, bcrypt, Base64, QR code, barcode, OpenAPI/Swagger, placeholder and random images, Laravel/PHP/Kali snippets, script sanitizer, Markdown preview, code format/minify, fake REST API, cron, timestamp, cURL, and more. No signup required.">
+        content="Penguin — Free online generators and utilities for developers: password, UUID, JWT, bcrypt, Base64, QR code, barcode, OpenAPI/Swagger, AI toolkit (Cursor Skills, Rules, MCP, prompts, CLAUDE.md, AGENTS.md, hooks), placeholder and random images, Laravel/PHP/Kali snippets, script sanitizer, Markdown preview, code format/minify, fake REST API, cron, timestamp, cURL, and more. No signup required.">
     <title>Penguin — Generators and utilities for developers</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%90%A7</text></svg>">
@@ -830,6 +830,53 @@
             color: #666;
         }
 
+        /* ===== AI TOOLKIT ===== */
+        .ai-io {
+            width: 100%;
+            min-height: 140px;
+            font-size: 12px;
+            line-height: 1.55;
+            margin-bottom: 16px;
+        }
+
+        .ai-io.out {
+            min-height: 220px;
+            color: #ccc;
+            cursor: text;
+        }
+
+        .ai-path-hint {
+            font-size: 11px;
+            color: #555;
+            margin: -18px 0 20px;
+            letter-spacing: 0.3px;
+        }
+
+        .ai-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .ai-presets button {
+            background: #141414;
+            border: 1px solid #2a2a2a;
+            color: #888;
+            font-family: inherit;
+            font-size: 10px;
+            padding: 7px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: 0.15s;
+        }
+
+        .ai-presets button:hover {
+            border-color: var(--neon);
+            color: var(--neon);
+        }
+
         /* ===== OPENAPI / MD / SANITIZER ===== */
         #swagger-ui-mount {
             min-height: 420px;
@@ -1152,6 +1199,16 @@
                 <button type="button" data-page="laravel" onclick="showPage('laravel', this)"><span class="icon">&gt;</span> Laravel</button>
                 <button type="button" data-page="phpsnip" onclick="showPage('phpsnip', this)"><span class="icon">&gt;</span> PHP snippets</button>
                 <button type="button" data-page="kali" onclick="showPage('kali', this)"><span class="icon">&gt;</span> Kali</button>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-label">AI &amp; Agents</div>
+                <button type="button" data-page="aiskill" onclick="showPage('aiskill', this)"><span class="icon">&gt;</span> Cursor Skill</button>
+                <button type="button" data-page="airule" onclick="showPage('airule', this)"><span class="icon">&gt;</span> Cursor Rule</button>
+                <button type="button" data-page="aimcp" onclick="showPage('aimcp', this)"><span class="icon">&gt;</span> MCP Config</button>
+                <button type="button" data-page="aiprompt" onclick="showPage('aiprompt', this)"><span class="icon">&gt;</span> Prompt Builder</button>
+                <button type="button" data-page="aiclaude" onclick="showPage('aiclaude', this)"><span class="icon">&gt;</span> CLAUDE.md</button>
+                <button type="button" data-page="aiagents" onclick="showPage('aiagents', this)"><span class="icon">&gt;</span> AGENTS.md</button>
+                <button type="button" data-page="aihooks" onclick="showPage('aihooks', this)"><span class="icon">&gt;</span> Cursor Hooks</button>
             </div>
         </nav>
         <div class="sidebar-footer">Penguin · <a href="https://web.ap.it" target="_blank" rel="noopener"
@@ -2602,6 +2659,335 @@
                     <div class="notify" id="md-notify">Preview is sanitized; scripts are stripped</div>
                 </div>
 
+                <!-- CURSOR SKILL GENERATOR -->
+                <div id="page-aiskill" class="page">
+                    <div class="stat-bar">
+                        <span>CURSOR SKILL</span>
+                        <span>SKILL.md</span>
+                    </div>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate a <code>SKILL.md</code> file
+                        for Cursor Agent Skills. Personal skills go in <code>~/.cursor/skills/</code>, project skills in
+                        <code>.cursor/skills/</code>.</p>
+                    <div class="row">
+                        <div>
+                            <div class="label">Skill name (slug)</div>
+                            <input type="text" id="sk-name" placeholder="e.g. deploy-pipeline" oninput="genAiSkill()" autocomplete="off">
+                        </div>
+                        <div>
+                            <div class="label">Scope</div>
+                            <select id="sk-scope" onchange="genAiSkill()">
+                                <option value="project">Project (.cursor/skills/)</option>
+                                <option value="personal">Personal (~/.cursor/skills/)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="label">Description (when the agent should use this skill)_</div>
+                    <input type="text" id="sk-desc" placeholder="Deploy to staging. Use when the user asks to deploy or release."
+                        oninput="genAiSkill()" autocomplete="off">
+                    <div class="checkbox-row" style="margin-bottom:20px">
+                        <label><input type="checkbox" id="sk-disable-invoke" onchange="genAiSkill()"> disable-model-invocation (manual only)</label>
+                        <label><input type="checkbox" id="sk-scripts" onchange="genAiSkill()"> Include scripts/ section</label>
+                    </div>
+                    <div class="label">Instructions (markdown body)_</div>
+                    <textarea id="sk-body" class="ai-io" rows="8" oninput="genAiSkill()" spellcheck="false"
+                        placeholder="# Deploy Pipeline&#10;&#10;## Steps&#10;1. Run tests&#10;2. Build assets&#10;3. Deploy to staging"></textarea>
+                    <div class="ai-path-hint" id="sk-path-hint">Save as: .cursor/skills/deploy-pipeline/SKILL.md</div>
+                    <div class="btn-row" style="margin-bottom:12px">
+                        <button type="button" class="btn" onclick="genAiSkill()" style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('sk-out', 'sk-notify')">Copy output</button>
+                    </div>
+                    <div class="label">Output — SKILL.md_</div>
+                    <textarea id="sk-out" class="ai-io out" rows="14" readonly spellcheck="false"></textarea>
+                    <div class="notify" id="sk-notify">Runs locally; paste into your skill folder</div>
+                </div>
+
+                <!-- CURSOR RULE GENERATOR -->
+                <div id="page-airule" class="page">
+                    <div class="stat-bar">
+                        <span>CURSOR RULE</span>
+                        <span>.mdc · .cursor/rules/</span>
+                    </div>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate a Cursor rule file
+                        (<code>.mdc</code>) with YAML frontmatter for persistent AI guidance.</p>
+                    <div class="label">Rule title_</div>
+                    <input type="text" id="ru-title" placeholder="TypeScript Standards" oninput="genAiRule()" autocomplete="off">
+                    <div class="label">Description (shown in rule picker)_</div>
+                    <input type="text" id="ru-desc" placeholder="TypeScript conventions and patterns for this project"
+                        oninput="genAiRule()" autocomplete="off">
+                    <div class="row">
+                        <div>
+                            <div class="label">File globs (optional)</div>
+                            <input type="text" id="ru-globs" placeholder="**/*.ts, **/*.tsx" oninput="genAiRule()" autocomplete="off">
+                        </div>
+                        <div style="flex:0 0 160px">
+                            <div class="label">Always apply</div>
+                            <select id="ru-always" onchange="genAiRule()">
+                                <option value="false">Only matching files</option>
+                                <option value="true">Every session</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="label">Rule content (markdown)_</div>
+                    <textarea id="ru-body" class="ai-io" rows="8" oninput="genAiRule()" spellcheck="false"
+                        placeholder="- Use strict TypeScript&#10;- Prefer functional components&#10;- No any unless documented"></textarea>
+                    <div class="ai-path-hint" id="ru-path-hint">Save as: .cursor/rules/typescript-standards.mdc</div>
+                    <div class="btn-row" style="margin-bottom:12px">
+                        <button type="button" class="btn" onclick="genAiRule()" style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('ru-out', 'ru-notify')">Copy output</button>
+                    </div>
+                    <div class="label">Output — rule file_</div>
+                    <textarea id="ru-out" class="ai-io out" rows="14" readonly spellcheck="false"></textarea>
+                    <div class="notify" id="ru-notify">Rules apply automatically when matching files are open</div>
+                </div>
+
+                <!-- MCP CONFIG GENERATOR -->
+                <div id="page-aimcp" class="page">
+                    <div class="stat-bar">
+                        <span>MCP SERVER</span>
+                        <span>mcp.json</span>
+                    </div>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate an MCP server entry for
+                        Cursor (<code>~/.cursor/mcp.json</code> or project <code>.cursor/mcp.json</code>).</p>
+                    <div class="ai-presets">
+                        <button type="button" onclick="aiMcpPreset('npx')">npx stdio</button>
+                        <button type="button" onclick="aiMcpPreset('uvx')">uvx Python</button>
+                        <button type="button" onclick="aiMcpPreset('docker')">Docker</button>
+                        <button type="button" onclick="aiMcpPreset('sse')">SSE remote</button>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <div class="label">Server name (key)</div>
+                            <input type="text" id="mcp-name" placeholder="e.g. github, postgres, filesystem" oninput="genAiMcp()"
+                                autocomplete="off">
+                        </div>
+                        <div>
+                            <div class="label">Transport</div>
+                            <select id="mcp-transport" onchange="genAiMcp()">
+                                <option value="stdio">stdio (local command)</option>
+                                <option value="sse">sse (remote URL)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="mcp-stdio-fields">
+                        <div class="label">Command_</div>
+                        <input type="text" id="mcp-cmd" placeholder="npx" oninput="genAiMcp()" autocomplete="off">
+                        <div class="label">Args (one per line)_</div>
+                        <textarea id="mcp-args" class="ai-io" rows="3" oninput="genAiMcp()" spellcheck="false"
+                            placeholder="-y&#10;@modelcontextprotocol/server-filesystem&#10;/path/to/allowed/dir"></textarea>
+                        <div class="label">Environment variables (KEY=value, one per line)_</div>
+                        <textarea id="mcp-env" class="ai-io" rows="2" oninput="genAiMcp()" spellcheck="false"
+                            placeholder="GITHUB_PERSONAL_ACCESS_TOKEN=ghp_..."></textarea>
+                    </div>
+                    <div id="mcp-sse-fields" style="display:none">
+                        <div class="label">Server URL_</div>
+                        <input type="text" id="mcp-url" placeholder="https://api.example.com/mcp/sse" oninput="genAiMcp()"
+                            autocomplete="off">
+                    </div>
+                    <div class="btn-row" style="margin-bottom:12px">
+                        <button type="button" class="btn" onclick="genAiMcp()" style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('mcp-out', 'mcp-notify')">Copy output</button>
+                    </div>
+                    <div class="label">Output — mcp.json entry_</div>
+                    <textarea id="mcp-out" class="ai-io out" rows="14" readonly spellcheck="false"></textarea>
+                    <div class="notify" id="mcp-notify">Merge into mcpServers in your mcp.json</div>
+                </div>
+
+                <!-- PROMPT BUILDER -->
+                <div id="page-aiprompt" class="page">
+                    <div class="stat-bar">
+                        <span>PROMPT BUILDER</span>
+                        <span>SYSTEM · USER · AGENT</span>
+                    </div>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Compose structured prompts for
+                        LLM agents, Cursor, Claude, or custom pipelines.</p>
+                    <div class="ai-presets">
+                        <button type="button" onclick="aiPromptPreset('coder')">Code assistant</button>
+                        <button type="button" onclick="aiPromptPreset('reviewer')">Code reviewer</button>
+                        <button type="button" onclick="aiPromptPreset('writer')">Technical writer</button>
+                        <button type="button" onclick="aiPromptPreset('analyst')">Data analyst</button>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <div class="label">Role / persona_</div>
+                            <input type="text" id="pr-role" placeholder="Senior TypeScript engineer" oninput="genAiPrompt()"
+                                autocomplete="off">
+                        </div>
+                        <div>
+                            <div class="label">Output format</div>
+                            <select id="pr-format" onchange="genAiPrompt()">
+                                <option value="markdown">Markdown</option>
+                                <option value="json">JSON</option>
+                                <option value="plain">Plain text</option>
+                                <option value="code">Code only</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="label">Primary task_</div>
+                    <input type="text" id="pr-task" placeholder="Help the user write clean, tested, production-ready code"
+                        oninput="genAiPrompt()" autocomplete="off">
+                    <div class="label">Context (project, stack, constraints)_</div>
+                    <textarea id="pr-context" class="ai-io" rows="4" oninput="genAiPrompt()" spellcheck="false"
+                        placeholder="React 19 + TypeScript monorepo. Follow existing patterns in src/components/."></textarea>
+                    <div class="label">Rules / constraints (one per line)_</div>
+                    <textarea id="pr-rules" class="ai-io" rows="4" oninput="genAiPrompt()" spellcheck="false"
+                        placeholder="Never expose secrets&#10;Prefer small, focused diffs&#10;Ask before destructive git operations"></textarea>
+                    <div class="label">Examples (optional, user/assistant pairs)_</div>
+                    <textarea id="pr-examples" class="ai-io" rows="3" oninput="genAiPrompt()" spellcheck="false"
+                        placeholder="User: Add a login form&#10;Assistant: I'll create a LoginForm component with validation..."></textarea>
+                    <div class="btn-row" style="margin-bottom:12px">
+                        <button type="button" class="btn" onclick="genAiPrompt()" style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('pr-out', 'pr-notify')">Copy output</button>
+                    </div>
+                    <div class="label">Output — system prompt_</div>
+                    <textarea id="pr-out" class="ai-io out" rows="16" readonly spellcheck="false"></textarea>
+                    <div class="notify" id="pr-notify">Use as system prompt or project instructions</div>
+                </div>
+
+                <!-- CLAUDE.md GENERATOR -->
+                <div id="page-aiclaude" class="page">
+                    <div class="stat-bar">
+                        <span>CLAUDE.md</span>
+                        <span>PROJECT CONTEXT</span>
+                    </div>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate a <code>CLAUDE.md</code>
+                        file for Claude Code / agentic workflows — project overview, commands, and conventions.</p>
+                    <div class="label">Project name_</div>
+                    <input type="text" id="cl-name" placeholder="My App" oninput="genAiClaude()" autocomplete="off">
+                    <div class="label">Tech stack (comma-separated)_</div>
+                    <input type="text" id="cl-stack" placeholder="Laravel 13, PHP 8.3, Vue 3, PostgreSQL" oninput="genAiClaude()"
+                        autocomplete="off">
+                    <div class="label">Architecture / overview_</div>
+                    <textarea id="cl-arch" class="ai-io" rows="3" oninput="genAiClaude()" spellcheck="false"
+                        placeholder="Monolithic API with Vue SPA. Auth via Sanctum. Queue workers on Redis."></textarea>
+                    <div class="label">Key commands (one per line: label | command)_</div>
+                    <textarea id="cl-cmds" class="ai-io" rows="4" oninput="genAiClaude()" spellcheck="false"
+                        placeholder="Dev server | composer run dev&#10;Run tests | php artisan test&#10;Migrate | php artisan migrate"></textarea>
+                    <div class="label">Code conventions_</div>
+                    <textarea id="cl-conv" class="ai-io" rows="4" oninput="genAiClaude()" spellcheck="false"
+                        placeholder="- PSR-12, strict types&#10;- Form requests for validation&#10;- Feature tests for HTTP endpoints"></textarea>
+                    <div class="label">Important paths / gotchas_</div>
+                    <textarea id="cl-paths" class="ai-io" rows="3" oninput="genAiClaude()" spellcheck="false"
+                        placeholder="config/ — never commit .env&#10;app/Services/ — business logic lives here"></textarea>
+                    <div class="btn-row" style="margin-bottom:12px">
+                        <button type="button" class="btn" onclick="genAiClaude()" style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('cl-out', 'cl-notify')">Copy output</button>
+                    </div>
+                    <div class="label">Output — CLAUDE.md_</div>
+                    <textarea id="cl-out" class="ai-io out" rows="18" readonly spellcheck="false"></textarea>
+                    <div class="notify" id="cl-notify">Save as CLAUDE.md in project root</div>
+                </div>
+
+                <!-- AGENTS.md GENERATOR -->
+                <div id="page-aiagents" class="page">
+                    <div class="stat-bar">
+                        <span>AGENTS.md</span>
+                        <span>AGENTIC DEVELOPMENT</span>
+                    </div>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate an <code>AGENTS.md</code>
+                        file for AI coding agents — build steps, testing, PR conventions, and repo map.</p>
+                    <div class="label">Project overview_</div>
+                    <textarea id="ag-overview" class="ai-io" rows="3" oninput="genAiAgents()" spellcheck="false"
+                        placeholder="E-commerce platform. Backend in app/, frontend in resources/js/."></textarea>
+                    <div class="label">Setup &amp; build commands_</div>
+                    <textarea id="ag-build" class="ai-io" rows="3" oninput="genAiAgents()" spellcheck="false"
+                        placeholder="composer install&#10;npm ci && npm run build&#10;cp .env.example .env && php artisan key:generate"></textarea>
+                    <div class="label">Test commands_</div>
+                    <textarea id="ag-test" class="ai-io" rows="2" oninput="genAiAgents()" spellcheck="false"
+                        placeholder="php artisan test&#10;npm run test"></textarea>
+                    <div class="label">Directory structure (path — description, one per line)_</div>
+                    <textarea id="ag-dirs" class="ai-io" rows="4" oninput="genAiAgents()" spellcheck="false"
+                        placeholder="app/Http/Controllers — HTTP layer&#10;app/Models — Eloquent models&#10;tests/Feature — integration tests"></textarea>
+                    <div class="label">Code style &amp; PR rules_</div>
+                    <textarea id="ag-style" class="ai-io" rows="4" oninput="genAiAgents()" spellcheck="false"
+                        placeholder="- Run pint before commit&#10;- One feature per PR&#10;- Never force-push main"></textarea>
+                    <div class="btn-row" style="margin-bottom:12px">
+                        <button type="button" class="btn" onclick="genAiAgents()" style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('ag-out', 'ag-notify')">Copy output</button>
+                    </div>
+                    <div class="label">Output — AGENTS.md_</div>
+                    <textarea id="ag-out" class="ai-io out" rows="18" readonly spellcheck="false"></textarea>
+                    <div class="notify" id="ag-notify">Save as AGENTS.md in project root</div>
+                </div>
+
+                <!-- CURSOR HOOKS GENERATOR -->
+                <div id="page-aihooks" class="page">
+                    <div class="stat-bar">
+                        <span>CURSOR HOOKS</span>
+                        <span>hooks.json</span>
+                    </div>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate a <code>hooks.json</code>
+                        entry for Cursor automation — audit shell commands, format on save, gate MCP calls, and more.</p>
+                    <div class="ai-presets">
+                        <button type="button" onclick="aiHookPreset('shell-audit')">Shell audit</button>
+                        <button type="button" onclick="aiHookPreset('format-edit')">Format after edit</button>
+                        <button type="button" onclick="aiHookPreset('block-secrets')">Block secrets in prompt</button>
+                        <button type="button" onclick="aiHookPreset('mcp-gate')">MCP gate</button>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <div class="label">Hook event</div>
+                            <select id="hk-event" onchange="genAiHooks()">
+                                <option value="beforeShellExecution">beforeShellExecution</option>
+                                <option value="afterShellExecution">afterShellExecution</option>
+                                <option value="beforeMCPExecution">beforeMCPExecution</option>
+                                <option value="afterMCPExecution">afterMCPExecution</option>
+                                <option value="preToolUse">preToolUse</option>
+                                <option value="postToolUse">postToolUse</option>
+                                <option value="beforeSubmitPrompt">beforeSubmitPrompt</option>
+                                <option value="afterFileEdit">afterFileEdit</option>
+                                <option value="beforeReadFile">beforeReadFile</option>
+                                <option value="subagentStart">subagentStart</option>
+                                <option value="subagentStop">subagentStop</option>
+                                <option value="sessionStart">sessionStart</option>
+                                <option value="sessionEnd">sessionEnd</option>
+                                <option value="stop">stop</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="label">Hook type</div>
+                            <select id="hk-type" onchange="genAiHooks()">
+                                <option value="command">command (script)</option>
+                                <option value="prompt">prompt (LLM check)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <div class="label">Scope</div>
+                            <select id="hk-scope" onchange="genAiHooks()">
+                                <option value="project">Project (.cursor/hooks.json)</option>
+                                <option value="user">User (~/.cursor/hooks.json)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="label">On failure</div>
+                            <select id="hk-fail" onchange="genAiHooks()">
+                                <option value="open">Fail open (allow)</option>
+                                <option value="closed">Fail closed (deny)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="hk-cmd-fields">
+                        <div class="label">Command path_</div>
+                        <input type="text" id="hk-cmd" placeholder=".cursor/hooks/audit-shell.sh" oninput="genAiHooks()"
+                            autocomplete="off">
+                    </div>
+                    <div id="hk-prompt-fields" style="display:none">
+                        <div class="label">Prompt instruction_</div>
+                        <textarea id="hk-prompt" class="ai-io" rows="4" oninput="genAiHooks()" spellcheck="false"
+                            placeholder="Check if the shell command is safe. Deny rm -rf, curl | bash, and credential exfiltration."></textarea>
+                    </div>
+                    <div class="label">Matcher (optional, e.g. tool name or command pattern)_</div>
+                    <input type="text" id="hk-matcher" placeholder="Shell, MCP:*, or regex" oninput="genAiHooks()" autocomplete="off">
+                    <div class="btn-row" style="margin-bottom:12px">
+                        <button type="button" class="btn" onclick="genAiHooks()" style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('hk-out', 'hk-notify')">Copy output</button>
+                    </div>
+                    <div class="label">Output — hooks.json_</div>
+                    <textarea id="hk-out" class="ai-io out" rows="14" readonly spellcheck="false"></textarea>
+                    <div class="notify" id="hk-notify">Merge into hooks object; version must be 1</div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -2652,6 +3038,13 @@
             kali: 'root@penguin: ~/kali-tools',
             sanitize: 'root@penguin: ~/script-sanitizer',
             mdpreview: 'root@penguin: ~/markdown-preview',
+            aiskill: 'root@penguin: ~/cursor-skill',
+            airule: 'root@penguin: ~/cursor-rule',
+            aimcp: 'root@penguin: ~/mcp-config',
+            aiprompt: 'root@penguin: ~/prompt-builder',
+            aiclaude: 'root@penguin: ~/claude-md',
+            aiagents: 'root@penguin: ~/agents-md',
+            aihooks: 'root@penguin: ~/cursor-hooks',
         };
 
         function navButtonFor(id) {
@@ -2746,6 +3139,13 @@
             if (id === 'placeholder') genPlaceholder();
             if (id === 'randomimg') genRandomImg();
             if (id === 'mdpreview') runMdPreview();
+            if (id === 'aiskill') genAiSkill();
+            if (id === 'airule') genAiRule();
+            if (id === 'aimcp') genAiMcp();
+            if (id === 'aiprompt') genAiPrompt();
+            if (id === 'aiclaude') genAiClaude();
+            if (id === 'aiagents') genAiAgents();
+            if (id === 'aihooks') genAiHooks();
         }
 
         function initRouteFromHash() {
@@ -5671,6 +6071,378 @@
                 .trim()
                 .replace(/[\s-]+/g, sep);
             document.getElementById('slug-out').innerText = slug || '----';
+        }
+
+        /* ========== AI TOOLKIT ========== */
+        function aiSlugify(s) {
+            return (s || '').toLowerCase().trim()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/[\s_]+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '') || 'my-item';
+        }
+
+        function aiLines(text) {
+            return (text || '').split('\n').map(l => l.trim()).filter(Boolean);
+        }
+
+        function aiCopyOut(id, notifyId) {
+            const el = document.getElementById(id);
+            if (!el || !el.value.trim()) return;
+            navigator.clipboard.writeText(el.value).then(() => {
+                const notif = document.getElementById(notifyId);
+                if (notif) {
+                    notif.innerText = '\u2713 COPIED';
+                    notif.style.color = 'var(--neon)';
+                    const defaults = {
+                        'sk-notify': 'Runs locally; paste into your skill folder',
+                        'ru-notify': 'Rules apply automatically when matching files are open',
+                        'mcp-notify': 'Merge into mcpServers in your mcp.json',
+                        'pr-notify': 'Use as system prompt or project instructions',
+                        'cl-notify': 'Save as CLAUDE.md in project root',
+                        'ag-notify': 'Save as AGENTS.md in project root',
+                        'hk-notify': 'Merge into hooks object; version must be 1',
+                    };
+                    setTimeout(() => {
+                        notif.innerText = defaults[notifyId] || 'Click to copy';
+                        notif.style.color = '#444';
+                    }, 1500);
+                }
+            });
+        }
+
+        function genAiSkill() {
+            const name = aiSlugify(document.getElementById('sk-name').value) || 'my-skill';
+            const desc = document.getElementById('sk-desc').value.trim();
+            const scope = document.getElementById('sk-scope').value;
+            const body = document.getElementById('sk-body').value.trim();
+            const disable = document.getElementById('sk-disable-invoke').checked;
+            const scripts = document.getElementById('sk-scripts').checked;
+            const base = scope === 'personal' ? '~/.cursor/skills/' : '.cursor/skills/';
+            document.getElementById('sk-path-hint').textContent = 'Save as: ' + base + name + '/SKILL.md';
+
+            let fm = '---\nname: ' + name + '\n';
+            fm += 'description: ' + (desc || 'Describe when the agent should use this skill.') + '\n';
+            if (disable) fm += 'disable-model-invocation: true\n';
+            fm += '---\n\n';
+
+            let out = fm;
+            const title = name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            out += '# ' + title + '\n\n';
+            if (body) {
+                out += body + '\n';
+            } else {
+                out += '## Overview\n\nDescribe the workflow this skill enables.\n\n';
+                out += '## Steps\n\n1. First step\n2. Second step\n3. Verify outcome\n';
+            }
+            if (scripts) {
+                out += '\n## Scripts\n\nOptional utility scripts in `scripts/`:\n\n';
+                out += '- `scripts/validate.sh` — run checks before applying\n';
+            }
+            document.getElementById('sk-out').value = out.trimEnd() + '\n';
+        }
+
+        function genAiRule() {
+            const title = document.getElementById('ru-title').value.trim() || 'Project Rule';
+            const desc = document.getElementById('ru-desc').value.trim();
+            const globs = document.getElementById('ru-globs').value.trim();
+            const always = document.getElementById('ru-always').value === 'true';
+            const body = document.getElementById('ru-body').value.trim();
+            const slug = aiSlugify(title);
+            document.getElementById('ru-path-hint').textContent = 'Save as: .cursor/rules/' + slug + '.mdc';
+
+            let fm = '---\n';
+            fm += 'description: ' + (desc || title) + '\n';
+            if (always) {
+                fm += 'alwaysApply: true\n';
+            } else if (globs) {
+                fm += 'globs: ' + globs + '\n';
+                fm += 'alwaysApply: false\n';
+            } else {
+                fm += 'alwaysApply: false\n';
+            }
+            fm += '---\n\n';
+
+            let out = fm + '# ' + title + '\n\n';
+            if (body) {
+                out += body.split('\n').map(l => l.startsWith('-') ? l : '- ' + l).join('\n');
+            } else {
+                out += '- Add your project conventions here\n';
+            }
+            document.getElementById('ru-out').value = out.trimEnd() + '\n';
+        }
+
+        function genAiMcp() {
+            const transport = document.getElementById('mcp-transport').value;
+            document.getElementById('mcp-stdio-fields').style.display = transport === 'stdio' ? 'block' : 'none';
+            document.getElementById('mcp-sse-fields').style.display = transport === 'sse' ? 'block' : 'none';
+
+            const name = document.getElementById('mcp-name').value.trim() || 'my-server';
+            let entry;
+            if (transport === 'sse') {
+                const url = document.getElementById('mcp-url').value.trim() || 'https://example.com/mcp/sse';
+                entry = { url: url };
+            } else {
+                const cmd = document.getElementById('mcp-cmd').value.trim() || 'npx';
+                const args = aiLines(document.getElementById('mcp-args').value);
+                entry = { command: cmd, args: args.length ? args : ['-y', '@modelcontextprotocol/server-example'] };
+                const envLines = aiLines(document.getElementById('mcp-env').value);
+                if (envLines.length) {
+                    entry.env = {};
+                    envLines.forEach(line => {
+                        const eq = line.indexOf('=');
+                        if (eq > 0) entry.env[line.slice(0, eq).trim()] = line.slice(eq + 1).trim();
+                    });
+                }
+            }
+            const out = {
+                mcpServers: {}
+            };
+            out.mcpServers[name] = entry;
+            document.getElementById('mcp-out').value = JSON.stringify(out, null, 2) + '\n';
+        }
+
+        function aiMcpPreset(kind) {
+            const presets = {
+                npx: {
+                    name: 'filesystem', transport: 'stdio', cmd: 'npx',
+                    args: '-y\n@modelcontextprotocol/server-filesystem\n/Users/your-username/projects', env: ''
+                },
+                uvx: {
+                    name: 'postgres', transport: 'stdio', cmd: 'uvx',
+                    args: 'mcp-server-postgres\npostgresql://user:pass@localhost/dbname', env: ''
+                },
+                docker: {
+                    name: 'docker-mcp', transport: 'stdio', cmd: 'docker',
+                    args: 'run\n-i\n--rm\nmcp/example-server', env: ''
+                },
+                sse: {
+                    name: 'remote-api', transport: 'sse', url: 'https://api.example.com/mcp/sse'
+                }
+            };
+            const p = presets[kind];
+            if (!p) return;
+            document.getElementById('mcp-name').value = p.name;
+            document.getElementById('mcp-transport').value = p.transport;
+            if (p.transport === 'sse') {
+                document.getElementById('mcp-url').value = p.url;
+            } else {
+                document.getElementById('mcp-cmd').value = p.cmd;
+                document.getElementById('mcp-args').value = p.args;
+                document.getElementById('mcp-env').value = p.env || '';
+            }
+            genAiMcp();
+        }
+
+        function genAiPrompt() {
+            const role = document.getElementById('pr-role').value.trim();
+            const task = document.getElementById('pr-task').value.trim();
+            const context = document.getElementById('pr-context').value.trim();
+            const rules = aiLines(document.getElementById('pr-rules').value);
+            const examples = document.getElementById('pr-examples').value.trim();
+            const format = document.getElementById('pr-format').value;
+
+            let out = '';
+            if (role) out += 'You are ' + role + '.\n\n';
+            if (task) out += '## Task\n' + task + '\n\n';
+            if (context) out += '## Context\n' + context + '\n\n';
+            if (rules.length) {
+                out += '## Rules\n';
+                rules.forEach(r => { out += '- ' + r + '\n'; });
+                out += '\n';
+            }
+            const formatMap = {
+                markdown: 'Respond in clear Markdown with headings and code blocks where appropriate.',
+                json: 'Respond with valid JSON only. No markdown fences unless asked.',
+                plain: 'Respond in plain text. No markdown formatting.',
+                code: 'Respond with code only unless explanation is explicitly requested.',
+            };
+            out += '## Output format\n' + formatMap[format] + '\n';
+            if (examples) {
+                out += '\n## Examples\n' + examples + '\n';
+            }
+            document.getElementById('pr-out').value = out.trimEnd() + '\n';
+        }
+
+        function aiPromptPreset(kind) {
+            const presets = {
+                coder: {
+                    role: 'a senior software engineer and pair programmer',
+                    task: 'Help the user write clean, tested, production-ready code with minimal scope.',
+                    context: 'Match existing project conventions. Read surrounding code before editing.',
+                    rules: 'Minimize diff size\nReuse existing abstractions\nOnly add tests when they add real value\nNever commit secrets',
+                    format: 'markdown'
+                },
+                reviewer: {
+                    role: 'a meticulous code reviewer',
+                    task: 'Review code for bugs, security issues, performance, and maintainability.',
+                    context: 'Focus on real issues, not style nitpicks unless they affect correctness.',
+                    rules: 'Cite file paths and line ranges\nPrioritize security and data integrity\nSuggest concrete fixes',
+                    format: 'markdown'
+                },
+                writer: {
+                    role: 'a technical writer',
+                    task: 'Produce clear documentation for developers.',
+                    context: 'Audience: engineers integrating or maintaining the system.',
+                    rules: 'Use active voice\nInclude runnable examples\nDefine acronyms on first use',
+                    format: 'markdown'
+                },
+                analyst: {
+                    role: 'a data analyst',
+                    task: 'Analyze data, surface insights, and recommend actions.',
+                    context: 'Validate assumptions. State limitations of the data.',
+                    rules: 'Show methodology\nQuantify uncertainty\nPrefer tables and charts in Markdown',
+                    format: 'markdown'
+                }
+            };
+            const p = presets[kind];
+            if (!p) return;
+            document.getElementById('pr-role').value = p.role;
+            document.getElementById('pr-task').value = p.task;
+            document.getElementById('pr-context').value = p.context;
+            document.getElementById('pr-rules').value = p.rules;
+            document.getElementById('pr-format').value = p.format;
+            genAiPrompt();
+        }
+
+        function genAiClaude() {
+            const name = document.getElementById('cl-name').value.trim() || 'Project';
+            const stack = document.getElementById('cl-stack').value.trim();
+            const arch = document.getElementById('cl-arch').value.trim();
+            const cmds = aiLines(document.getElementById('cl-cmds').value);
+            const conv = document.getElementById('cl-conv').value.trim();
+            const paths = document.getElementById('cl-paths').value.trim();
+
+            let out = '# ' + name + '\n\n';
+            if (stack) out += '**Stack:** ' + stack + '\n\n';
+            out += '## Overview\n\n';
+            out += arch || 'Brief description of the project architecture and purpose.\n';
+            out += '\n\n## Commands\n\n';
+            if (cmds.length) {
+                cmds.forEach(line => {
+                    const sep = line.indexOf('|');
+                    if (sep > 0) {
+                        out += '- **' + line.slice(0, sep).trim() + ':** `' + line.slice(sep + 1).trim() + '`\n';
+                    } else {
+                        out += '- `' + line + '`\n';
+                    }
+                });
+            } else {
+                out += '- **Dev:** `composer run dev` or `npm run dev`\n';
+                out += '- **Test:** `php artisan test` or `npm test`\n';
+            }
+            out += '\n## Conventions\n\n';
+            out += conv || '- Follow existing patterns in the codebase\n- Keep changes focused and minimal\n';
+            if (paths) {
+                out += '\n## Important paths\n\n' + paths.split('\n').map(l => '- ' + l).join('\n') + '\n';
+            }
+            out += '\n## Notes for agents\n\n';
+            out += '- Read this file and nearby code before making changes.\n';
+            out += '- Do not run destructive git commands without explicit user approval.\n';
+            document.getElementById('cl-out').value = out.trimEnd() + '\n';
+        }
+
+        function genAiAgents() {
+            const overview = document.getElementById('ag-overview').value.trim();
+            const build = aiLines(document.getElementById('ag-build').value);
+            const test = aiLines(document.getElementById('ag-test').value);
+            const dirs = aiLines(document.getElementById('ag-dirs').value);
+            const style = document.getElementById('ag-style').value.trim();
+
+            let out = '# AGENTS.md\n\n';
+            out += 'Instructions for AI coding agents working in this repository.\n\n';
+            out += '## Project overview\n\n';
+            out += overview || 'Describe what this project does and its main components.\n';
+            out += '\n## Setup\n\n```bash\n';
+            out += build.length ? build.join('\n') : 'npm install\nnpm run build';
+            out += '\n```\n\n## Testing\n\n```bash\n';
+            out += test.length ? test.join('\n') : 'npm test';
+            out += '\n```\n\n';
+            if (dirs.length) {
+                out += '## Repository map\n\n';
+                dirs.forEach(line => {
+                    const sep = line.indexOf('—');
+                    const sep2 = line.indexOf('-');
+                    const idx = sep > 0 ? sep : (sep2 > 0 && line.indexOf('/') >= 0 ? sep2 : -1);
+                    if (idx > 0) {
+                        out += '- `' + line.slice(0, idx).trim() + '` — ' + line.slice(idx + 1).trim() + '\n';
+                    } else {
+                        out += '- ' + line + '\n';
+                    }
+                });
+                out += '\n';
+            }
+            out += '## Code style\n\n';
+            out += style || '- Match existing conventions\n- Prefer small, reviewable diffs\n';
+            out += '\n## Agent guidelines\n\n';
+            out += '- Run tests relevant to your changes before finishing.\n';
+            out += '- Do not modify unrelated files.\n';
+            out += '- Ask before force-pushing or amending published commits.\n';
+            document.getElementById('ag-out').value = out.trimEnd() + '\n';
+        }
+
+        function genAiHooks() {
+            const type = document.getElementById('hk-type').value;
+            document.getElementById('hk-cmd-fields').style.display = type === 'command' ? 'block' : 'none';
+            document.getElementById('hk-prompt-fields').style.display = type === 'prompt' ? 'block' : 'none';
+
+            const event = document.getElementById('hk-event').value;
+            const scope = document.getElementById('hk-scope').value;
+            const fail = document.getElementById('hk-fail').value;
+            const matcher = document.getElementById('hk-matcher').value.trim();
+            const cmdPath = document.getElementById('hk-cmd').value.trim() ||
+                (scope === 'user' ? './hooks/my-hook.sh' : '.cursor/hooks/my-hook.sh');
+            const prompt = document.getElementById('hk-prompt').value.trim();
+
+            const hook = { type: type };
+            if (type === 'command') {
+                hook.command = cmdPath;
+            } else {
+                hook.prompt = prompt || 'Review the event payload. Deny unsafe or policy-violating actions.';
+            }
+            if (matcher) hook.matcher = matcher;
+            if (fail === 'closed') hook.failClosed = true;
+
+            const out = {
+                version: 1,
+                hooks: {}
+            };
+            out.hooks[event] = [hook];
+            document.getElementById('hk-out').value = JSON.stringify(out, null, 2) + '\n';
+        }
+
+        function aiHookPreset(kind) {
+            const presets = {
+                'shell-audit': {
+                    event: 'beforeShellExecution', type: 'command',
+                    cmd: '.cursor/hooks/audit-shell.sh', matcher: '', prompt: '', fail: 'open'
+                },
+                'format-edit': {
+                    event: 'afterFileEdit', type: 'command',
+                    cmd: '.cursor/hooks/format-on-save.sh', matcher: '', prompt: '', fail: 'open'
+                },
+                'block-secrets': {
+                    event: 'beforeSubmitPrompt', type: 'prompt',
+                    cmd: '', matcher: '',
+                    prompt: 'Deny prompts that contain API keys, passwords, or private tokens. Ask the user to use environment variables instead.',
+                    fail: 'closed'
+                },
+                'mcp-gate': {
+                    event: 'beforeMCPExecution', type: 'prompt',
+                    cmd: '', matcher: 'MCP:*',
+                    prompt: 'Allow only MCP tools required for the current task. Deny broad filesystem or network access unless explicitly requested.',
+                    fail: 'closed'
+                }
+            };
+            const p = presets[kind];
+            if (!p) return;
+            document.getElementById('hk-event').value = p.event;
+            document.getElementById('hk-type').value = p.type;
+            document.getElementById('hk-cmd').value = p.cmd;
+            document.getElementById('hk-matcher').value = p.matcher;
+            document.getElementById('hk-prompt').value = p.prompt;
+            document.getElementById('hk-fail').value = p.fail;
+            genAiHooks();
         }
     </script>
     <script async src="https://stats.web.ap.it/i/cc5736cc-538c-48e5-a19a-eb6bbd056d47.js"></script>
