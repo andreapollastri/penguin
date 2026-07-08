@@ -1114,6 +1114,7 @@
                 <button type="button" data-page="appkey" onclick="showPage('appkey', this)"><span class="icon">&gt;</span> APP_KEY</button>
                 <button type="button" data-page="hash" onclick="showPage('hash', this)"><span class="icon">&gt;</span> Hash</button>
                 <button type="button" data-page="jwt" onclick="showPage('jwt', this)"><span class="icon">&gt;</span> JWT</button>
+                <button type="button" data-page="sqids" onclick="showPage('sqids', this)"><span class="icon">&gt;</span> Sqids</button>
             </div>
             <div class="nav-section">
                 <div class="nav-section-label">Encoding &amp; IDs</div>
@@ -1599,6 +1600,47 @@
                     </div>
 
                     <div class="notify" id="jwt-notify">Click to copy</div>
+                </div>
+
+                <!-- SQIDS ENCODER / DECODER -->
+                <div id="page-sqids" class="page">
+                    <div class="stat-bar">
+                        <span>SQIDS</span>
+                        <span>ENCODE / DECODE</span>
+                    </div>
+                    <div class="btn-row" style="margin-bottom:25px">
+                        <button class="btn" id="sqids-mode-encode" onclick="setSqidsMode('encode')"
+                            style="background:var(--neon);color:#000">Encode</button>
+                        <button class="btn" id="sqids-mode-decode" onclick="setSqidsMode('decode')">Decode</button>
+                    </div>
+
+                    <div id="sqids-encode-section">
+                        <div class="label">Numbers (comma or space separated)_</div>
+                        <input type="text" id="sqids-encode-input" placeholder="e.g. 1, 2, 3 or 12345"
+                            oninput="doSqids()" autocomplete="off">
+                        <div class="row" style="margin-top:14px">
+                            <div>
+                                <div class="label">Min length (optional)</div>
+                                <input type="number" id="sqids-min-len" value="0" min="0" max="255" oninput="doSqids()">
+                            </div>
+                        </div>
+                        <div class="label" style="margin-top:14px">Custom alphabet (optional)</div>
+                        <input type="text" id="sqids-alphabet" placeholder="Leave empty for default"
+                            oninput="doSqids()" autocomplete="off" spellcheck="false">
+                    </div>
+
+                    <div id="sqids-decode-section" style="display:none">
+                        <div class="label">Sqids ID_</div>
+                        <input type="text" id="sqids-decode-input" placeholder="e.g. 86Rf07"
+                            oninput="doSqids()" autocomplete="off" spellcheck="false">
+                        <div class="label" style="margin-top:14px">Custom alphabet (optional)</div>
+                        <input type="text" id="sqids-decode-alphabet" placeholder="Leave empty for default"
+                            oninput="doSqids()" autocomplete="off" spellcheck="false">
+                    </div>
+
+                    <div class="label" style="margin-top:20px">Output</div>
+                    <div class="val small" id="sqids-out" onclick="clip('sqids-out')">----</div>
+                    <div class="notify" id="sqids-notify">Click output to copy · <a href="https://sqids.org/" target="_blank" rel="noopener" style="color:#444">sqids.org</a></div>
                 </div>
 
                 <!-- BASE64 ENCODER/DECODER -->
@@ -2824,6 +2866,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sql-formatter@15.4.6/dist/sql-formatter.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sqids@0.3.0/dist/sqids.min.js"></script>
     <script>
         /* ========== NAVIGATION ========== */
         const pageTitles = {
@@ -2833,6 +2876,7 @@
             appkey: 'root@penguin: ~/app-key',
             hash: 'root@penguin: ~/hash',
             jwt: 'root@penguin: ~/jwt',
+            sqids: 'root@penguin: ~/sqids',
             uuid: 'root@penguin: ~/uuid',
             jsonld: 'root@penguin: ~/json-ld',
             fakeid: 'root@penguin: ~/fake-identity',
@@ -4747,6 +4791,94 @@
             pl.exp = pl.exp || now + 3600;
             ta.value = JSON.stringify(pl, null, 2);
             encodeJwt();
+        }
+
+        /* ========== SQIDS ========== */
+        let sqidsMode = 'encode';
+
+        function setSqidsMode(mode) {
+            sqidsMode = mode;
+            document.getElementById('sqids-encode-section').style.display = mode === 'encode' ? 'block' : 'none';
+            document.getElementById('sqids-decode-section').style.display = mode === 'decode' ? 'block' : 'none';
+            document.getElementById('sqids-mode-encode').style.background = mode === 'encode' ? 'var(--neon)' : 'transparent';
+            document.getElementById('sqids-mode-encode').style.color = mode === 'encode' ? '#000' : 'var(--neon)';
+            document.getElementById('sqids-mode-decode').style.background = mode === 'decode' ? 'var(--neon)' : 'transparent';
+            document.getElementById('sqids-mode-decode').style.color = mode === 'decode' ? '#000' : 'var(--neon)';
+            doSqids();
+        }
+
+        function parseSqidsNumbers(raw) {
+            if (!raw) return [];
+            return raw.split(/[\s,]+/).filter(Boolean).map((part) => {
+                if (!/^\d+$/.test(part)) throw new Error('Numbers must be non-negative integers');
+                const n = Number(part);
+                if (!Number.isSafeInteger(n) || n < 0) throw new Error('Numbers must be non-negative integers');
+                return n;
+            });
+        }
+
+        function buildSqidsInstance(alphabetId, minLenId) {
+            if (typeof Sqids === 'undefined') throw new Error('Sqids library failed to load');
+            const opts = {};
+            const alphabet = document.getElementById(alphabetId).value.trim();
+            if (alphabet) opts.alphabet = alphabet;
+            if (minLenId) {
+                const minLength = parseInt(document.getElementById(minLenId).value, 10);
+                if (!Number.isNaN(minLength) && minLength > 0) opts.minLength = minLength;
+            }
+            return new Sqids(opts);
+        }
+
+        function doSqids() {
+            const out = document.getElementById('sqids-out');
+            const notify = document.getElementById('sqids-notify');
+            if (typeof Sqids === 'undefined') {
+                out.innerText = '----';
+                notify.innerText = 'Sqids library failed to load';
+                notify.style.color = '#ff6b6b';
+                return;
+            }
+            notify.style.color = 'var(--neon)';
+            try {
+                if (sqidsMode === 'encode') {
+                    const raw = document.getElementById('sqids-encode-input').value.trim();
+                    if (!raw) {
+                        out.innerText = '----';
+                        notify.innerText = 'Enter numbers to encode · sqids.org';
+                        return;
+                    }
+                    const numbers = parseSqidsNumbers(raw);
+                    if (!numbers.length) {
+                        out.innerText = '----';
+                        notify.innerText = 'Enter at least one number';
+                        return;
+                    }
+                    const sqids = buildSqidsInstance('sqids-alphabet', 'sqids-min-len');
+                    out.innerText = sqids.encode(numbers);
+                    notify.innerText = 'Encoded ' + numbers.length + ' number(s) · click output to copy';
+                } else {
+                    const raw = document.getElementById('sqids-decode-input').value.trim();
+                    if (!raw) {
+                        out.innerText = '----';
+                        notify.innerText = 'Enter a Sqids ID to decode · sqids.org';
+                        return;
+                    }
+                    const sqids = buildSqidsInstance('sqids-decode-alphabet', null);
+                    const numbers = sqids.decode(raw);
+                    if (!numbers.length) {
+                        out.innerText = '----';
+                        notify.innerText = 'Invalid Sqids ID or alphabet mismatch';
+                        notify.style.color = '#ff6b6b';
+                        return;
+                    }
+                    out.innerText = numbers.join(', ');
+                    notify.innerText = 'Decoded to ' + numbers.length + ' number(s) · click output to copy';
+                }
+            } catch (e) {
+                out.innerText = '----';
+                notify.innerText = (e && e.message) ? e.message : 'Sqids error';
+                notify.style.color = '#ff6b6b';
+            }
         }
 
         /* ========== BASE64 ========== */
