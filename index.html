@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0d0d0d">
     <meta name="description"
-        content="Penguin — Free online generators and utilities for developers: password, UUID, JWT, bcrypt, Base64, QR code, barcode, OpenAPI/Swagger, AI toolkit (Cursor Skills, Rules, MCP, prompts, CLAUDE.md, AGENTS.md, hooks, spec-driven), placeholder and random images, Laravel/PHP/Kali snippets, script sanitizer, Markdown preview, code format/minify, fake REST API, cron, timestamp, cURL, and more. No signup required.">
+        content="Penguin — Free online generators and utilities for developers: password, UUID, JWT, bcrypt, Base64, QR code, barcode, OpenAPI/Swagger, AI toolkit (Cursor Skills, Rules, MCP, prompts, CLAUDE.md, AGENTS.md, hooks, spec-driven), GitHub Actions & GitLab CI pipeline builder for Laravel/PHP, placeholder and random images, Laravel/PHP/Kali snippets, script sanitizer, Markdown preview, code format/minify, fake REST API, cron, timestamp, cURL, and more. No signup required.">
     <title>Penguin — Generators and utilities for developers</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%90%A7</text></svg>">
@@ -877,6 +877,46 @@
             color: var(--neon);
         }
 
+        .ci-step-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .ci-step-group {
+            background: #0a0a0a;
+            border: 1px solid #1e1e1e;
+            border-radius: 5px;
+            padding: 10px 12px;
+        }
+
+        .ci-step-title {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            color: var(--neon);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .ci-step-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .ci-step-group label:last-child {
+            margin-bottom: 0;
+        }
+
+        .ci-step-group input[type="checkbox"] {
+            accent-color: var(--neon);
+        }
+
         /* ===== OPENAPI / MD / SANITIZER ===== */
         #swagger-ui-mount {
             min-height: 420px;
@@ -1215,6 +1255,7 @@
                 <button type="button" data-page="linux" onclick="showPage('linux', this)"><span class="icon">&gt;</span> Linux</button>
                 <button type="button" data-page="chmod" onclick="showPage('chmod', this)"><span class="icon">&gt;</span> Chmod</button>
                 <button type="button" data-page="laravel" onclick="showPage('laravel', this)"><span class="icon">&gt;</span> Laravel</button>
+                <button type="button" data-page="cipipe" onclick="showPage('cipipe', this)"><span class="icon">&gt;</span> CI/CD Pipeline</button>
                 <button type="button" data-page="phpsnip" onclick="showPage('phpsnip', this)"><span class="icon">&gt;</span> PHP snippets</button>
                 <button type="button" data-page="kali" onclick="showPage('kali', this)"><span class="icon">&gt;</span> Kali</button>
             </div>
@@ -2587,6 +2628,155 @@
                     <div class="notify" id="laravel-notify" style="margin-top:15px">Click any snippet to copy</div>
                 </div>
 
+                <!-- CI/CD PIPELINE GENERATOR -->
+                <div id="page-cipipe" class="page">
+                    <div class="stat-bar">
+                        <span>GITHUB ACTIONS · GITLAB CI</span>
+                        <span>PHP · LARAVEL · SSH DEPLOY</span>
+                    </div>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.65">Ship Laravel apps with
+                        confidence — compose production-ready pipelines with Composer audit, Pint, PHPStan, Pest/PHPUnit,
+                        Vite builds, and zero-downtime SSH deploys. Pick a preset or tune every step.</p>
+
+                    <div class="ai-presets" id="ci-presets">
+                        <button type="button" onclick="ciPreset('laravel-full')">Laravel full stack</button>
+                        <button type="button" onclick="ciPreset('laravel-ci')">Laravel CI only</button>
+                        <button type="button" onclick="ciPreset('laravel-pest')">Laravel + Pest</button>
+                        <button type="button" onclick="ciPreset('php-package')">PHP package</button>
+                        <button type="button" onclick="ciPreset('deploy-ssh')">SSH deploy only</button>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <div class="label">Platform</div>
+                            <select id="ci-platform" onchange="genCiPipe()">
+                                <option value="github">GitHub Actions</option>
+                                <option value="gitlab">GitLab CI</option>
+                            </select>
+                        </div>
+                        <div style="flex:0 0 100px">
+                            <div class="label">PHP</div>
+                            <select id="ci-php" onchange="genCiPipe()">
+                                <option value="8.2">8.2</option>
+                                <option value="8.3" selected>8.3</option>
+                                <option value="8.4">8.4</option>
+                            </select>
+                        </div>
+                        <div style="flex:0 0 100px">
+                            <div class="label">Node</div>
+                            <select id="ci-node" onchange="genCiPipe()">
+                                <option value="18">18</option>
+                                <option value="20" selected>20</option>
+                                <option value="22">22</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="label">Project type</div>
+                            <select id="ci-project" onchange="genCiPipe()">
+                                <option value="laravel" selected>Laravel application</option>
+                                <option value="package">PHP package / library</option>
+                                <option value="php">Plain PHP project</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <div class="label">Test database</div>
+                            <select id="ci-db" onchange="genCiPipe()">
+                                <option value="sqlite" selected>SQLite (in-memory / file)</option>
+                                <option value="mysql">MySQL 8</option>
+                                <option value="pgsql">PostgreSQL 16</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="label">Deploy branch</div>
+                            <input type="text" id="ci-branch" value="main" placeholder="main" oninput="genCiPipe()"
+                                autocomplete="off">
+                        </div>
+                        <div>
+                            <div class="label">Runner</div>
+                            <select id="ci-runner" onchange="genCiPipe()">
+                                <option value="cloud" selected>Cloud (ubuntu-latest / shared)</option>
+                                <option value="self">Self-hosted</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="label" style="margin-top:8px">Pipeline steps</div>
+                    <div class="ci-step-grid">
+                        <div class="ci-step-group">
+                            <div class="ci-step-title">Composer</div>
+                            <label><input type="checkbox" id="ci-s-composer-install" checked onchange="genCiPipe()"> install</label>
+                            <label><input type="checkbox" id="ci-s-composer-validate" checked onchange="genCiPipe()"> validate --strict</label>
+                            <label><input type="checkbox" id="ci-s-composer-audit" checked onchange="genCiPipe()"> audit (security)</label>
+                            <label><input type="checkbox" id="ci-s-cache-composer" checked onchange="genCiPipe()"> cache vendor/</label>
+                        </div>
+                        <div class="ci-step-group">
+                            <div class="ci-step-title">Quality</div>
+                            <label><input type="checkbox" id="ci-s-pint" checked onchange="genCiPipe()"> Pint --test</label>
+                            <label><input type="checkbox" id="ci-s-phpstan" checked onchange="genCiPipe()"> PHPStan analyse</label>
+                            <label><input type="checkbox" id="ci-s-php-lint" onchange="genCiPipe()"> php -l (syntax)</label>
+                        </div>
+                        <div class="ci-step-group">
+                            <div class="ci-step-title">Laravel tests</div>
+                            <label><input type="checkbox" id="ci-s-env-setup" checked onchange="genCiPipe()"> .env + key:generate</label>
+                            <label><input type="checkbox" id="ci-s-migrate" checked onchange="genCiPipe()"> migrate (testing)</label>
+                            <label><input type="checkbox" id="ci-s-artisan-test" checked onchange="ciTestChoice('artisan')"> php artisan test</label>
+                            <label><input type="checkbox" id="ci-s-pest" onchange="ciTestChoice('pest')"> Pest</label>
+                            <label><input type="checkbox" id="ci-s-phpunit" onchange="ciTestChoice('phpunit')"> PHPUnit</label>
+                        </div>
+                        <div class="ci-step-group">
+                            <div class="ci-step-title">Frontend</div>
+                            <label><input type="checkbox" id="ci-s-npm-ci" checked onchange="genCiPipe()"> npm ci</label>
+                            <label><input type="checkbox" id="ci-s-npm-build" checked onchange="genCiPipe()"> npm run build</label>
+                            <label><input type="checkbox" id="ci-s-npm-lint" onchange="genCiPipe()"> npm run lint</label>
+                            <label><input type="checkbox" id="ci-s-cache-npm" checked onchange="genCiPipe()"> cache node_modules</label>
+                        </div>
+                        <div class="ci-step-group">
+                            <div class="ci-step-title">Deploy (SSH)</div>
+                            <label><input type="checkbox" id="ci-s-deploy" checked onchange="ciToggleDeploy(); genCiPipe()"> SSH deploy</label>
+                            <label><input type="checkbox" id="ci-s-optimize" checked onchange="genCiPipe()"> artisan optimize</label>
+                            <label><input type="checkbox" id="ci-s-queue" checked onchange="genCiPipe()"> queue:restart</label>
+                            <label><input type="checkbox" id="ci-s-horizon" onchange="genCiPipe()"> horizon:terminate</label>
+                            <label><input type="checkbox" id="ci-s-storage-link" onchange="genCiPipe()"> storage:link</label>
+                        </div>
+                    </div>
+
+                    <div id="ci-deploy-fields">
+                        <div class="row" style="margin-top:12px">
+                            <div>
+                                <div class="label">SSH host_</div>
+                                <input type="text" id="ci-deploy-host" value="deploy.example.com" oninput="genCiPipe()"
+                                    autocomplete="off">
+                            </div>
+                            <div style="flex:0 0 120px">
+                                <div class="label">User</div>
+                                <input type="text" id="ci-deploy-user" value="deploy" oninput="genCiPipe()"
+                                    autocomplete="off">
+                            </div>
+                            <div style="flex:0 0 80px">
+                                <div class="label">Port</div>
+                                <input type="text" id="ci-deploy-port" value="22" oninput="genCiPipe()" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="label">Remote path_</div>
+                        <input type="text" id="ci-deploy-path" value="/var/www/laravel" oninput="genCiPipe()"
+                            autocomplete="off">
+                    </div>
+
+                    <div class="ai-path-hint" id="ci-path-hint">Save as: .github/workflows/laravel-ci.yml</div>
+                    <div class="btn-row" style="margin-bottom:12px">
+                        <button type="button" class="btn" onclick="genCiPipe()" style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('ci-out', 'ci-notify')">Copy output</button>
+                    </div>
+                    <div class="label">Generated pipeline_</div>
+                    <textarea id="ci-out" class="ai-io out" rows="26" readonly spellcheck="false"
+                        onclick="this.select()"></textarea>
+                    <div class="ai-path-hint" id="ci-secrets-hint" style="margin-top:8px"></div>
+                    <div class="notify" id="ci-notify">Runs locally; paste into your repo and configure secrets</div>
+                </div>
+
                 <!-- PHP SNIPPETS -->
                 <div id="page-phpsnip" class="page">
                     <div class="label">Search_</div>
@@ -3432,6 +3622,7 @@ Feature: Order lookup via GraphQL
             placeholder: 'root@penguin: ~/placeholder-img',
             randomimg: 'root@penguin: ~/random-img',
             laravel: 'root@penguin: ~/laravel-snippets',
+            cipipe: 'root@penguin: ~/ci-pipeline',
             phpsnip: 'root@penguin: ~/php-snippets',
             kali: 'root@penguin: ~/kali-tools',
             sanitize: 'root@penguin: ~/script-sanitizer',
@@ -3533,6 +3724,7 @@ Feature: Order lookup via GraphQL
             if (id === 'fakerest') genFakeRest();
             if (id === 'format') fmtUpdateHint();
             if (id === 'laravel' && !document.getElementById('laravel-list').innerHTML) filterLaravel();
+            if (id === 'cipipe') genCiPipe();
             if (id === 'phpsnip' && !document.getElementById('php-list').innerHTML) filterPhpSnip();
             if (id === 'kali' && !document.getElementById('kali-list').innerHTML) filterKali();
             if (id === 'placeholder') genPlaceholder();
@@ -6280,6 +6472,602 @@ Feature: Order lookup via GraphQL
 
         calcChmod();
 
+        /* ========== CI/CD PIPELINE GENERATOR ========== */
+        function ciChecked(id) {
+            const el = document.getElementById(id);
+            return el ? el.checked : false;
+        }
+
+        function ciVal(id, fallback) {
+            const el = document.getElementById(id);
+            const v = el ? el.value.trim() : '';
+            return v || fallback;
+        }
+
+        function ciReadOpts() {
+            const project = ciVal('ci-project', 'laravel');
+            const isLaravel = project === 'laravel';
+            return {
+                platform: ciVal('ci-platform', 'github'),
+                php: ciVal('ci-php', '8.3'),
+                node: ciVal('ci-node', '20'),
+                project,
+                isLaravel,
+                isPackage: project === 'package',
+                db: ciVal('ci-db', 'sqlite'),
+                branch: ciVal('ci-branch', 'main'),
+                runner: ciVal('ci-runner', 'cloud'),
+                host: ciVal('ci-deploy-host', 'deploy.example.com'),
+                user: ciVal('ci-deploy-user', 'deploy'),
+                port: ciVal('ci-deploy-port', '22'),
+                path: ciVal('ci-deploy-path', '/var/www/laravel'),
+                steps: {
+                    composerInstall: ciChecked('ci-s-composer-install'),
+                    composerValidate: ciChecked('ci-s-composer-validate'),
+                    composerAudit: ciChecked('ci-s-composer-audit'),
+                    cacheComposer: ciChecked('ci-s-cache-composer'),
+                    pint: ciChecked('ci-s-pint'),
+                    phpstan: ciChecked('ci-s-phpstan'),
+                    phpLint: ciChecked('ci-s-php-lint'),
+                    envSetup: isLaravel && ciChecked('ci-s-env-setup'),
+                    migrate: isLaravel && ciChecked('ci-s-migrate'),
+                    artisanTest: isLaravel && ciChecked('ci-s-artisan-test'),
+                    pest: isLaravel && ciChecked('ci-s-pest'),
+                    phpunit: ciChecked('ci-s-phpunit') || (project === 'package' && ciChecked('ci-s-phpunit')),
+                    npmCi: ciChecked('ci-s-npm-ci'),
+                    npmBuild: ciChecked('ci-s-npm-build'),
+                    npmLint: ciChecked('ci-s-npm-lint'),
+                    cacheNpm: ciChecked('ci-s-cache-npm'),
+                    deploy: ciChecked('ci-s-deploy'),
+                    optimize: isLaravel && ciChecked('ci-s-optimize'),
+                    queue: isLaravel && ciChecked('ci-s-queue'),
+                    horizon: isLaravel && ciChecked('ci-s-horizon'),
+                    storageLink: isLaravel && ciChecked('ci-s-storage-link'),
+                },
+            };
+        }
+
+        function ciPhpExtensions(db) {
+            const base = 'dom, curl, libxml, mbstring, zip, pcntl, bcmath, intl, gd';
+            if (db === 'mysql') return base + ', pdo, pdo_mysql';
+            if (db === 'pgsql') return base + ', pdo, pdo_pgsql';
+            return base + ', pdo, sqlite, pdo_sqlite';
+        }
+
+        function ciJoin(lines) {
+            return lines.filter(l => l !== null && l !== false && l !== '').join('\n');
+        }
+
+        function ciIndent(n) {
+            return '  '.repeat(n);
+        }
+
+        function ciGhRunner(o) {
+            return o.runner === 'self' ? 'self-hosted' : 'ubuntu-latest';
+        }
+
+        function ciGhDbService(o) {
+            if (!o.isLaravel || o.db === 'sqlite') return [];
+            if (o.db === 'mysql') {
+                return [
+                    '',
+                    '    services:',
+                    '      mysql:',
+                    '        image: mysql:8.0',
+                    '        env:',
+                    '          MYSQL_ROOT_PASSWORD: password',
+                    '          MYSQL_DATABASE: laravel_test',
+                    '        ports:',
+                    '          - 3306:3306',
+                    '        options: >-',
+                    '          --health-cmd="mysqladmin ping"',
+                    '          --health-interval=10s',
+                    '          --health-timeout=5s',
+                    '          --health-retries=5',
+                ];
+            }
+            return [
+                '',
+                '    services:',
+                '      postgres:',
+                '        image: postgres:16',
+                '        env:',
+                '          POSTGRES_PASSWORD: password',
+                '          POSTGRES_DB: laravel_test',
+                '        ports:',
+                '          - 5432:5432',
+                '        options: >-',
+                '          --health-cmd="pg_isready -U postgres"',
+                '          --health-interval=10s',
+                '          --health-timeout=5s',
+                '          --health-retries=5',
+            ];
+        }
+
+        function ciGhDbEnv(o) {
+            if (!o.isLaravel || o.db === 'sqlite') {
+                return [
+                    'echo "DB_CONNECTION=sqlite" >> .env',
+                    'echo "DB_DATABASE=:memory:" >> .env',
+                ];
+            }
+            if (o.db === 'mysql') {
+                return [
+                    'echo "DB_CONNECTION=mysql" >> .env',
+                    'echo "DB_HOST=127.0.0.1" >> .env',
+                    'echo "DB_PORT=3306" >> .env',
+                    'echo "DB_DATABASE=laravel_test" >> .env',
+                    'echo "DB_USERNAME=root" >> .env',
+                    'echo "DB_PASSWORD=password" >> .env',
+                ];
+            }
+            return [
+                'echo "DB_CONNECTION=pgsql" >> .env',
+                'echo "DB_HOST=127.0.0.1" >> .env',
+                'echo "DB_PORT=5432" >> .env',
+                'echo "DB_DATABASE=laravel_test" >> .env',
+                'echo "DB_USERNAME=postgres" >> .env',
+                'echo "DB_PASSWORD=password" >> .env',
+            ];
+        }
+
+        function ciGhBackendSteps(o) {
+            const s = o.steps;
+            const lines = [
+                '      - name: Checkout',
+                '        uses: actions/checkout@v4',
+                '',
+                '      - name: Setup PHP',
+                '        uses: shivammathur/setup-php@v2',
+                '        with:',
+                `          php-version: '${o.php}'`,
+                `          extensions: ${ciPhpExtensions(o.db)}`,
+                '          coverage: none',
+            ];
+            if (s.cacheComposer) {
+                lines.push(
+                    '',
+                    '      - name: Cache Composer',
+                    '        uses: actions/cache@v4',
+                    '        with:',
+                    '          path: vendor',
+                    "          key: composer-${{ hashFiles('composer.lock') }}",
+                    "          restore-keys: composer-",
+                );
+            }
+            if (s.composerInstall) lines.push('', '      - run: composer install --prefer-dist --no-progress --no-interaction');
+            if (s.composerValidate) lines.push('      - run: composer validate --strict');
+            if (s.composerAudit) lines.push('      - run: composer audit');
+            if (s.pint) lines.push('      - run: vendor/bin/pint --test');
+            if (s.phpstan) lines.push('      - run: vendor/bin/phpstan analyse --memory-limit=1G');
+            if (s.phpLint) lines.push('      - run: find app -name "*.php" -print0 | xargs -0 -n1 php -l');
+            if (s.envSetup) {
+                lines.push(
+                    '      - run: cp .env.example .env',
+                    '      - run: php artisan key:generate',
+                );
+                lines.push(...ciGhDbEnv(o).map(cmd => '      - run: ' + cmd));
+            }
+            if (s.migrate && s.envSetup) lines.push('      - run: php artisan migrate --force --env=testing');
+            if (s.pest) lines.push('      - run: ./vendor/bin/pest --parallel');
+            else if (s.artisanTest) lines.push('      - run: php artisan test --parallel');
+            else if (s.phpunit) lines.push('      - run: ./vendor/bin/phpunit');
+            return lines;
+        }
+
+        function ciGhFrontendSteps(o) {
+            const s = o.steps;
+            const lines = [
+                '      - name: Checkout',
+                '        uses: actions/checkout@v4',
+                '',
+                '      - name: Setup Node',
+                '        uses: actions/setup-node@v4',
+                '        with:',
+                `          node-version: '${o.node}'`,
+            ];
+            if (s.cacheNpm) lines.push("          cache: 'npm'");
+            if (s.npmCi) lines.push('', '      - run: npm ci');
+            if (s.npmLint) lines.push('      - run: npm run lint');
+            if (s.npmBuild) lines.push('      - run: npm run build');
+            return lines;
+        }
+
+        function ciDeployRemoteCommands(o) {
+            const cmds = [];
+            if (o.isLaravel) {
+                cmds.push(`cd ${o.path}`);
+                cmds.push(`git pull origin ${o.branch}`);
+                cmds.push(`composer install --no-dev --optimize-autoloader --no-interaction`);
+                if (o.steps.npmCi || o.steps.npmBuild || o.steps.deploy) cmds.push(`npm ci && npm run build`);
+                if (o.steps.storageLink) cmds.push(`php artisan storage:link`);
+                if (o.steps.deploy) cmds.push(`php artisan migrate --force`);
+                if (o.steps.optimize) {
+                    cmds.push(`php artisan config:cache`);
+                    cmds.push(`php artisan route:cache`);
+                    cmds.push(`php artisan view:cache`);
+                    cmds.push(`php artisan event:cache`);
+                }
+                if (o.steps.horizon) cmds.push(`php artisan horizon:terminate`);
+                if (o.steps.queue) cmds.push(`php artisan queue:restart`);
+            } else {
+                cmds.push(`cd ${o.path}`);
+                cmds.push(`git pull origin ${o.branch}`);
+                cmds.push(`composer install --no-dev --optimize-autoloader --no-interaction`);
+            }
+            return cmds;
+        }
+
+        function ciGhDeployJob(o, needs) {
+            const sshTarget = `${o.user}@${o.host}`;
+            const remote = ciDeployRemoteCommands(o);
+            const needsLine = needs.length ? `    needs: [${needs.join(', ')}]\n` : '';
+            return ciJoin([
+                '  deploy:',
+                '    name: Deploy via SSH',
+                needsLine + `    runs-on: ${ciGhRunner(o)}`,
+                `    if: github.ref == 'refs/heads/${o.branch}' && github.event_name == 'push'`,
+                '    environment: production',
+                '    steps:',
+                '      - uses: actions/checkout@v4',
+                '',
+                '      - name: Setup SSH agent',
+                '        uses: webfactory/ssh-agent@v0.9.0',
+                '        with:',
+                '          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}',
+                '',
+                '      - name: Add host to known_hosts',
+                '        run: ssh-keyscan -p ' + o.port + ' -H ' + o.host + ' >> ~/.ssh/known_hosts',
+                '',
+                '      - name: Deploy to server',
+                '        run: |',
+                `          ssh -p ${o.port} -o StrictHostKeyChecking=yes ${sshTarget} << 'ENDSSH'`,
+                ...remote,
+                '          ENDSSH',
+            ]);
+        }
+
+        function genCiGithub(o) {
+            const s = o.steps;
+            const hasBackend = s.composerInstall || s.composerValidate || s.composerAudit || s.pint || s.phpstan ||
+                s.phpLint || s.envSetup || (s.migrate && s.envSetup) || s.artisanTest || s.pest || s.phpunit;
+            const hasFrontend = s.npmCi || s.npmBuild || s.npmLint;
+            const jobs = [];
+            const needs = [];
+
+            const title = o.isLaravel ? 'Laravel CI/CD' : (o.isPackage ? 'PHP Package CI' : 'PHP CI');
+
+            if (hasBackend) {
+                needs.push('backend');
+                jobs.push(ciJoin([
+                    '  backend:',
+                    `    name: PHP ${o.php} — quality & tests`,
+                    `    runs-on: ${ciGhRunner(o)}`,
+                    ...ciGhDbService(o),
+                    '    steps:',
+                    ...ciGhBackendSteps(o),
+                ]));
+            }
+
+            if (hasFrontend) {
+                needs.push('frontend');
+                jobs.push(ciJoin([
+                    '  frontend:',
+                    `    name: Node ${o.node} — assets`,
+                    `    runs-on: ${ciGhRunner(o)}`,
+                    '    steps:',
+                    ...ciGhFrontendSteps(o),
+                ]));
+            }
+
+            if (s.deploy) {
+                jobs.push(ciGhDeployJob(o, needs));
+            }
+
+            if (!jobs.length) jobs.push(ciJoin([
+                '  noop:',
+                `    runs-on: ${ciGhRunner(o)}`,
+                '    steps:',
+                '      - run: echo "Enable at least one pipeline step"',
+            ]));
+
+            return ciJoin([
+                `# ${title} — generated by Penguin`,
+                '# Docs: https://docs.github.com/en/actions',
+                '',
+                `name: ${title}`,
+                '',
+                'on:',
+                '  push:',
+                `    branches: [${o.branch}, develop]`,
+                '  pull_request:',
+                `    branches: [${o.branch}]`,
+                '',
+                'concurrency:',
+                '  group: ${{ github.workflow }}-${{ github.ref }}',
+                '  cancel-in-progress: true',
+                '',
+                'jobs:',
+                ...jobs,
+            ]);
+        }
+
+        function ciGlBeforeScript(o) {
+            return [
+                '  before_script:',
+                '    - apt-get update -qq && apt-get install -y -qq git unzip libzip-dev libpq-dev',
+                '    - docker-php-ext-install zip',
+                o.db === 'mysql' ? '    - docker-php-ext-install pdo_mysql' : null,
+                o.db === 'pgsql' ? '    - docker-php-ext-install pdo_pgsql' : null,
+                o.db === 'sqlite' ? '    - docker-php-ext-install pdo_sqlite' : null,
+                '    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer',
+            ];
+        }
+
+        function ciGlPhpScript(o) {
+            const s = o.steps;
+            const lines = [];
+            if (s.composerInstall) lines.push('    - composer install --prefer-dist --no-progress --no-interaction');
+            if (s.composerValidate) lines.push('    - composer validate --strict');
+            if (s.composerAudit) lines.push('    - composer audit');
+            if (s.pint) lines.push('    - vendor/bin/pint --test');
+            if (s.phpstan) lines.push('    - vendor/bin/phpstan analyse --memory-limit=1G');
+            if (s.phpLint) lines.push('    - find app -name "*.php" -print0 | xargs -0 -n1 php -l');
+            if (s.envSetup) {
+                lines.push('    - cp .env.example .env');
+                lines.push('    - php artisan key:generate');
+                lines.push(...ciGhDbEnv(o).map(cmd => '    - ' + cmd));
+            }
+            if (s.migrate && s.envSetup) lines.push('    - php artisan migrate --force --env=testing');
+            if (s.pest) lines.push('    - ./vendor/bin/pest --parallel');
+            else if (s.artisanTest) lines.push('    - php artisan test --parallel');
+            else if (s.phpunit) lines.push('    - ./vendor/bin/phpunit');
+            return lines;
+        }
+
+        function genCiGitlab(o) {
+            const s = o.steps;
+            const stages = [];
+            const jobs = [];
+            const title = o.isLaravel ? 'Laravel CI/CD' : (o.isPackage ? 'PHP Package CI' : 'PHP CI');
+            const phpImage = `php:${o.php}-cli`;
+            const nodeImage = `node:${o.node}-alpine`;
+
+            const hasPhp = s.composerInstall || s.composerValidate || s.composerAudit || s.pint || s.phpstan ||
+                s.phpLint || s.envSetup || (s.migrate && s.envSetup) || s.artisanTest || s.pest || s.phpunit;
+            const hasFrontend = s.npmCi || s.npmBuild || s.npmLint;
+
+            if (hasPhp) {
+                stages.push('install', 'quality', 'test');
+                jobs.push(ciJoin([
+                    'composer:install:',
+                    '  stage: install',
+                    `  image: ${phpImage}`,
+                    ...ciGlBeforeScript(o),
+                    '  script:',
+                    '    - composer install --prefer-dist --no-progress --no-interaction',
+                    s.cacheComposer ? '  cache:\n    key: composer-$CI_COMMIT_REF_SLUG\n    paths:\n      - vendor/' : '',
+                ]));
+
+                const qualitySteps = [];
+                if (s.composerValidate) qualitySteps.push('    - composer validate --strict');
+                if (s.composerAudit) qualitySteps.push('    - composer audit');
+                if (s.pint) qualitySteps.push('    - vendor/bin/pint --test');
+                if (s.phpstan) qualitySteps.push('    - vendor/bin/phpstan analyse --memory-limit=1G');
+                if (s.phpLint) qualitySteps.push('    - find app -name "*.php" -print0 | xargs -0 -n1 php -l');
+
+                if (qualitySteps.length) {
+                    jobs.push(ciJoin([
+                        'quality:checks:',
+                        '  stage: quality',
+                        `  image: ${phpImage}`,
+                        '  needs: [composer:install]',
+                        ...ciGlBeforeScript(o),
+                        '  script:',
+                        ...qualitySteps,
+                    ]));
+                }
+
+                const testSteps = ciGlPhpScript(o).filter(l =>
+                    /artisan|pest|phpunit|\.env|migrate|key:generate|DB_/.test(l));
+                if (testSteps.length) {
+                    const svc = o.isLaravel && o.db === 'mysql' ? [
+                        '  services:',
+                        '    - name: mysql:8.0',
+                        '      alias: mysql',
+                        '  variables:',
+                        '    MYSQL_ROOT_PASSWORD: password',
+                        '    MYSQL_DATABASE: laravel_test',
+                        '    DB_HOST: mysql',
+                    ] : o.isLaravel && o.db === 'pgsql' ? [
+                        '  services:',
+                        '    - name: postgres:16',
+                        '      alias: postgres',
+                        '  variables:',
+                        '    POSTGRES_PASSWORD: password',
+                        '    POSTGRES_DB: laravel_test',
+                        '    DB_HOST: postgres',
+                    ] : [];
+                    jobs.push(ciJoin([
+                        'test:php:',
+                        '  stage: test',
+                        `  image: ${phpImage}`,
+                        '  needs: [composer:install]',
+                        ...svc,
+                        ...ciGlBeforeScript(o),
+                        '  script:',
+                        ...testSteps,
+                    ]));
+                }
+            }
+
+            if (hasFrontend) {
+                stages.push('build');
+                const fe = [];
+                if (s.npmCi) fe.push('    - npm ci');
+                if (s.npmLint) fe.push('    - npm run lint');
+                if (s.npmBuild) fe.push('    - npm run build');
+                jobs.push(ciJoin([
+                    'build:assets:',
+                    '  stage: build',
+                    `  image: ${nodeImage}`,
+                    hasPhp ? '  needs: [composer:install]' : '',
+                    s.cacheNpm ? '  cache:\n    key: npm-$CI_COMMIT_REF_SLUG\n    paths:\n      - node_modules/' : '',
+                    '  script:',
+                    ...fe,
+                ]));
+            }
+
+            if (s.deploy) {
+                stages.push('deploy');
+                const remote = ciDeployRemoteCommands(o);
+                jobs.push(ciJoin([
+                    'deploy:production:',
+                    '  stage: deploy',
+                    '  image: alpine:latest',
+                    hasPhp || hasFrontend ? '  needs: [' + [
+                        hasPhp ? 'test:php' : null,
+                        hasFrontend ? 'build:assets' : null,
+                    ].filter(Boolean).join(', ') + ']' : '',
+                    `  rules:`,
+                    `    - if: $CI_COMMIT_BRANCH == "${o.branch}"`,
+                    '  before_script:',
+                    '    - apk add --no-cache openssh-client git',
+                    '    - eval $(ssh-agent -s)',
+                    '    - echo "$SSH_PRIVATE_KEY" | tr -d \'\\r\' | ssh-add -',
+                    '    - mkdir -p ~/.ssh && chmod 700 ~/.ssh',
+                    `    - ssh-keyscan -p ${o.port} -H ${o.host} >> ~/.ssh/known_hosts`,
+                    '  script:',
+                    `    - |`,
+                    `      ssh -p ${o.port} ${o.user}@${o.host} << 'ENDSSH'`,
+                    ...remote,
+                    '      ENDSSH',
+                    '  environment:',
+                    '    name: production',
+                    `    url: https://${o.host}`,
+                ]));
+            }
+
+            const uniqueStages = [...new Set(stages)];
+            if (!uniqueStages.length) uniqueStages.push('test');
+
+            return ciJoin([
+                `# ${title} — generated by Penguin`,
+                '# Docs: https://docs.gitlab.com/ee/ci/yaml/',
+                '',
+                `stages:`,
+                ...uniqueStages.map(st => `  - ${st}`),
+                '',
+                'variables:',
+                `  PHP_VERSION: "${o.php}"`,
+                '',
+                ...jobs,
+            ]);
+        }
+
+        function ciUpdateHints(o) {
+            const pathHint = document.getElementById('ci-path-hint');
+            const secretsHint = document.getElementById('ci-secrets-hint');
+            if (pathHint) {
+                pathHint.textContent = o.platform === 'gitlab'
+                    ? 'Save as: .gitlab-ci.yml (repo root)'
+                    : 'Save as: .github/workflows/laravel-ci.yml';
+            }
+            if (secretsHint) {
+                const secrets = [];
+                if (o.steps.deploy) {
+                    secrets.push(o.platform === 'gitlab'
+                        ? 'SSH_PRIVATE_KEY (CI/CD variable, masked)'
+                        : 'SSH_PRIVATE_KEY (repo secret)');
+                }
+                if (o.isLaravel && o.db !== 'sqlite') secrets.push('Tune DB_* credentials for your test service');
+                secretsHint.textContent = secrets.length
+                    ? 'Configure: ' + secrets.join(' · ')
+                    : 'No extra secrets required for the selected steps';
+            }
+        }
+
+        function ciToggleDeploy() {
+            const on = ciChecked('ci-s-deploy');
+            const el = document.getElementById('ci-deploy-fields');
+            if (el) el.style.display = on ? 'block' : 'none';
+        }
+
+        function ciTestChoice(which) {
+            const map = { artisan: 'ci-s-artisan-test', pest: 'ci-s-pest', phpunit: 'ci-s-phpunit' };
+            if (which === 'artisan' && ciChecked('ci-s-artisan-test')) {
+                document.getElementById('ci-s-pest').checked = false;
+                document.getElementById('ci-s-phpunit').checked = false;
+            }
+            if (which === 'pest' && ciChecked('ci-s-pest')) {
+                document.getElementById('ci-s-artisan-test').checked = false;
+                document.getElementById('ci-s-phpunit').checked = false;
+            }
+            if (which === 'phpunit' && ciChecked('ci-s-phpunit')) {
+                document.getElementById('ci-s-artisan-test').checked = false;
+                document.getElementById('ci-s-pest').checked = false;
+            }
+            genCiPipe();
+        }
+
+        function ciSetStep(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.checked = !!val;
+        }
+
+        function ciPreset(name) {
+            const all = {
+                composer: ['ci-s-composer-install', 'ci-s-composer-validate', 'ci-s-composer-audit', 'ci-s-cache-composer'],
+                quality: ['ci-s-pint', 'ci-s-phpstan'],
+                laravel: ['ci-s-env-setup', 'ci-s-migrate', 'ci-s-artisan-test'],
+                frontend: ['ci-s-npm-ci', 'ci-s-npm-build', 'ci-s-cache-npm'],
+                deploy: ['ci-s-deploy', 'ci-s-optimize', 'ci-s-queue'],
+            };
+            const off = [
+                'ci-s-composer-install', 'ci-s-composer-validate', 'ci-s-composer-audit', 'ci-s-cache-composer',
+                'ci-s-pint', 'ci-s-phpstan', 'ci-s-php-lint', 'ci-s-env-setup', 'ci-s-migrate',
+                'ci-s-artisan-test', 'ci-s-pest', 'ci-s-phpunit',
+                'ci-s-npm-ci', 'ci-s-npm-build', 'ci-s-npm-lint', 'ci-s-cache-npm',
+                'ci-s-deploy', 'ci-s-optimize', 'ci-s-queue', 'ci-s-horizon', 'ci-s-storage-link',
+            ];
+            off.forEach(id => ciSetStep(id, false));
+
+            document.getElementById('ci-project').value = 'laravel';
+            document.getElementById('ci-platform').value = 'github';
+            document.getElementById('ci-php').value = '8.3';
+            document.getElementById('ci-node').value = '20';
+            document.getElementById('ci-db').value = 'sqlite';
+
+            if (name === 'laravel-full') {
+                [...all.composer, ...all.quality, ...all.laravel, ...all.frontend, ...all.deploy].forEach(id => ciSetStep(id, true));
+            } else if (name === 'laravel-ci') {
+                [...all.composer, ...all.quality, ...all.laravel, ...all.frontend].forEach(id => ciSetStep(id, true));
+            } else if (name === 'laravel-pest') {
+                [...all.composer, ...all.quality, ...all.frontend].forEach(id => ciSetStep(id, true));
+                ciSetStep('ci-s-env-setup', true);
+                ciSetStep('ci-s-migrate', true);
+                ciSetStep('ci-s-pest', true);
+            } else if (name === 'php-package') {
+                document.getElementById('ci-project').value = 'package';
+                [...all.composer, ...all.quality].forEach(id => ciSetStep(id, true));
+                ciSetStep('ci-s-phpunit', true);
+            } else if (name === 'deploy-ssh') {
+                [...all.deploy].forEach(id => ciSetStep(id, true));
+            }
+            ciToggleDeploy();
+            genCiPipe();
+        }
+
+        function genCiPipe() {
+            const o = ciReadOpts();
+            ciToggleDeploy();
+            ciUpdateHints(o);
+            const yaml = o.platform === 'gitlab' ? genCiGitlab(o) : genCiGithub(o);
+            document.getElementById('ci-out').value = yaml;
+        }
+
+        ciPreset('laravel-full');
+
         /* ========== TIMESTAMP CONVERTER ========== */
         let tsMode = 'tohuman';
 
@@ -6503,6 +7291,7 @@ Feature: Order lookup via GraphQL
                         'ag-notify': 'Save as AGENTS.md in project root',
                         'hk-notify': 'Merge into hooks object; version must be 1',
                         'sp-notify': 'Agree on the spec before asking the agent to implement',
+                        'ci-notify': 'Runs locally; paste into your repo and configure secrets',
                     };
                     setTimeout(() => {
                         notif.innerText = defaults[notifyId] || 'Click to copy';
