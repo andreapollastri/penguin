@@ -980,6 +980,10 @@
             overflow-y: auto;
         }
 
+        .laravel-guide.laravel-guide-tall {
+            max-height: 620px;
+        }
+
         .laravel-guide h3 {
             font-size: 10px;
             text-transform: uppercase;
@@ -1015,6 +1019,20 @@
 
         .laravel-guide li {
             margin-bottom: 4px;
+        }
+
+        .laravel-guide pre {
+            background: #0a0a0a;
+            border: 1px solid #1e1e1e;
+            border-radius: 5px;
+            padding: 10px 12px;
+            font-size: 11px;
+            color: #ccc;
+            line-height: 1.55;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 8px 0 12px;
         }
 
         /* ===== WEB TOOLS ===== */
@@ -2991,6 +3009,319 @@
 
                 <!-- SPEC-DRIVEN GENERATOR -->
                 <div id="page-aispec" class="page">
+                    <details class="laravel-guide-wrap" open>
+                        <summary>Gherkin — quick guide with examples</summary>
+                        <div class="laravel-guide laravel-guide-tall">
+                            <p><strong>Gherkin</strong> is the language used in BDD (Behavior-Driven Development) to describe
+                                expected behavior in a form readable by both people and tools (Cucumber, Behat, SpecFlow, etc.).
+                                Each <code>.feature</code> file describes a capability and its test scenarios.</p>
+                            <h3>Keywords</h3>
+                            <ul>
+                                <li><code>Feature</code> — title and description of the capability</li>
+                                <li><code>Background</code> — steps shared by all scenarios (optional)</li>
+                                <li><code>Scenario</code> — a concrete use case</li>
+                                <li><code>Scenario Outline</code> + <code>Examples</code> — same flow with different data</li>
+                                <li><code>Given</code> — preconditions / initial state</li>
+                                <li><code>When</code> — user action or event</li>
+                                <li><code>Then</code> — expected outcome</li>
+                                <li><code>And</code> / <code>But</code> — continue the previous step</li>
+                                <li><code>""" ... """</code> — doc string for multiline text (JSON payloads, bodies, templates)</li>
+                                <li>Data tables (<code>| col | col |</code>) — structured input or expected fields</li>
+                            </ul>
+                            <h3>Basic rules</h3>
+                            <ul>
+                                <li>Indentation: usually <strong>2 spaces</strong> per level (Feature → Scenario → steps)</li>
+                                <li>One scenario = one verifiable behavior; avoid overly long scenarios</li>
+                                <li>Write in domain language, not technical details (<em>“the cart is empty”</em>, not
+                                    <em>“click #btn-42”</em>)</li>
+                                <li>Use <code>Given</code> for state, <code>When</code> for action, <code>Then</code> for outcome</li>
+                                <li>Comments with <code>#</code>; optional tags above Feature/Scenario: <code>@smoke @checkout</code></li>
+                            </ul>
+                            <h3>Example 1 — Simple feature</h3>
+                            <pre>Feature: User login
+  As a registered user
+  I want to sign in with email and password
+  So that I can access my account
+
+  Scenario: Login with valid credentials
+    Given I am on the login page
+    And a user "alice@example.com" exists with password "secret123"
+    When I submit email "alice@example.com" and password "secret123"
+    Then I should see the dashboard
+    And I should see a welcome message for "Alice"
+
+  Scenario: Wrong password
+    Given I am on the login page
+    And a user "alice@example.com" exists with password "secret123"
+    When I submit email "alice@example.com" and password "wrong"
+    Then I should see an error "Invalid credentials"
+    And I should remain on the login page</pre>
+                            <h3>Example 2 — Shared Background</h3>
+                            <pre>Feature: Shopping cart
+  As a shopper
+  I want to manage items in my cart
+  So that I can buy products
+
+  Background:
+    Given I am logged in as "alice@example.com"
+    And the following product exists:
+      | sku   | name   | price |
+      | PEN-1 | Pen    | 2.50  |
+
+  Scenario: Add a product
+    Given my cart is empty
+    When I add "PEN-1" to the cart
+    Then my cart should contain 1 item
+    And the cart total should be 2.50
+
+  Scenario: Empty the cart
+    Given my cart contains "PEN-1"
+    When I remove all items from the cart
+    Then my cart should be empty</pre>
+                            <h3>Example 3 — Scenario Outline (parameters)</h3>
+                            <pre>Feature: Email validation on registration
+
+  Scenario Outline: Email format
+    Given I am on the registration page
+    When I enter email "&lt;email&gt;"
+    Then I should see validation "&lt;message&gt;"
+
+    Examples:
+      | email           | message              |
+      | user@domain.com |                      |
+      | not-an-email    | Invalid email format |
+      |                 | Email is required    |</pre>
+                            <h3>Example 4 — Tags and Rule (Gherkin 6+)</h3>
+                            <pre>@checkout @e2e
+Feature: Checkout
+
+  Rule: The cart cannot be empty
+    Scenario: Attempt with empty cart
+      Given my cart is empty
+      When I proceed to checkout
+      Then I should see "Your cart is empty"
+
+  Rule: Supported payment methods
+    Scenario Outline: Accepted payment
+      Given my cart total is 10.00
+      When I pay with "&lt;method&gt;"
+      Then the order should be confirmed
+
+      Examples:
+        | method  |
+        | card    |
+        | paypal  |</pre>
+                            <h3>Example 5 — REST API with request/response payloads</h3>
+                            <p>For API or integration features, assert HTTP status, headers, and JSON bodies explicitly.
+                                Use doc strings for payloads; keep step wording stable and map it in step definitions.</p>
+                            <pre>@api @orders
+Feature: Create order API
+  As an integration client
+  I want to create orders via REST
+  So that external systems can place purchases
+
+  Background:
+    Given the API base URL is "https://api.example.com"
+    And I am authenticated with bearer token "svc_orders_writer"
+
+  Scenario: Create order with valid payload
+    Given the following product exists:
+      | id     | sku   | unitPrice | stock |
+      | prod_1 | PEN-1 | 2.50      | 10    |
+    When I send a POST request to "/v1/orders" with headers:
+      | name         | value            |
+      | Content-Type | application/json |
+      | Idempotency-Key | idem_abc123   |
+    And the request body is:
+      """
+      {
+        "customerId": "cust_42",
+        "items": [{ "sku": "PEN-1", "quantity": 2 }],
+        "currency": "EUR",
+        "shippingAddress": {
+          "line1": "Via Roma 1",
+          "city": "Milan",
+          "country": "IT"
+        }
+      }
+      """
+    Then the response status should be 201
+    And the response header "Content-Type" should be "application/json"
+    And the response header "Location" should match "/v1/orders/*"
+    And the response JSON should match:
+      """
+      {
+        "status": "pending",
+        "currency": "EUR",
+        "total": 5.00,
+        "items": [
+          { "sku": "PEN-1", "quantity": 2, "unitPrice": 2.50, "lineTotal": 5.00 }
+        ]
+      }
+      """
+    And the response JSON field "id" should be a non-empty string
+
+  Scenario: Reject invalid payload with structured error
+    When I send a POST request to "/v1/orders" with body:
+      """
+      { "customerId": "cust_42", "items": [], "currency": "EUR" }
+      """
+    Then the response status should be 422
+    And the response JSON should be:
+      """
+      {
+        "error": "validation_failed",
+        "message": "The request could not be processed",
+        "details": [
+          { "field": "items", "code": "min_items", "message": "must contain at least one item" }
+        ]
+      }
+      """</pre>
+                            <h3>Example 6 — Pagination, filtering, and partial response match</h3>
+                            <pre>@api @invoices
+Feature: List customer invoices
+
+  Scenario: Paginated invoice list with metadata
+    Given these invoices exist for customer "cust_42":
+      | id      | amount | status | issuedAt   |
+      | inv_101 | 10.00  | paid   | 2026-01-01 |
+      | inv_102 | 25.00  | open   | 2026-01-05 |
+      | inv_103 | 7.50   | paid   | 2026-01-08 |
+    When I send a GET request to "/v1/customers/cust_42/invoices?status=paid&page=1&limit=2"
+    Then the response status should be 200
+    And the response JSON should match:
+      """
+      {
+        "data": [
+          { "id": "inv_101", "amount": 10.00, "status": "paid" },
+          { "id": "inv_103", "amount": 7.50, "status": "paid" }
+        ],
+        "meta": { "page": 1, "limit": 2, "total": 2, "totalPages": 1 }
+      }
+      """
+    And the response JSON path "$.data" should have length 2
+
+  Scenario: Empty result set
+    When I send a GET request to "/v1/customers/cust_99/invoices"
+    Then the response status should be 200
+    And the response JSON should be:
+      """
+      { "data": [], "meta": { "page": 1, "limit": 20, "total": 0, "totalPages": 0 } }
+      """</pre>
+                            <h3>Example 7 — Webhook ingestion and downstream event</h3>
+                            <pre>@webhook @payments
+Feature: Payment provider webhook
+
+  Scenario: Mark order paid after payment_intent.succeeded
+    Given order "ord_99" exists with:
+      | field    | value   |
+      | status   | pending |
+      | total    | 50.00   |
+      | currency | EUR     |
+    And the webhook signing secret is "whsec_test"
+    When the payment provider sends POST "/webhooks/stripe" with signed payload:
+      """
+      {
+        "id": "evt_1N2example",
+        "type": "payment_intent.succeeded",
+        "created": 1710000000,
+        "data": {
+          "object": {
+            "id": "pi_3Nexample",
+            "amount_received": 5000,
+            "currency": "eur",
+            "metadata": { "orderId": "ord_99" }
+          }
+        }
+      }
+      """
+    Then the response status should be 200
+    And the response body should be empty
+    And order "ord_99" should have status "paid"
+    And an outbox event "order.paid" should be published with payload:
+      """
+      {
+        "orderId": "ord_99",
+        "paymentIntentId": "pi_3Nexample",
+        "amount": 50.00,
+        "currency": "EUR"
+      }
+      """
+
+  Scenario: Reject webhook with invalid signature
+    When the payment provider sends POST "/webhooks/stripe" with invalid signature and payload:
+      """{ "id": "evt_bad", "type": "payment_intent.succeeded" }"""
+    Then the response status should be 400
+    And the response JSON should be:
+      """{ "error": "invalid_signature", "message": "Webhook signature verification failed" }"""</pre>
+                            <h3>Example 8 — Scenario Outline for auth and error responses</h3>
+                            <pre>@api @auth
+Feature: Protected profile endpoint
+
+  Scenario Outline: Authorization failures return consistent error shape
+    When I send a GET request to "/v1/me" with headers:
+      | name          | value           |
+      | Authorization | &lt;authorization&gt; |
+    Then the response status should be &lt;status&gt;
+    And the response JSON should be:
+      """
+      &lt;response_body&gt;
+      """
+
+    Examples:
+      | authorization        | status | response_body                                                                 |
+      |                      | 401    | {"error":"unauthorized","message":"Missing bearer token"}                     |
+      | Bearer bad.token     | 401    | {"error":"unauthorized","message":"Invalid token"}                            |
+      | Bearer expired.jwt   | 401    | {"error":"unauthorized","message":"Token expired"}                            |
+      | Bearer valid.jwt     | 200    | {"id":"usr_1","email":"alice@example.com","roles":["user"]}                   |</pre>
+                            <h3>Example 9 — GraphQL query with variables and errors</h3>
+                            <pre>@api @graphql
+Feature: Order lookup via GraphQL
+
+  Scenario: Successful query with variables
+    Given order "ord_77" exists with status "shipped" and total 19.99
+    When I send a POST request to "/graphql" with body:
+      """
+      {
+        "query": "query ($id: ID!) { order(id: $id) { id status total currency } }",
+        "variables": { "id": "ord_77" }
+      }
+      """
+    Then the response status should be 200
+    And the response JSON should match:
+      """
+      {
+        "data": {
+          "order": { "id": "ord_77", "status": "shipped", "total": 19.99, "currency": "EUR" }
+        }
+      }
+      """
+    And the response JSON path "$.errors" should be absent
+
+  Scenario: GraphQL validation error
+    When I send a POST request to "/graphql" with body:
+      """
+      { "query": "query { unknownField }" }
+      """
+    Then the response status should be 200
+    And the response JSON path "$.data" should be null
+    And the response JSON path "$.errors[0].message" should contain "Cannot query field"</pre>
+                            <h3>Anti-patterns to avoid</h3>
+                            <ul>
+                                <li>Identical steps repeated in every scenario → use <code>Background</code></li>
+                                <li>Too many consecutive <code>And</code> steps → split into smaller scenarios</li>
+                                <li>In <strong>UI</strong> specs, avoid low-level selectors or raw HTTP codes → describe user-visible outcomes</li>
+                                <li>In <strong>API</strong> specs, do assert status and payload — but keep steps reusable (don’t paste unique URLs in every step)</li>
+                                <li>Huge JSON blobs inline in step text → prefer doc strings or external fixture files referenced by step defs</li>
+                                <li>One scenario describing multiple unrelated behaviors</li>
+                            </ul>
+                            <p style="margin-top:12px;font-size:11px;color:#555">References:
+                                <a href="https://cucumber.io/docs/gherkin/" target="_blank" rel="noopener">Cucumber Gherkin reference</a>,
+                                <a href="https://cucumber.io/docs/bdd/" target="_blank" rel="noopener">BDD introduction</a>.
+                                Use the generator below with the <strong>BDD / Gherkin</strong> framework to produce
+                                <code>.feature</code> files from your scenarios.</p>
+                        </div>
+                    </details>
                     <div class="stat-bar">
                         <span>SPEC-DRIVEN</span>
                         <span>OPENSPEC · SPEC KIT · BDD</span>
