@@ -1213,62 +1213,103 @@
         <nav class="sidebar-nav" aria-label="Tools">
             <div class="nav-section">
                 <div class="nav-section-label">Crypto &amp; secrets</div>
-                <button type="button" class="active" data-page="password" onclick="showPage('password', this)"><span class="icon">&gt;</span> Password</button>
-                <button type="button" data-page="username" onclick="showPage('username', this)"><span class="icon">&gt;</span> Username</button>
-                <button type="button" data-page="bcrypt" onclick="showPage('bcrypt', this)"><span class="icon">&gt;</span> Bcrypt</button>
-                <button type="button" data-page="appkey" onclick="showPage('appkey', this)"><span class="icon">&gt;</span> APP_KEY</button>
-                <button type="button" data-page="hash" onclick="showPage('hash', this)"><span class="icon">&gt;</span> Hash</button>
-                <button type="button" data-page="jwt" onclick="showPage('jwt', this)"><span class="icon">&gt;</span> JWT</button>
-                <button type="button" data-page="sqids" onclick="showPage('sqids', this)"><span class="icon">&gt;</span> Sqids</button>
+                <button type="button" class="active" data-page="password" onclick="showPage('password', this)"><span
+                        class="icon">&gt;</span> Password</button>
+                <button type="button" data-page="username" onclick="showPage('username', this)"><span
+                        class="icon">&gt;</span> Username</button>
+                <button type="button" data-page="bcrypt" onclick="showPage('bcrypt', this)"><span
+                        class="icon">&gt;</span> Bcrypt</button>
+                <button type="button" data-page="appkey" onclick="showPage('appkey', this)"><span
+                        class="icon">&gt;</span> APP_KEY</button>
+                <button type="button" data-page="hash" onclick="showPage('hash', this)"><span class="icon">&gt;</span>
+                    Hash</button>
+                <button type="button" data-page="jwt" onclick="showPage('jwt', this)"><span class="icon">&gt;</span>
+                    JWT</button>
+                <button type="button" data-page="sqids" onclick="showPage('sqids', this)"><span class="icon">&gt;</span>
+                    Sqids</button>
             </div>
             <div class="nav-section">
                 <div class="nav-section-label">Encoding &amp; IDs</div>
-                <button type="button" data-page="uuid" onclick="showPage('uuid', this)"><span class="icon">&gt;</span> UUID</button>
-                <button type="button" data-page="jsonld" onclick="showPage('jsonld', this)"><span class="icon">&gt;</span> JSON-LD</button>
-                <button type="button" data-page="fakeid" onclick="showPage('fakeid', this)"><span class="icon">&gt;</span> Fake ID</button>
-                <button type="button" data-page="base64" onclick="showPage('base64', this)"><span class="icon">&gt;</span> Base64</button>
-                <button type="button" data-page="slug" onclick="showPage('slug', this)"><span class="icon">&gt;</span> Slug</button>
+                <button type="button" data-page="uuid" onclick="showPage('uuid', this)"><span class="icon">&gt;</span>
+                    UUID</button>
+                <button type="button" data-page="jsonld" onclick="showPage('jsonld', this)"><span
+                        class="icon">&gt;</span> JSON-LD</button>
+                <button type="button" data-page="fakeid" onclick="showPage('fakeid', this)"><span
+                        class="icon">&gt;</span> Fake ID</button>
+                <button type="button" data-page="base64" onclick="showPage('base64', this)"><span
+                        class="icon">&gt;</span> Base64</button>
+                <button type="button" data-page="slug" onclick="showPage('slug', this)"><span class="icon">&gt;</span>
+                    Slug</button>
             </div>
             <div class="nav-section">
                 <div class="nav-section-label">URLs &amp; media</div>
-                <button type="button" data-page="urlparse" onclick="showPage('urlparse', this)"><span class="icon">&gt;</span> URL Parse</button>
-                <button type="button" data-page="qrcode" onclick="showPage('qrcode', this)"><span class="icon">&gt;</span> QR Code</button>
-                <button type="button" data-page="barcode" onclick="showPage('barcode', this)"><span class="icon">&gt;</span> Barcode</button>
-                <button type="button" data-page="placeholder" onclick="showPage('placeholder', this)"><span class="icon">&gt;</span> Placeholder IMG</button>
-                <button type="button" data-page="randomimg" onclick="showPage('randomimg', this)"><span class="icon">&gt;</span> Random IMG</button>
+                <button type="button" data-page="urlparse" onclick="showPage('urlparse', this)"><span
+                        class="icon">&gt;</span> URL Parse</button>
+                <button type="button" data-page="qrcode" onclick="showPage('qrcode', this)"><span
+                        class="icon">&gt;</span> QR Code</button>
+                <button type="button" data-page="barcode" onclick="showPage('barcode', this)"><span
+                        class="icon">&gt;</span> Barcode</button>
+                <button type="button" data-page="placeholder" onclick="showPage('placeholder', this)"><span
+                        class="icon">&gt;</span> Placeholder IMG</button>
+                <button type="button" data-page="randomimg" onclick="showPage('randomimg', this)"><span
+                        class="icon">&gt;</span> Random IMG</button>
             </div>
             <div class="nav-section">
                 <div class="nav-section-label">Text &amp; APIs</div>
-                <button type="button" data-page="crontab" onclick="showPage('crontab', this)"><span class="icon">&gt;</span> Crontab</button>
-                <button type="button" data-page="timestamp" onclick="showPage('timestamp', this)"><span class="icon">&gt;</span> Timestamp</button>
-                <button type="button" data-page="lorem" onclick="showPage('lorem', this)"><span class="icon">&gt;</span> Lorem</button>
-                <button type="button" data-page="curl" onclick="showPage('curl', this)"><span class="icon">&gt;</span> cURL</button>
-                <button type="button" data-page="fakerest" onclick="showPage('fakerest', this)"><span class="icon">&gt;</span> Fake REST</button>
-                <button type="button" data-page="format" onclick="showPage('format', this)"><span class="icon">&gt;</span> Format / Minify</button>
-                <button type="button" data-page="openapi" onclick="showPage('openapi', this)"><span class="icon">&gt;</span> OpenAPI / Swagger</button>
-                <button type="button" data-page="sanitize" onclick="showPage('sanitize', this)"><span class="icon">&gt;</span> Script sanitizer</button>
-                <button type="button" data-page="mdpreview" onclick="showPage('mdpreview', this)"><span class="icon">&gt;</span> MD preview</button>
+                <button type="button" data-page="crontab" onclick="showPage('crontab', this)"><span
+                        class="icon">&gt;</span> Crontab</button>
+                <button type="button" data-page="timestamp" onclick="showPage('timestamp', this)"><span
+                        class="icon">&gt;</span> Timestamp</button>
+                <button type="button" data-page="lorem" onclick="showPage('lorem', this)"><span class="icon">&gt;</span>
+                    Lorem</button>
+                <button type="button" data-page="curl" onclick="showPage('curl', this)"><span class="icon">&gt;</span>
+                    cURL</button>
+                <button type="button" data-page="fakerest" onclick="showPage('fakerest', this)"><span
+                        class="icon">&gt;</span> Fake REST</button>
+                <button type="button" data-page="format" onclick="showPage('format', this)"><span
+                        class="icon">&gt;</span> Format / Minify</button>
+                <button type="button" data-page="openapi" onclick="showPage('openapi', this)"><span
+                        class="icon">&gt;</span> OpenAPI / Swagger</button>
+                <button type="button" data-page="sanitize" onclick="showPage('sanitize', this)"><span
+                        class="icon">&gt;</span> Script sanitizer</button>
+                <button type="button" data-page="mdpreview" onclick="showPage('mdpreview', this)"><span
+                        class="icon">&gt;</span> MD preview</button>
             </div>
             <div class="nav-section">
                 <div class="nav-section-label">System &amp; snippets</div>
-                <button type="button" data-page="sql" onclick="showPage('sql', this)"><span class="icon">&gt;</span> SQL</button>
-                <button type="button" data-page="linux" onclick="showPage('linux', this)"><span class="icon">&gt;</span> Linux</button>
-                <button type="button" data-page="chmod" onclick="showPage('chmod', this)"><span class="icon">&gt;</span> Chmod</button>
-                <button type="button" data-page="laravel" onclick="showPage('laravel', this)"><span class="icon">&gt;</span> Laravel</button>
-                <button type="button" data-page="cipipe" onclick="showPage('cipipe', this)"><span class="icon">&gt;</span> CI/CD Pipeline</button>
-                <button type="button" data-page="phpsnip" onclick="showPage('phpsnip', this)"><span class="icon">&gt;</span> PHP snippets</button>
-                <button type="button" data-page="kali" onclick="showPage('kali', this)"><span class="icon">&gt;</span> Kali</button>
+                <button type="button" data-page="sql" onclick="showPage('sql', this)"><span class="icon">&gt;</span>
+                    SQL</button>
+                <button type="button" data-page="linux" onclick="showPage('linux', this)"><span class="icon">&gt;</span>
+                    Linux</button>
+                <button type="button" data-page="chmod" onclick="showPage('chmod', this)"><span class="icon">&gt;</span>
+                    Chmod</button>
+                <button type="button" data-page="laravel" onclick="showPage('laravel', this)"><span
+                        class="icon">&gt;</span> Laravel</button>
+                <button type="button" data-page="cipipe" onclick="showPage('cipipe', this)"><span
+                        class="icon">&gt;</span> CI/CD Pipeline</button>
+                <button type="button" data-page="phpsnip" onclick="showPage('phpsnip', this)"><span
+                        class="icon">&gt;</span> PHP snippets</button>
+                <button type="button" data-page="kali" onclick="showPage('kali', this)"><span class="icon">&gt;</span>
+                    Kali</button>
             </div>
             <div class="nav-section">
                 <div class="nav-section-label">AI &amp; Agents</div>
-                <button type="button" data-page="aiskill" onclick="showPage('aiskill', this)"><span class="icon">&gt;</span> Cursor Skill</button>
-                <button type="button" data-page="airule" onclick="showPage('airule', this)"><span class="icon">&gt;</span> Cursor Rule</button>
-                <button type="button" data-page="aimcp" onclick="showPage('aimcp', this)"><span class="icon">&gt;</span> MCP Config</button>
-                <button type="button" data-page="aiprompt" onclick="showPage('aiprompt', this)"><span class="icon">&gt;</span> Prompt Builder</button>
-                <button type="button" data-page="aiclaude" onclick="showPage('aiclaude', this)"><span class="icon">&gt;</span> CLAUDE.md</button>
-                <button type="button" data-page="aiagents" onclick="showPage('aiagents', this)"><span class="icon">&gt;</span> AGENTS.md</button>
-                <button type="button" data-page="aihooks" onclick="showPage('aihooks', this)"><span class="icon">&gt;</span> Cursor Hooks</button>
-                <button type="button" data-page="aispec" onclick="showPage('aispec', this)"><span class="icon">&gt;</span> Spec Driven</button>
+                <button type="button" data-page="aiskill" onclick="showPage('aiskill', this)"><span
+                        class="icon">&gt;</span> Cursor Skill</button>
+                <button type="button" data-page="airule" onclick="showPage('airule', this)"><span
+                        class="icon">&gt;</span> Cursor Rule</button>
+                <button type="button" data-page="aimcp" onclick="showPage('aimcp', this)"><span class="icon">&gt;</span>
+                    MCP Config</button>
+                <button type="button" data-page="aiprompt" onclick="showPage('aiprompt', this)"><span
+                        class="icon">&gt;</span> Prompt Builder</button>
+                <button type="button" data-page="aiclaude" onclick="showPage('aiclaude', this)"><span
+                        class="icon">&gt;</span> CLAUDE.md</button>
+                <button type="button" data-page="aiagents" onclick="showPage('aiagents', this)"><span
+                        class="icon">&gt;</span> AGENTS.md</button>
+                <button type="button" data-page="aihooks" onclick="showPage('aihooks', this)"><span
+                        class="icon">&gt;</span> Cursor Hooks</button>
+                <button type="button" data-page="aispec" onclick="showPage('aispec', this)"><span
+                        class="icon">&gt;</span> Spec Driven</button>
             </div>
         </nav>
         <div class="sidebar-footer">Penguin · <a href="https://web.ap.it" target="_blank" rel="noopener"
@@ -1279,12 +1320,15 @@
     <div class="main">
         <div class="topbar">
             <div style="display:flex;align-items:center;gap:12px;min-width:0;flex:1">
-                <button type="button" class="menu-toggle" onclick="toggleSidebar()" aria-label="Open menu">&#9776;</button>
+                <button type="button" class="menu-toggle" onclick="toggleSidebar()"
+                    aria-label="Open menu">&#9776;</button>
                 <span class="page-title" id="page-title">root@penguin: ~/password</span>
             </div>
             <div class="topbar-actions">
-                <button type="button" class="topbar-link" id="copy-page-link" onclick="copyCurrentToolLink()" title="Copy link to this tool" aria-label="Copy link #tool"># link</button>
-                <div class="dots" aria-hidden="true"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+                <button type="button" class="topbar-link" id="copy-page-link" onclick="copyCurrentToolLink()"
+                    title="Copy link to this tool" aria-label="Copy link #tool"># link</button>
+                <div class="dots" aria-hidden="true"><span class="r"></span><span class="y"></span><span
+                        class="g"></span></div>
             </div>
         </div>
 
@@ -1451,7 +1495,8 @@
                     <div class="row" style="margin-bottom:5px">
                         <div>
                             <div class="label">Size (px)</div>
-                            <input type="number" id="qr-size" value="256" min="128" max="512" step="32" oninput="genQR()">
+                            <input type="number" id="qr-size" value="256" min="128" max="512" step="32"
+                                oninput="genQR()">
                         </div>
                         <div>
                             <div class="label">Error correction</div>
@@ -1502,15 +1547,18 @@
                         </div>
                         <div>
                             <div class="label">Bar width</div>
-                            <input type="number" id="bc-width" value="2" min="1" max="6" step="0.5" oninput="genBarcode()">
+                            <input type="number" id="bc-width" value="2" min="1" max="6" step="0.5"
+                                oninput="genBarcode()">
                         </div>
                         <div>
                             <div class="label">Height (px)</div>
-                            <input type="number" id="bc-height" value="100" min="40" max="200" step="10" oninput="genBarcode()">
+                            <input type="number" id="bc-height" value="100" min="40" max="200" step="10"
+                                oninput="genBarcode()">
                         </div>
                     </div>
                     <div class="checkbox-row" style="margin-bottom:8px">
-                        <label><input type="checkbox" id="bc-showtext" checked onchange="genBarcode()"> Show text</label>
+                        <label><input type="checkbox" id="bc-showtext" checked onchange="genBarcode()"> Show
+                            text</label>
                     </div>
                     <div class="btn-row" style="margin-top:10px">
                         <button type="button" class="btn" onclick="genBarcode()">&#x21BB; Generate</button>
@@ -1729,14 +1777,14 @@
                             </div>
                         </div>
                         <div class="label" style="margin-top:14px">Custom alphabet (optional)</div>
-                        <input type="text" id="sqids-alphabet" placeholder="Leave empty for default"
-                            oninput="doSqids()" autocomplete="off" spellcheck="false">
+                        <input type="text" id="sqids-alphabet" placeholder="Leave empty for default" oninput="doSqids()"
+                            autocomplete="off" spellcheck="false">
                     </div>
 
                     <div id="sqids-decode-section" style="display:none">
                         <div class="label">Sqids ID_</div>
-                        <input type="text" id="sqids-decode-input" placeholder="e.g. 86Rf07"
-                            oninput="doSqids()" autocomplete="off" spellcheck="false">
+                        <input type="text" id="sqids-decode-input" placeholder="e.g. 86Rf07" oninput="doSqids()"
+                            autocomplete="off" spellcheck="false">
                         <div class="label" style="margin-top:14px">Custom alphabet (optional)</div>
                         <input type="text" id="sqids-decode-alphabet" placeholder="Leave empty for default"
                             oninput="doSqids()" autocomplete="off" spellcheck="false">
@@ -1744,7 +1792,8 @@
 
                     <div class="label" style="margin-top:20px">Output</div>
                     <div class="val small" id="sqids-out" onclick="clip('sqids-out')">----</div>
-                    <div class="notify" id="sqids-notify">Click output to copy · <a href="https://sqids.org/" target="_blank" rel="noopener" style="color:#444">sqids.org</a></div>
+                    <div class="notify" id="sqids-notify">Click output to copy · <a href="https://sqids.org/"
+                            target="_blank" rel="noopener" style="color:#444">sqids.org</a></div>
                 </div>
 
                 <!-- BASE64 ENCODER/DECODER -->
@@ -2479,7 +2528,8 @@
                         <span>OPENAPI 3 · SWAGGER UI</span>
                         <span>PASTE JSON OR YAML</span>
                     </div>
-                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Paste an OpenAPI 3.x or Swagger 2.0
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Paste an OpenAPI 3.x or
+                        Swagger 2.0
                         document (JSON or YAML). Rendering loads Swagger UI from the CDN the first time.</p>
                     <div class="btn-row" style="margin-bottom:12px">
                         <button type="button" class="btn" onclick="openapiLoadExample()">Load Petstore example</button>
@@ -2513,21 +2563,23 @@
                     <div class="row">
                         <div>
                             <div class="label">Background</div>
-                            <input type="text" id="ph-bg" value="1a1a1a" placeholder="hex without #" oninput="genPlaceholder()"
-                                autocomplete="off">
+                            <input type="text" id="ph-bg" value="1a1a1a" placeholder="hex without #"
+                                oninput="genPlaceholder()" autocomplete="off">
                         </div>
                         <div>
                             <div class="label">Text color</div>
-                            <input type="text" id="ph-fg" value="00ff41" placeholder="hex without #" oninput="genPlaceholder()"
-                                autocomplete="off">
+                            <input type="text" id="ph-fg" value="00ff41" placeholder="hex without #"
+                                oninput="genPlaceholder()" autocomplete="off">
                         </div>
                     </div>
                     <div class="label">Label text_</div>
                     <input type="text" id="ph-txt" value="Penguin" oninput="genPlaceholder()" autocomplete="off">
                     <div class="label">URL (placehold.co)</div>
-                    <div class="cmd-box" id="ph-url" onclick="clip('ph-url')" style="word-break:break-all;font-size:12px">----
+                    <div class="cmd-box" id="ph-url" onclick="clip('ph-url')"
+                        style="word-break:break-all;font-size:12px">----
                     </div>
-                    <img id="ph-img" class="ph-img-preview" alt="Placeholder preview" crossorigin="anonymous" style="display:none">
+                    <img id="ph-img" class="ph-img-preview" alt="Placeholder preview" crossorigin="anonymous"
+                        style="display:none">
                     <div class="notify" id="ph-notify">Click URL to copy</div>
                 </div>
 
@@ -2555,9 +2607,11 @@
                         <button type="button" class="btn" onclick="genRandomImg(true)">&#x21BB; New random</button>
                     </div>
                     <div class="label">URL</div>
-                    <div class="cmd-box" id="rf-url" onclick="clip('rf-url')" style="word-break:break-all;font-size:12px">----
+                    <div class="cmd-box" id="rf-url" onclick="clip('rf-url')"
+                        style="word-break:break-all;font-size:12px">----
                     </div>
-                    <img id="rf-img" class="ph-img-preview" alt="Random preview" crossorigin="anonymous" style="display:none">
+                    <img id="rf-img" class="ph-img-preview" alt="Random preview" crossorigin="anonymous"
+                        style="display:none">
                     <div class="notify" id="rf-notify">Click URL to copy</div>
                 </div>
 
@@ -2568,33 +2622,42 @@
                         <div class="laravel-guide">
                             <p>This section summarizes the main chapters of the
                                 <a href="https://laravel.com/docs/13.x/" target="_blank" rel="noopener">Laravel 13.x</a>
-                                documentation and collects ready-to-copy commands and snippets.</p>
+                                documentation and collects ready-to-copy commands and snippets.
+                            </p>
                             <h3>Getting started</h3>
-                            <p>PHP/Composer installation, <code>laravel</code> CLI, app creation with <code>laravel new</code>,
-                                startup with <code>composer run dev</code> (server, queue, Vite). Configuration via <code>.env</code>
-                                and files in <code>config/</code>. Default SQLite in <code>database/database.sqlite</code>; for MySQL
-                                update <code>DB_*</code> and run <code>php artisan migrate</code>.</p>
+                            <p>PHP/Composer installation, <code>laravel</code> CLI, app creation with
+                                <code>laravel new</code>,
+                                startup with <code>composer run dev</code> (server, queue, Vite). Configuration via
+                                <code>.env</code>
+                                and files in <code>config/</code>. Default SQLite in
+                                <code>database/database.sqlite</code>; for MySQL
+                                update <code>DB_*</code> and run <code>php artisan migrate</code>.
+                            </p>
                             <h3>Architecture</h3>
                             <p>Request lifecycle, service container, providers, facades. Predictable folder conventions
-                                for AI agents and tools (see also <a href="https://laravel.com/docs/13.x/agentic-development"
-                                    target="_blank" rel="noopener">Agentic development</a>).</p>
+                                for AI agents and tools (see also <a
+                                    href="https://laravel.com/docs/13.x/agentic-development" target="_blank"
+                                    rel="noopener">Agentic development</a>).</p>
                             <h3>The basics</h3>
                             <p>Routing, middleware, CSRF, controllers, requests, responses, Blade, assets with Vite,
                                 URL generation, sessions, validation, logging, error handling.</p>
                             <h3>Digging deeper</h3>
-                            <p>Artisan, broadcasting, cache, collections, HTTP client, file storage, mail, notifications,
+                            <p>Artisan, broadcasting, cache, collections, HTTP client, file storage, mail,
+                                notifications,
                                 strings, queue, rate limiting, scheduling, tasks.</p>
                             <h3>Security &amp; database</h3>
                             <p>Authentication, authorization, hashing, encryption. Query builder, migrations, seeding,
                                 Redis, MongoDB. Eloquent: relationships, casts, API resources, factories.</p>
                             <h3>AI &amp; testing</h3>
-                            <p><a href="https://laravel.com/docs/13.x/boost" target="_blank" rel="noopener">Laravel Boost</a>
+                            <p><a href="https://laravel.com/docs/13.x/boost" target="_blank" rel="noopener">Laravel
+                                    Boost</a>
                                 for AI context (versioned documentation, tools). HTTP, console, browser, database tests,
                                 mocking.</p>
                             <h3>Packages</h3>
                             <p>Ecosystem: Horizon, Sanctum, Sail, Telescope, Pint, Passport, Scout, Dusk, Cashier, etc.
                                 Each package has its own section in the official docs.</p>
-                            <p style="margin-top:12px;font-size:11px;color:#555">PHP 8.2+ recommended for Laravel 13. Use the
+                            <p style="margin-top:12px;font-size:11px;color:#555">PHP 8.2+ recommended for Laravel 13.
+                                Use the
                                 filters below to find snippets by topic.</p>
                         </div>
                     </details>
@@ -2635,7 +2698,8 @@
                         <span>PHP · LARAVEL · SSH DEPLOY</span>
                     </div>
                     <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.65">Ship Laravel apps with
-                        confidence — compose production-ready pipelines with Composer audit, Pint, PHPStan, Pest/PHPUnit,
+                        confidence — compose production-ready pipelines with Composer audit, Pint, PHPStan,
+                        Pest/PHPUnit,
                         Vite builds, and zero-downtime SSH deploys. Pick a preset or tune every step.</p>
 
                     <div class="ai-presets" id="ci-presets">
@@ -2707,39 +2771,59 @@
                     <div class="ci-step-grid">
                         <div class="ci-step-group">
                             <div class="ci-step-title">Composer</div>
-                            <label><input type="checkbox" id="ci-s-composer-install" checked onchange="genCiPipe()"> install</label>
-                            <label><input type="checkbox" id="ci-s-composer-validate" checked onchange="genCiPipe()"> validate --strict</label>
-                            <label><input type="checkbox" id="ci-s-composer-audit" checked onchange="genCiPipe()"> audit (security)</label>
-                            <label><input type="checkbox" id="ci-s-cache-composer" checked onchange="genCiPipe()"> cache vendor/</label>
+                            <label><input type="checkbox" id="ci-s-composer-install" checked onchange="genCiPipe()">
+                                install</label>
+                            <label><input type="checkbox" id="ci-s-composer-validate" checked onchange="genCiPipe()">
+                                validate --strict</label>
+                            <label><input type="checkbox" id="ci-s-composer-audit" checked onchange="genCiPipe()"> audit
+                                (security)</label>
+                            <label><input type="checkbox" id="ci-s-cache-composer" checked onchange="genCiPipe()"> cache
+                                vendor/</label>
                         </div>
                         <div class="ci-step-group">
                             <div class="ci-step-title">Quality</div>
-                            <label><input type="checkbox" id="ci-s-pint" checked onchange="genCiPipe()"> Pint --test</label>
-                            <label><input type="checkbox" id="ci-s-phpstan" checked onchange="genCiPipe()"> PHPStan analyse</label>
-                            <label><input type="checkbox" id="ci-s-php-lint" onchange="genCiPipe()"> php -l (syntax)</label>
+                            <label><input type="checkbox" id="ci-s-pint" checked onchange="genCiPipe()"> Pint
+                                --test</label>
+                            <label><input type="checkbox" id="ci-s-phpstan" checked onchange="genCiPipe()"> PHPStan
+                                analyse</label>
+                            <label><input type="checkbox" id="ci-s-php-lint" onchange="genCiPipe()"> php -l
+                                (syntax)</label>
                         </div>
                         <div class="ci-step-group">
                             <div class="ci-step-title">Laravel tests</div>
-                            <label><input type="checkbox" id="ci-s-env-setup" checked onchange="genCiPipe()"> .env + key:generate</label>
-                            <label><input type="checkbox" id="ci-s-migrate" checked onchange="genCiPipe()"> migrate (testing)</label>
-                            <label><input type="checkbox" id="ci-s-artisan-test" checked onchange="ciTestChoice('artisan')"> php artisan test</label>
+                            <label><input type="checkbox" id="ci-s-env-setup" checked onchange="genCiPipe()"> .env +
+                                key:generate</label>
+                            <label><input type="checkbox" id="ci-s-migrate" checked onchange="genCiPipe()"> migrate
+                                (testing)</label>
+                            <label><input type="checkbox" id="ci-s-artisan-test" checked
+                                    onchange="ciTestChoice('artisan')"> php artisan test</label>
                             <label><input type="checkbox" id="ci-s-pest" onchange="ciTestChoice('pest')"> Pest</label>
-                            <label><input type="checkbox" id="ci-s-phpunit" onchange="ciTestChoice('phpunit')"> PHPUnit</label>
+                            <label><input type="checkbox" id="ci-s-phpunit" onchange="ciTestChoice('phpunit')">
+                                PHPUnit</label>
                         </div>
                         <div class="ci-step-group">
                             <div class="ci-step-title">Frontend</div>
-                            <label><input type="checkbox" id="ci-s-npm-ci" checked onchange="genCiPipe()"> npm ci</label>
-                            <label><input type="checkbox" id="ci-s-npm-build" checked onchange="genCiPipe()"> npm run build</label>
-                            <label><input type="checkbox" id="ci-s-npm-lint" onchange="genCiPipe()"> npm run lint</label>
-                            <label><input type="checkbox" id="ci-s-cache-npm" checked onchange="genCiPipe()"> cache node_modules</label>
+                            <label><input type="checkbox" id="ci-s-npm-ci" checked onchange="genCiPipe()"> npm
+                                ci</label>
+                            <label><input type="checkbox" id="ci-s-npm-build" checked onchange="genCiPipe()"> npm run
+                                build</label>
+                            <label><input type="checkbox" id="ci-s-npm-lint" onchange="genCiPipe()"> npm run
+                                lint</label>
+                            <label><input type="checkbox" id="ci-s-cache-npm" checked onchange="genCiPipe()"> cache
+                                node_modules</label>
                         </div>
                         <div class="ci-step-group">
                             <div class="ci-step-title">Deploy (SSH)</div>
-                            <label><input type="checkbox" id="ci-s-deploy" checked onchange="ciToggleDeploy(); genCiPipe()"> SSH deploy</label>
-                            <label><input type="checkbox" id="ci-s-optimize" checked onchange="genCiPipe()"> artisan optimize</label>
-                            <label><input type="checkbox" id="ci-s-queue" checked onchange="genCiPipe()"> queue:restart</label>
-                            <label><input type="checkbox" id="ci-s-horizon" onchange="genCiPipe()"> horizon:terminate</label>
-                            <label><input type="checkbox" id="ci-s-storage-link" onchange="genCiPipe()"> storage:link</label>
+                            <label><input type="checkbox" id="ci-s-deploy" checked
+                                    onchange="ciToggleDeploy(); genCiPipe()"> SSH deploy</label>
+                            <label><input type="checkbox" id="ci-s-optimize" checked onchange="genCiPipe()"> artisan
+                                optimize</label>
+                            <label><input type="checkbox" id="ci-s-queue" checked onchange="genCiPipe()">
+                                queue:restart</label>
+                            <label><input type="checkbox" id="ci-s-horizon" onchange="genCiPipe()">
+                                horizon:terminate</label>
+                            <label><input type="checkbox" id="ci-s-storage-link" onchange="genCiPipe()">
+                                storage:link</label>
                         </div>
                     </div>
 
@@ -2757,7 +2841,8 @@
                             </div>
                             <div style="flex:0 0 80px">
                                 <div class="label">Port</div>
-                                <input type="text" id="ci-deploy-port" value="22" oninput="genCiPipe()" autocomplete="off">
+                                <input type="text" id="ci-deploy-port" value="22" oninput="genCiPipe()"
+                                    autocomplete="off">
                             </div>
                         </div>
                         <div class="label">Remote path_</div>
@@ -2767,8 +2852,10 @@
 
                     <div class="ai-path-hint" id="ci-path-hint">Save as: .github/workflows/laravel-ci.yml</div>
                     <div class="btn-row" style="margin-bottom:12px">
-                        <button type="button" class="btn" onclick="genCiPipe()" style="background:var(--neon);color:#000">Generate</button>
-                        <button type="button" class="btn" onclick="aiCopyOut('ci-out', 'ci-notify')">Copy output</button>
+                        <button type="button" class="btn" onclick="genCiPipe()"
+                            style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('ci-out', 'ci-notify')">Copy
+                            output</button>
                     </div>
                     <div class="label">Generated pipeline_</div>
                     <textarea id="ci-out" class="ai-io out" rows="26" readonly spellcheck="false"
@@ -2874,13 +2961,16 @@
                         <span>CURSOR SKILL</span>
                         <span>SKILL.md</span>
                     </div>
-                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate a <code>SKILL.md</code> file
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate a
+                        <code>SKILL.md</code> file
                         for Cursor Agent Skills. Personal skills go in <code>~/.cursor/skills/</code>, project skills in
-                        <code>.cursor/skills/</code>.</p>
+                        <code>.cursor/skills/</code>.
+                    </p>
                     <div class="row">
                         <div>
                             <div class="label">Skill name (slug)</div>
-                            <input type="text" id="sk-name" placeholder="e.g. deploy-pipeline" oninput="genAiSkill()" autocomplete="off">
+                            <input type="text" id="sk-name" placeholder="e.g. deploy-pipeline" oninput="genAiSkill()"
+                                autocomplete="off">
                         </div>
                         <div>
                             <div class="label">Scope</div>
@@ -2891,19 +2981,24 @@
                         </div>
                     </div>
                     <div class="label">Description (when the agent should use this skill)_</div>
-                    <input type="text" id="sk-desc" placeholder="Deploy to staging. Use when the user asks to deploy or release."
+                    <input type="text" id="sk-desc"
+                        placeholder="Deploy to staging. Use when the user asks to deploy or release."
                         oninput="genAiSkill()" autocomplete="off">
                     <div class="checkbox-row" style="margin-bottom:20px">
-                        <label><input type="checkbox" id="sk-disable-invoke" onchange="genAiSkill()"> disable-model-invocation (manual only)</label>
-                        <label><input type="checkbox" id="sk-scripts" onchange="genAiSkill()"> Include scripts/ section</label>
+                        <label><input type="checkbox" id="sk-disable-invoke" onchange="genAiSkill()">
+                            disable-model-invocation (manual only)</label>
+                        <label><input type="checkbox" id="sk-scripts" onchange="genAiSkill()"> Include scripts/
+                            section</label>
                     </div>
                     <div class="label">Instructions (markdown body)_</div>
                     <textarea id="sk-body" class="ai-io" rows="8" oninput="genAiSkill()" spellcheck="false"
                         placeholder="# Deploy Pipeline&#10;&#10;## Steps&#10;1. Run tests&#10;2. Build assets&#10;3. Deploy to staging"></textarea>
                     <div class="ai-path-hint" id="sk-path-hint">Save as: .cursor/skills/deploy-pipeline/SKILL.md</div>
                     <div class="btn-row" style="margin-bottom:12px">
-                        <button type="button" class="btn" onclick="genAiSkill()" style="background:var(--neon);color:#000">Generate</button>
-                        <button type="button" class="btn" onclick="aiCopyOut('sk-out', 'sk-notify')">Copy output</button>
+                        <button type="button" class="btn" onclick="genAiSkill()"
+                            style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('sk-out', 'sk-notify')">Copy
+                            output</button>
                     </div>
                     <div class="label">Output — SKILL.md_</div>
                     <textarea id="sk-out" class="ai-io out" rows="14" readonly spellcheck="false"></textarea>
@@ -2919,14 +3014,16 @@
                     <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate a Cursor rule file
                         (<code>.mdc</code>) with YAML frontmatter for persistent AI guidance.</p>
                     <div class="label">Rule title_</div>
-                    <input type="text" id="ru-title" placeholder="TypeScript Standards" oninput="genAiRule()" autocomplete="off">
+                    <input type="text" id="ru-title" placeholder="TypeScript Standards" oninput="genAiRule()"
+                        autocomplete="off">
                     <div class="label">Description (shown in rule picker)_</div>
                     <input type="text" id="ru-desc" placeholder="TypeScript conventions and patterns for this project"
                         oninput="genAiRule()" autocomplete="off">
                     <div class="row">
                         <div>
                             <div class="label">File globs (optional)</div>
-                            <input type="text" id="ru-globs" placeholder="**/*.ts, **/*.tsx" oninput="genAiRule()" autocomplete="off">
+                            <input type="text" id="ru-globs" placeholder="**/*.ts, **/*.tsx" oninput="genAiRule()"
+                                autocomplete="off">
                         </div>
                         <div style="flex:0 0 160px">
                             <div class="label">Always apply</div>
@@ -2941,8 +3038,10 @@
                         placeholder="- Use strict TypeScript&#10;- Prefer functional components&#10;- No any unless documented"></textarea>
                     <div class="ai-path-hint" id="ru-path-hint">Save as: .cursor/rules/typescript-standards.mdc</div>
                     <div class="btn-row" style="margin-bottom:12px">
-                        <button type="button" class="btn" onclick="genAiRule()" style="background:var(--neon);color:#000">Generate</button>
-                        <button type="button" class="btn" onclick="aiCopyOut('ru-out', 'ru-notify')">Copy output</button>
+                        <button type="button" class="btn" onclick="genAiRule()"
+                            style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('ru-out', 'ru-notify')">Copy
+                            output</button>
                     </div>
                     <div class="label">Output — rule file_</div>
                     <textarea id="ru-out" class="ai-io out" rows="14" readonly spellcheck="false"></textarea>
@@ -2955,7 +3054,8 @@
                         <span>MCP SERVER</span>
                         <span>mcp.json</span>
                     </div>
-                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate an MCP server entry for
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate an MCP server entry
+                        for
                         Cursor (<code>~/.cursor/mcp.json</code> or project <code>.cursor/mcp.json</code>).</p>
                     <div class="ai-presets">
                         <button type="button" onclick="aiMcpPreset('npx')">npx stdio</button>
@@ -2966,8 +3066,8 @@
                     <div class="row">
                         <div>
                             <div class="label">Server name (key)</div>
-                            <input type="text" id="mcp-name" placeholder="e.g. github, postgres, filesystem" oninput="genAiMcp()"
-                                autocomplete="off">
+                            <input type="text" id="mcp-name" placeholder="e.g. github, postgres, filesystem"
+                                oninput="genAiMcp()" autocomplete="off">
                         </div>
                         <div>
                             <div class="label">Transport</div>
@@ -2989,12 +3089,14 @@
                     </div>
                     <div id="mcp-sse-fields" style="display:none">
                         <div class="label">Server URL_</div>
-                        <input type="text" id="mcp-url" placeholder="https://api.example.com/mcp/sse" oninput="genAiMcp()"
-                            autocomplete="off">
+                        <input type="text" id="mcp-url" placeholder="https://api.example.com/mcp/sse"
+                            oninput="genAiMcp()" autocomplete="off">
                     </div>
                     <div class="btn-row" style="margin-bottom:12px">
-                        <button type="button" class="btn" onclick="genAiMcp()" style="background:var(--neon);color:#000">Generate</button>
-                        <button type="button" class="btn" onclick="aiCopyOut('mcp-out', 'mcp-notify')">Copy output</button>
+                        <button type="button" class="btn" onclick="genAiMcp()"
+                            style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('mcp-out', 'mcp-notify')">Copy
+                            output</button>
                     </div>
                     <div class="label">Output — mcp.json entry_</div>
                     <textarea id="mcp-out" class="ai-io out" rows="14" readonly spellcheck="false"></textarea>
@@ -3007,7 +3109,8 @@
                         <span>PROMPT BUILDER</span>
                         <span>SYSTEM · USER · AGENT</span>
                     </div>
-                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Compose structured prompts for
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Compose structured prompts
+                        for
                         LLM agents, Cursor, Claude, or custom pipelines.</p>
                     <div class="ai-presets">
                         <button type="button" onclick="aiPromptPreset('coder')">Code assistant</button>
@@ -3018,8 +3121,8 @@
                     <div class="row">
                         <div>
                             <div class="label">Role / persona_</div>
-                            <input type="text" id="pr-role" placeholder="Senior TypeScript engineer" oninput="genAiPrompt()"
-                                autocomplete="off">
+                            <input type="text" id="pr-role" placeholder="Senior TypeScript engineer"
+                                oninput="genAiPrompt()" autocomplete="off">
                         </div>
                         <div>
                             <div class="label">Output format</div>
@@ -3032,8 +3135,9 @@
                         </div>
                     </div>
                     <div class="label">Primary task_</div>
-                    <input type="text" id="pr-task" placeholder="Help the user write clean, tested, production-ready code"
-                        oninput="genAiPrompt()" autocomplete="off">
+                    <input type="text" id="pr-task"
+                        placeholder="Help the user write clean, tested, production-ready code" oninput="genAiPrompt()"
+                        autocomplete="off">
                     <div class="label">Context (project, stack, constraints)_</div>
                     <textarea id="pr-context" class="ai-io" rows="4" oninput="genAiPrompt()" spellcheck="false"
                         placeholder="React 19 + TypeScript monorepo. Follow existing patterns in src/components/."></textarea>
@@ -3044,8 +3148,10 @@
                     <textarea id="pr-examples" class="ai-io" rows="3" oninput="genAiPrompt()" spellcheck="false"
                         placeholder="User: Add a login form&#10;Assistant: I'll create a LoginForm component with validation..."></textarea>
                     <div class="btn-row" style="margin-bottom:12px">
-                        <button type="button" class="btn" onclick="genAiPrompt()" style="background:var(--neon);color:#000">Generate</button>
-                        <button type="button" class="btn" onclick="aiCopyOut('pr-out', 'pr-notify')">Copy output</button>
+                        <button type="button" class="btn" onclick="genAiPrompt()"
+                            style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('pr-out', 'pr-notify')">Copy
+                            output</button>
                     </div>
                     <div class="label">Output — system prompt_</div>
                     <textarea id="pr-out" class="ai-io out" rows="16" readonly spellcheck="false"></textarea>
@@ -3058,13 +3164,15 @@
                         <span>CLAUDE.md</span>
                         <span>PROJECT CONTEXT</span>
                     </div>
-                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate a <code>CLAUDE.md</code>
-                        file for Claude Code / agentic workflows — project overview, commands, and conventions.</p>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate a
+                        <code>CLAUDE.md</code>
+                        file for Claude Code / agentic workflows — project overview, commands, and conventions.
+                    </p>
                     <div class="label">Project name_</div>
                     <input type="text" id="cl-name" placeholder="My App" oninput="genAiClaude()" autocomplete="off">
                     <div class="label">Tech stack (comma-separated)_</div>
-                    <input type="text" id="cl-stack" placeholder="Laravel 13, PHP 8.3, Vue 3, PostgreSQL" oninput="genAiClaude()"
-                        autocomplete="off">
+                    <input type="text" id="cl-stack" placeholder="Laravel 13, PHP 8.3, Vue 3, PostgreSQL"
+                        oninput="genAiClaude()" autocomplete="off">
                     <div class="label">Architecture / overview_</div>
                     <textarea id="cl-arch" class="ai-io" rows="3" oninput="genAiClaude()" spellcheck="false"
                         placeholder="Monolithic API with Vue SPA. Auth via Sanctum. Queue workers on Redis."></textarea>
@@ -3078,8 +3186,10 @@
                     <textarea id="cl-paths" class="ai-io" rows="3" oninput="genAiClaude()" spellcheck="false"
                         placeholder="config/ — never commit .env&#10;app/Services/ — business logic lives here"></textarea>
                     <div class="btn-row" style="margin-bottom:12px">
-                        <button type="button" class="btn" onclick="genAiClaude()" style="background:var(--neon);color:#000">Generate</button>
-                        <button type="button" class="btn" onclick="aiCopyOut('cl-out', 'cl-notify')">Copy output</button>
+                        <button type="button" class="btn" onclick="genAiClaude()"
+                            style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('cl-out', 'cl-notify')">Copy
+                            output</button>
                     </div>
                     <div class="label">Output — CLAUDE.md_</div>
                     <textarea id="cl-out" class="ai-io out" rows="18" readonly spellcheck="false"></textarea>
@@ -3092,8 +3202,10 @@
                         <span>AGENTS.md</span>
                         <span>AGENTIC DEVELOPMENT</span>
                     </div>
-                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate an <code>AGENTS.md</code>
-                        file for AI coding agents — build steps, testing, PR conventions, and repo map.</p>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate an
+                        <code>AGENTS.md</code>
+                        file for AI coding agents — build steps, testing, PR conventions, and repo map.
+                    </p>
                     <div class="label">Project overview_</div>
                     <textarea id="ag-overview" class="ai-io" rows="3" oninput="genAiAgents()" spellcheck="false"
                         placeholder="E-commerce platform. Backend in app/, frontend in resources/js/."></textarea>
@@ -3110,8 +3222,10 @@
                     <textarea id="ag-style" class="ai-io" rows="4" oninput="genAiAgents()" spellcheck="false"
                         placeholder="- Run pint before commit&#10;- One feature per PR&#10;- Never force-push main"></textarea>
                     <div class="btn-row" style="margin-bottom:12px">
-                        <button type="button" class="btn" onclick="genAiAgents()" style="background:var(--neon);color:#000">Generate</button>
-                        <button type="button" class="btn" onclick="aiCopyOut('ag-out', 'ag-notify')">Copy output</button>
+                        <button type="button" class="btn" onclick="genAiAgents()"
+                            style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('ag-out', 'ag-notify')">Copy
+                            output</button>
                     </div>
                     <div class="label">Output — AGENTS.md_</div>
                     <textarea id="ag-out" class="ai-io out" rows="18" readonly spellcheck="false"></textarea>
@@ -3124,8 +3238,10 @@
                         <span>CURSOR HOOKS</span>
                         <span>hooks.json</span>
                     </div>
-                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate a <code>hooks.json</code>
-                        entry for Cursor automation — audit shell commands, format on save, gate MCP calls, and more.</p>
+                    <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate a
+                        <code>hooks.json</code>
+                        entry for Cursor automation — audit shell commands, format on save, gate MCP calls, and more.
+                    </p>
                     <div class="ai-presets">
                         <button type="button" onclick="aiHookPreset('shell-audit')">Shell audit</button>
                         <button type="button" onclick="aiHookPreset('format-edit')">Format after edit</button>
@@ -3187,10 +3303,13 @@
                             placeholder="Check if the shell command is safe. Deny rm -rf, curl | bash, and credential exfiltration."></textarea>
                     </div>
                     <div class="label">Matcher (optional, e.g. tool name or command pattern)_</div>
-                    <input type="text" id="hk-matcher" placeholder="Shell, MCP:*, or regex" oninput="genAiHooks()" autocomplete="off">
+                    <input type="text" id="hk-matcher" placeholder="Shell, MCP:*, or regex" oninput="genAiHooks()"
+                        autocomplete="off">
                     <div class="btn-row" style="margin-bottom:12px">
-                        <button type="button" class="btn" onclick="genAiHooks()" style="background:var(--neon);color:#000">Generate</button>
-                        <button type="button" class="btn" onclick="aiCopyOut('hk-out', 'hk-notify')">Copy output</button>
+                        <button type="button" class="btn" onclick="genAiHooks()"
+                            style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('hk-out', 'hk-notify')">Copy
+                            output</button>
                     </div>
                     <div class="label">Output — hooks.json_</div>
                     <textarea id="hk-out" class="ai-io out" rows="14" readonly spellcheck="false"></textarea>
@@ -3202,30 +3321,39 @@
                     <details class="laravel-guide-wrap" open>
                         <summary>Gherkin — quick guide with examples</summary>
                         <div class="laravel-guide laravel-guide-tall">
-                            <p><strong>Gherkin</strong> is the language used in BDD (Behavior-Driven Development) to describe
-                                expected behavior in a form readable by both people and tools (Cucumber, Behat, SpecFlow, etc.).
+                            <p><strong>Gherkin</strong> is the language used in BDD (Behavior-Driven Development) to
+                                describe
+                                expected behavior in a form readable by both people and tools (Cucumber, Behat,
+                                SpecFlow, etc.).
                                 Each <code>.feature</code> file describes a capability and its test scenarios.</p>
                             <h3>Keywords</h3>
                             <ul>
                                 <li><code>Feature</code> — title and description of the capability</li>
                                 <li><code>Background</code> — steps shared by all scenarios (optional)</li>
                                 <li><code>Scenario</code> — a concrete use case</li>
-                                <li><code>Scenario Outline</code> + <code>Examples</code> — same flow with different data</li>
+                                <li><code>Scenario Outline</code> + <code>Examples</code> — same flow with different
+                                    data</li>
                                 <li><code>Given</code> — preconditions / initial state</li>
                                 <li><code>When</code> — user action or event</li>
                                 <li><code>Then</code> — expected outcome</li>
                                 <li><code>And</code> / <code>But</code> — continue the previous step</li>
-                                <li><code>""" ... """</code> — doc string for multiline text (JSON payloads, bodies, templates)</li>
+                                <li><code>""" ... """</code> — doc string for multiline text (JSON payloads, bodies,
+                                    templates)</li>
                                 <li>Data tables (<code>| col | col |</code>) — structured input or expected fields</li>
                             </ul>
                             <h3>Basic rules</h3>
                             <ul>
-                                <li>Indentation: usually <strong>2 spaces</strong> per level (Feature → Scenario → steps)</li>
+                                <li>Indentation: usually <strong>2 spaces</strong> per level (Feature → Scenario →
+                                    steps)</li>
                                 <li>One scenario = one verifiable behavior; avoid overly long scenarios</li>
                                 <li>Write in domain language, not technical details (<em>“the cart is empty”</em>, not
-                                    <em>“click #btn-42”</em>)</li>
-                                <li>Use <code>Given</code> for state, <code>When</code> for action, <code>Then</code> for outcome</li>
-                                <li>Comments with <code>#</code>; optional tags above Feature/Scenario: <code>@smoke @checkout</code></li>
+                                    <em>“click #btn-42”</em>)
+                                </li>
+                                <li>Use <code>Given</code> for state, <code>When</code> for action, <code>Then</code>
+                                    for outcome</li>
+                                <li>Comments with <code>#</code>; optional tags above Feature/Scenario:
+                                    <code>@smoke @checkout</code>
+                                </li>
                             </ul>
                             <h3>Example 1 — Simple feature</h3>
                             <pre>Feature: User login
@@ -3303,7 +3431,8 @@ Feature: Checkout
         | paypal  |</pre>
                             <h3>Example 5 — REST API with request/response payloads</h3>
                             <p>For API or integration features, assert HTTP status, headers, and JSON bodies explicitly.
-                                Use doc strings for payloads; keep step wording stable and map it in step definitions.</p>
+                                Use doc strings for payloads; keep step wording stable and map it in step definitions.
+                            </p>
                             <pre>@api @orders
 Feature: Create order API
   As an integration client
@@ -3500,16 +3629,22 @@ Feature: Order lookup via GraphQL
                             <ul>
                                 <li>Identical steps repeated in every scenario → use <code>Background</code></li>
                                 <li>Too many consecutive <code>And</code> steps → split into smaller scenarios</li>
-                                <li>In <strong>UI</strong> specs, avoid low-level selectors or raw HTTP codes → describe user-visible outcomes</li>
-                                <li>In <strong>API</strong> specs, do assert status and payload — but keep steps reusable (don’t paste unique URLs in every step)</li>
-                                <li>Huge JSON blobs inline in step text → prefer doc strings or external fixture files referenced by step defs</li>
+                                <li>In <strong>UI</strong> specs, avoid low-level selectors or raw HTTP codes → describe
+                                    user-visible outcomes</li>
+                                <li>In <strong>API</strong> specs, do assert status and payload — but keep steps
+                                    reusable (don’t paste unique URLs in every step)</li>
+                                <li>Huge JSON blobs inline in step text → prefer doc strings or external fixture files
+                                    referenced by step defs</li>
                                 <li>One scenario describing multiple unrelated behaviors</li>
                             </ul>
                             <p style="margin-top:12px;font-size:11px;color:#555">References:
-                                <a href="https://cucumber.io/docs/gherkin/" target="_blank" rel="noopener">Cucumber Gherkin reference</a>,
-                                <a href="https://cucumber.io/docs/bdd/" target="_blank" rel="noopener">BDD introduction</a>.
+                                <a href="https://cucumber.io/docs/gherkin/" target="_blank" rel="noopener">Cucumber
+                                    Gherkin reference</a>,
+                                <a href="https://cucumber.io/docs/bdd/" target="_blank" rel="noopener">BDD
+                                    introduction</a>.
                                 Use the generator below with the <strong>BDD / Gherkin</strong> framework to produce
-                                <code>.feature</code> files from your scenarios.</p>
+                                <code>.feature</code> files from your scenarios.
+                            </p>
                         </div>
                     </details>
                     <div class="stat-bar">
@@ -3519,7 +3654,8 @@ Feature: Order lookup via GraphQL
                     <p style="font-size:11px;color:#666;margin-bottom:16px;line-height:1.6">Generate specs before code —
                         compatible with <a href="https://openspec.dev/" target="_blank" rel="noopener">OpenSpec</a>,
                         <a href="https://github.com/github/spec-kit" target="_blank" rel="noopener">GitHub Spec Kit</a>,
-                        generic feature specs, and BDD/Gherkin.</p>
+                        generic feature specs, and BDD/Gherkin.
+                    </p>
                     <div class="ai-presets">
                         <button type="button" onclick="aiSpecPreset('openspec-dark')">OpenSpec · dark mode</button>
                         <button type="button" onclick="aiSpecPreset('openspec-auth')">OpenSpec · 2FA</button>
@@ -3544,11 +3680,13 @@ Feature: Order lookup via GraphQL
                     <div class="row">
                         <div>
                             <div class="label">Feature / change name_</div>
-                            <input type="text" id="sp-name" placeholder="add-dark-mode" oninput="genAiSpec()" autocomplete="off">
+                            <input type="text" id="sp-name" placeholder="add-dark-mode" oninput="genAiSpec()"
+                                autocomplete="off">
                         </div>
                         <div id="sp-domain-field">
                             <div class="label">Domain (OpenSpec)</div>
-                            <input type="text" id="sp-domain" placeholder="ui, auth, payments" oninput="genAiSpec()" autocomplete="off">
+                            <input type="text" id="sp-domain" placeholder="ui, auth, payments" oninput="genAiSpec()"
+                                autocomplete="off">
                         </div>
                     </div>
                     <div class="label">Intent / problem statement_</div>
@@ -3560,7 +3698,8 @@ Feature: Order lookup via GraphQL
                     <div class="label">Requirements (one per line — becomes SHALL/MUST statements)_</div>
                     <textarea id="sp-reqs" class="ai-io" rows="4" oninput="genAiSpec()" spellcheck="false"
                         placeholder="Theme selection between light and dark&#10;Preference persists across sessions&#10;Respect system preference when unset"></textarea>
-                    <div class="label">Scenarios (requirement | scenario name, then GIVEN/WHEN/THEN lines; blank line between scenarios)_</div>
+                    <div class="label">Scenarios (requirement | scenario name, then GIVEN/WHEN/THEN lines; blank line
+                        between scenarios)_</div>
                     <textarea id="sp-scenarios" class="ai-io" rows="6" oninput="genAiSpec()" spellcheck="false"
                         placeholder="Theme selection | Manual toggle&#10;GIVEN a user on any page&#10;WHEN the user clicks the theme toggle&#10;THEN the theme switches immediately&#10;AND the preference persists across sessions"></textarea>
                     <div class="label">Technical approach / design notes_</div>
@@ -3568,8 +3707,10 @@ Feature: Order lookup via GraphQL
                         placeholder="CSS custom properties for theming. React context for state. localStorage for persistence."></textarea>
                     <div class="ai-path-hint" id="sp-path-hint">Save under openspec/changes/add-dark-mode/</div>
                     <div class="btn-row" style="margin-bottom:12px">
-                        <button type="button" class="btn" onclick="genAiSpec()" style="background:var(--neon);color:#000">Generate</button>
-                        <button type="button" class="btn" onclick="aiCopyOut('sp-out', 'sp-notify')">Copy output</button>
+                        <button type="button" class="btn" onclick="genAiSpec()"
+                            style="background:var(--neon);color:#000">Generate</button>
+                        <button type="button" class="btn" onclick="aiCopyOut('sp-out', 'sp-notify')">Copy
+                            output</button>
                     </div>
                     <div class="label">Output_</div>
                     <textarea id="sp-out" class="ai-io out" rows="20" readonly spellcheck="false"></textarea>
@@ -8086,9 +8227,9 @@ Feature: Order lookup via GraphQL
             genAiSpec();
         }
     </script>
-    <script async src="https://stats.web.ap.it/i/cc5736cc-538c-48e5-a19a-eb6bbd056d47.js"></script>
-    <noscript><img src="https://stats.web.ap.it/collect/pixel.gif?k=cc5736cc-538c-48e5-a19a-eb6bbd056d47&p=/" width="1"
-            height="1" /></noscript>
+    <script async src="https://stats.misterdev.it/i/30019d19-e649-47d0-8200-7aa747fc31fb.js"></script>
+    <noscript><img src="https://stats.misterdev.it/collect/pixel.gif?k=30019d19-e649-47d0-8200-7aa747fc31fb&p=/"
+            width="1" height="1" /></noscript>
 </body>
 
 </html>
